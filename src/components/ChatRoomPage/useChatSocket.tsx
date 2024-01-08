@@ -70,8 +70,8 @@ export const useChatSocket = () => {
     setActionInfo(data);
   };
 
-  const disconnectChat = (socket: any) => {
-    socket.disconnect();
+  const disconnectChat = () => {
+    chatSocket?.disconnect();
   };
 
   const addSocketEvent = (socket: any) => {
@@ -80,18 +80,18 @@ export const useChatSocket = () => {
     socket.on("move", moveCallback);
   };
 
-  const removeSocketEvent = (socket: any) => {
-    socket.off("join", joinCallback);
-    socket.off("chat", chatCallback);
-    socket.off("move", moveCallback);
+  const removeSocketEvent = () => {
+    chatSocket?.off("join", joinCallback);
+    chatSocket?.off("chat", chatCallback);
+    chatSocket?.off("move", moveCallback);
   };
 
   useEffect(() => {
     setChatSocket(connectChat());
 
     return () => {
-      disconnectChat(chatSocket);
-      removeSocketEvent(chatSocket);
+      disconnectChat();
+      removeSocketEvent();
     };
   }, []);
 
