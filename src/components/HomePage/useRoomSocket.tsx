@@ -5,7 +5,11 @@ import { joinRoom } from "../../apis/room/joinRoom";
 
 import { io, Socket } from "socket.io-client";
 
-const Url = "http://localhost:3000/room";
+const Url = (
+  process.env.NODE_ENV == "development"
+    ? process.env.REACT_APP_DEV_SOCKET_DOMAIN
+    : process.env.REACT_APP_PORD_SOCKET_DOMAIN
+) as string;
 const Path = "/socket.io";
 
 type RoomInfo = {

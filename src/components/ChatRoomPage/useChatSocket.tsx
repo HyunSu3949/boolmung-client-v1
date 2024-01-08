@@ -3,7 +3,11 @@ import { io, Socket } from "socket.io-client";
 import { useAuth } from "../common/Context/AuthContext";
 import { useParams } from "react-router-dom";
 
-const Url = "http://127.0.0.1:3000/chat";
+const Url = (
+  process.env.NODE_ENV == "development"
+    ? process.env.REACT_APP_DEV_SOCKET_DOMAIN
+    : process.env.REACT_APP_PORD_SOCKET_DOMAIN
+) as string;
 const Path = "/socket.io";
 
 type Chat = {
