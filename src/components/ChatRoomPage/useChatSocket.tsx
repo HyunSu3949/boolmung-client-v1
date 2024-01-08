@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "../common/Context/AuthContext";
 import { useParams } from "react-router-dom";
+console.log("NODE_ENV: ", process.env.NODE_ENV);
+console.log(process.env.REACT_APP_PROD_SOCKET_DOMAIN);
 
 const Url = (
   process.env.NODE_ENV == "development"
