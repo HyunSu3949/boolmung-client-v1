@@ -2,9 +2,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 
 let baseURL;
 if (process.env.NODE_ENV === "development") {
-  baseURL = process.env.REACT_APP_DEV_DOMAIN;
+  baseURL = "http://localhost:3000/api/v1";
 } else {
-  baseURL = process.env.REACT_APP_PROD_DOMAIN;
+  baseURL = "https://boolmung-api-v1-hs.koyeb.app/api/v1";
 }
 
 const axiosInstance = axios.create({

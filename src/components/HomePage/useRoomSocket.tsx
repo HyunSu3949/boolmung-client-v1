@@ -7,11 +7,10 @@ import { io, Socket } from "socket.io-client";
 
 const Url = (
   process.env.NODE_ENV == "development"
-    ? process.env.REACT_APP_DEV_SOCKET_DOMAIN
-    : process.env.REACT_APP_PROD_SOCKET_DOMAIN
+    ? "http://localhost:3000"
+    : "https://boolmung-api-v1-hs.koyeb.app"
 ) as string;
 const Path = "/socket.io";
-console.log("chatsocket:", Url);
 
 type RoomInfo = {
   _id: string;
