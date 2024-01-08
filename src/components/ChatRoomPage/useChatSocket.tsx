@@ -6,9 +6,10 @@ import { useParams } from "react-router-dom";
 const Url = (
   process.env.NODE_ENV == "development"
     ? process.env.REACT_APP_DEV_SOCKET_DOMAIN
-    : process.env.REACT_APP_PORD_SOCKET_DOMAIN
+    : process.env.REACT_APP_PROD_SOCKET_DOMAIN
 ) as string;
 const Path = "/socket.io";
+console.log("chatsocket:", Url);
 
 type Chat = {
   _id: string;

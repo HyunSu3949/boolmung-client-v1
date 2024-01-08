@@ -19,9 +19,10 @@ export const useLoginForm = () => {
   const onSubmit = async (data: FormData) => {
     try {
       const result = await login(data);
-      console.log(result);
-      if (result.status === 200) {
+      console.log(result.data);
+      if (result.data.status === "success") {
         setIsLogedIn(true);
+        localStorage.setItem("token", result.data.token); // 로그인 성공 시 토큰을 로컬 스토리지에 저장
       }
     } catch (error: any) {
       setError("root", {
