@@ -1,0 +1,22 @@
+.side {
+  position: absolute;
+  height: 40%;
+  width: 300px;
+  padding: 20px;
+  top: 0;
+  right: 0;
+  padding-top: 50px;
+  z-index: 1;
+}
+
+.signupModalButton {
+  width: 50%;
+  transform: translate(100%, -100%);
+  background-color: #ccc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}

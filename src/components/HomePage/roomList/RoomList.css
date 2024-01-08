@@ -1,0 +1,37 @@
+.roomListBox {
+  position: relative;
+  height: 100%;
+}
+
+.roomUl {
+  padding: 5px;
+  height: 80%;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.roomLi {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roomLi:hover {
+  cursor: pointer;
+}
+
+.makeRoomButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #333333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+}
+.makeRoomButton:hover {
+  background-color: #3d3d3d;
+  cursor: pointer;
+}

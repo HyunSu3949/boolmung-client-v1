@@ -1,0 +1,91 @@
+.ReactModalPortal {
+  position: relative;
+  z-index: 2;
+}
+.signupModal {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 5px;
+  padding: 30px 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  width: 400px;
+  color: black;
+}
+
+.signupModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signupModal form > div {
+  display: flex;
+  flex-direction: column;
+}
+.signupModal form > div:last-child {
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.signupModal h2 {
+  margin: 0;
+  margin-bottom: 20px;
+}
+.signupModal label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.signupModal input[type="text"],
+.signupModal input[type="email"],
+.signupModal input[type="password"] {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+  margin-bottom: 16px;
+}
+
+.signupModal input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px #ccc;
+}
+
+.signupModal button[type="submit"] {
+  width: 30%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signupModal button[type="submit"]:hover {
+  background-color: #0062cc;
+}
+
+.signupModal button[type="button"] {
+  width: 30%;
+  background-color: #ccc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signupModal button[type="button"]:hover {
+  background-color: #bfbfbf;
+}

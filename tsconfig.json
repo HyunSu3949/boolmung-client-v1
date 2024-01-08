@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "lib": ["dom", "ES2015"],
+    "strict": true,
+    "sourceMap": true,
+    "target": "esnext",
+    "typeRoots": ["./src/typings", "./node_modules/@types"]
+  },
+  "exclude": ["node_modules"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "env": {
+    "es6": true
+  }
+}
