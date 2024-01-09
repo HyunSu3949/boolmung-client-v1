@@ -31,7 +31,7 @@ let rotateAxis = new THREE.Vector3(0, 1, 0);
 let rotateQuarternion = new THREE.Quaternion();
 let cameraTarget = new THREE.Vector3();
 
-export const MyCharacter = ({ chatSocket }: any) => {
+export const MyCharacter = ({ chatSocketRef }: any) => {
   const { currentUser } = useAuth();
   const { id } = useParams();
   const { forward, backward, left, right } = useInput();
@@ -81,18 +81,19 @@ export const MyCharacter = ({ chatSocket }: any) => {
       nextActionToPlay?.reset().fadeIn(0.2).play();
       currentAction.current = action;
     }
-
-    chatSocket.emit("move", {
-      roomId: id,
-      userId: currentUser._id,
-      input: { forward, backward, left, right },
-      position: [
-        model.scene.position.x,
-        model.scene.position.y,
-        model.scene.position.z,
-      ],
-      cameraCharacterAngleY,
-    });
+    if (chatSocketRef.current) {
+      chatSocketRef.current.emit("move", {
+        roomId: id,
+        userId: currentUser._id,
+        input: { forward, backward, left, right },
+        position: [
+          model.scene.position.x,
+          model.scene.position.y,
+          model.scene.position.z,
+        ],
+        cameraCharacterAngleY,
+      });
+    }
   }, [forward, backward, left, right, cameraCharacterAngleY]);
 
   const elapsedTime = useRef(0);

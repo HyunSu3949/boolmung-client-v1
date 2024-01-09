@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllRoom } from "../../apis/room/getAllRoom";
 import { useNavigate } from "react-router-dom";
 import { joinRoom } from "../../apis/room/joinRoom";
 
-import { io, Socket } from "socket.io-client";
+import { io, Manager, Socket } from "socket.io-client";
 
 const Url = (
   process.env.NODE_ENV == "development"
@@ -20,7 +20,7 @@ type RoomInfo = {
   participants: string[];
 };
 export const useRoomSocket = () => {
-  const [roomSocket, setRoomSocket] = useState<Socket>();
+  const roomSocketRef = useRef<Socket>();
   const [roomList, setRoomList] = useState<RoomInfo[]>([]);
 
   const navigate = useNavigate();
@@ -39,28 +39,30 @@ export const useRoomSocket = () => {
   };
 
   const connectRoom = () => {
-    const roomSocket = io(Url, {
-      path: Path,
-    });
-    setRoomSocket(roomSocket);
+    const manager = new Manager(Url);
+    const roomSocket = manager.socket("/room");
+    addSocketEvent(roomSocket);
+    return roomSocket;
   };
 
-  const disconnectChat = () => {
-    roomSocket?.disconnect();
+  const disconnectChat = (socket: any) => {
+    socket.on("disconnect", () => {});
   };
 
-  const addSocketEvent = () => {
-    roomSocket?.on("enter", enterCallback);
-    roomSocket?.on("newRoom", newRoomCallback);
-    roomSocket?.on("roomDeleted", roomDeletedCallback);
+  const addSocketEvent = (roomSocket: any) => {
+    roomSocket.on("enter", enterCallback);
+    roomSocket.on("newRoom", newRoomCallback);
+    roomSocket.on("roomDeleted", roomDeletedCallback);
   };
 
-  const removeSocketEvent = () => {
-    roomSocket?.off("enter", enterCallback);
+  const removeSocketEvent = (socket: any) => {
+    socket.off("enter", enterCallback);
   };
 
   const enterCallback = () => {};
   const newRoomCallback = (data: RoomInfo) => {
+    console.log(data);
+
     setRoomList((prev) => [
       ...prev,
       {
@@ -93,16 +95,17 @@ export const useRoomSocket = () => {
         }))
       );
     })();
+    roomSocketRef.current = connectRoom();
 
-    if (!roomSocket) connectRoom();
-
-    addSocketEvent();
+    addSocketEvent(connectRoom());
 
     return () => {
-      disconnectChat();
-      removeSocketEvent();
+      if (roomSocketRef.current) {
+        disconnectChat(roomSocketRef.current);
+        removeSocketEvent(roomSocketRef.current);
+      }
     };
-  }, [roomSocket]);
+  }, []);
 
   return { roomList, enterRoom };
 };

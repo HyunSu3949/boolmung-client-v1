@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
+import React, { useEffect, useRef, useState } from "react";
+import { io, Socket, Manager } from "socket.io-client";
 import { useAuth } from "../common/Context/AuthContext";
 import { useParams } from "react-router-dom";
 
@@ -9,7 +9,6 @@ const Url = (
     : "https://boolmung-api-v1-hs.koyeb.app"
 ) as string;
 const Path = "/socket.io";
-console.log("chatsocket:", Url);
 
 type Chat = {
   _id: string;
@@ -19,44 +18,38 @@ type Chat = {
 };
 
 export const useChatSocket = () => {
-  const [chatSocket, setChatSocket] = useState<Socket>();
+  const chatSocketRef = useRef<Socket>();
   const [actionInfo, setActionInfo] = useState({});
   const [chatList, setChatList] = useState<Chat[]>([]);
   const { currentUser } = useAuth();
   const { id } = useParams();
 
   const connectChat = () => {
-    const chatSocket = io(Url, {
-      path: Path,
-    });
-
-    chatSocket.emit("join", {
+    const manager = new Manager(Url);
+    const chatSokcet = manager.socket("/chat");
+    chatSokcet.emit("join", {
       userId: currentUser._id,
       roomId: id,
       name: currentUser.name,
     });
 
-    addSocketEvent(chatSocket);
-
-    return chatSocket;
+    addSocketEvent(chatSokcet);
+    return chatSokcet;
   };
 
   const sendChat = (message: string) => {
-    chatSocket?.emit("chat", {
-      userId: currentUser._id,
-      roomId: id,
-      name: currentUser.name,
-      message,
-    });
+    if (chatSocketRef.current) {
+      chatSocketRef.current.emit("chat", {
+        userId: currentUser._id,
+        roomId: id,
+        name: currentUser.name,
+        message,
+      });
+    }
   };
-  const joinCallback = (data: any) => {
-    console.log(data);
-  };
+  const joinCallback = (data: any) => {};
 
   const chatCallback = (data: Chat) => {
-    console.log(data);
-    console.log(data._id, currentUser._id);
-
     if (data._id === currentUser._id) {
       data.type = "mine";
     } else if (data._id !== currentUser._id) {
@@ -70,8 +63,8 @@ export const useChatSocket = () => {
     setActionInfo(data);
   };
 
-  const disconnectChat = () => {
-    chatSocket?.disconnect();
+  const disconnectChat = (socket: any) => {
+    socket.on("disconnect", () => {});
   };
 
   const addSocketEvent = (socket: any) => {
@@ -80,23 +73,25 @@ export const useChatSocket = () => {
     socket.on("move", moveCallback);
   };
 
-  const removeSocketEvent = () => {
-    chatSocket?.off("join", joinCallback);
-    chatSocket?.off("chat", chatCallback);
-    chatSocket?.off("move", moveCallback);
+  const removeSocketEvent = (socket: any) => {
+    socket.off("join", joinCallback);
+    socket.off("chat", chatCallback);
+    socket.off("move", moveCallback);
   };
 
   useEffect(() => {
-    setChatSocket(connectChat());
+    chatSocketRef.current = connectChat();
 
     return () => {
-      disconnectChat();
-      removeSocketEvent();
+      if (chatSocketRef.current) {
+        disconnectChat(chatSocketRef.current);
+        removeSocketEvent(chatSocketRef.current);
+      }
     };
   }, []);
 
   return {
-    chatSocket,
+    chatSocketRef,
     chatList,
     actionInfo,
     sendChat,

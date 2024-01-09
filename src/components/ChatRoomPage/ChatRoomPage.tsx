@@ -8,14 +8,14 @@ import { Navbar } from "../common/Navbar/Navbar";
 import { sendChat } from "./../../apis/room/sendChat";
 
 export const ChatRoomPage = () => {
-  const { chatList, actionInfo, chatSocket, sendChat } = useChatSocket();
+  const { chatList, actionInfo, chatSocketRef, sendChat } = useChatSocket();
   const navigate = useNavigate();
   const exitRoom = () => {
     navigate(-1);
   };
   return (
     <>
-      <ChatScene actionInfo={actionInfo} chatSocket={chatSocket} />
+      <ChatScene actionInfo={actionInfo} chatSocketRef={chatSocketRef} />
       <Navbar />
       <div className="side">
         <ChatWindow chatList={chatList} sendChat={sendChat} />
