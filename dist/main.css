@@ -125,14 +125,12 @@
 }
 
 .side {
-  position: absolute;
   height: 40%;
   width: 300px;
   padding: 20px;
   top: 0;
   right: 0;
   padding-top: 50px;
-  z-index: 1;
 }
 
 .signupModalButton {
