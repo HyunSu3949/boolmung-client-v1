@@ -9,9 +9,14 @@
     "strict": true,
     "sourceMap": true,
     "target": "esnext",
-    "typeRoots": ["./src/typings", "./node_modules/@types"]
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "src/types/*": ["src/types/*"]
+    }
   },
   "exclude": ["node_modules"],
+  "include": ["**/*.ts", "**/*.tsx", "./src/types"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },

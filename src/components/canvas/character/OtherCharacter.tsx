@@ -3,14 +3,15 @@ import React, { useEffect, useRef, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
+
 import { directionOffset } from "./utils";
 
 type ActionName = "default" | "walk" | "";
 
-let rotateAxis = new THREE.Vector3(0, 1, 0);
-let rotateQuarternion = new THREE.Quaternion();
+const rotateAxis = new THREE.Vector3(0, 1, 0);
+const rotateQuarternion = new THREE.Quaternion();
 
-export const OtherCharacter = ({ model, state }: any) => {
+export function OtherCharacter({ model, state }: any) {
   const { input, position, cameraCharacterAngleY } = state;
 
   const { forward, backward, left, right } = input;
@@ -43,7 +44,7 @@ export const OtherCharacter = ({ model, state }: any) => {
 
   useFrame((state, delta) => {
     if (currentAction.current == "walk") {
-      let newDirectionOffset = directionOffset({
+      const newDirectionOffset = directionOffset({
         forward,
         backward,
         left,
@@ -52,15 +53,15 @@ export const OtherCharacter = ({ model, state }: any) => {
 
       rotateQuarternion.setFromAxisAngle(
         rotateAxis,
-        cameraCharacterAngleY + newDirectionOffset
+        cameraCharacterAngleY + newDirectionOffset,
       );
 
       clone.quaternion.rotateTowards(rotateQuarternion, 0.2);
 
-      let direction = new THREE.Vector3(
+      const direction = new THREE.Vector3(
         Math.sin(cameraCharacterAngleY),
         0,
-        Math.cos(cameraCharacterAngleY)
+        Math.cos(cameraCharacterAngleY),
       );
       direction.applyAxisAngle(rotateAxis, newDirectionOffset);
 
@@ -71,11 +72,7 @@ export const OtherCharacter = ({ model, state }: any) => {
       clone.position.z += moveZ;
     }
   });
-  return (
-    <>
-      <primitive object={clone} ref={ref} />
-    </>
-  );
-};
+  return <primitive object={clone} ref={ref} />;
+}
 
-useGLTF.preload("/models/player.glb");
+useGLTF.preload("/models/player7.glb");

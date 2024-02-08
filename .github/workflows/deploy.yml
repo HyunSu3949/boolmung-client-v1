@@ -1,0 +1,35 @@
+name: React CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Deploy to EC2
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-avzr --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.TARGET }}
+          REACT_APP_PROD_DOMAIN: ${{ secrets.REACT_APP_PROD_DOMAIN }}
+          REACT_APP_PROD_SOCKET_DOMAIN: ${{ secrets.REACT_APP_PROD_SOCKET_DOMAIN }}
+          REACT_APP_PROD_STATIC_DOMAIN: ${{ secrets.REACT_APP_PROD_STATIC_DOMAIN }}

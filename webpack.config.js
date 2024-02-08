@@ -2,6 +2,7 @@ const Dotenv = require("dotenv-webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
 const prod = process.env.NODE_ENV === "production";
 
@@ -9,7 +10,15 @@ module.exports = {
   mode: prod ? "production" : "development",
   entry: "./src/index.tsx",
   output: {
-    path: __dirname + "/dist/",
+    path: `${__dirname}/dist/`,
+  },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, "./src/"),
+    },
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -27,7 +36,7 @@ module.exports = {
       },
       {
         test: /\.(css)$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
         test: /\.(png|jpe?g|gif|glb|gltf)$/i,
@@ -47,9 +56,9 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "./public/img", to: "./img" },
-        { from: "./public/models", to: "./models" },
-        { from: "./public/sound", to: "./sound" },
+        { from: "./src/assets/img", to: "./img" },
+        { from: "./src/assets/models", to: "./models" },
+        { from: "./src/assets/sound", to: "./sound" },
       ],
     }),
     new Dotenv(),
