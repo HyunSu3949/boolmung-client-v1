@@ -25,6 +25,8 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        env:
+          RSYNC_RSH: ssh -o StrictHostKeyChecking=no
 
       - name: Sync build files to EC2
         run: |
