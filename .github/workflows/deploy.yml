@@ -21,10 +21,15 @@ jobs:
       - name: Build React app
         run: npm run build
 
-      - name: Deploy to EC2
-        uses: easingthemes/ssh-deploy@v2.1.5
-        env:
+      - name: Set up SSH agent for file transfer
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Sync build files to EC2
+        run: |
+          rsync -avzr --delete $GITHUB_WORKSPACE/build/ ec2-user@${{ secrets.REMOTE_HOST }}:${{ secrets.TARGET }}
+        env:
           ARGS: "-avzr --delete"
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
