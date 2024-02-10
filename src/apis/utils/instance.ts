@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const baseURL = ":3000"
+const baseURL = "https://www.boolmung.duckdns.org:3000"
 
 const axiosInstance = axios.create({
   baseURL,
