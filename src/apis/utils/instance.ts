@@ -4,7 +4,7 @@ const baseURL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_PROD_DOMAIN
     : process.env.REACT_APP_DEV_DOMAIN;
-
+console.log(baseURL,'url------------')
 const axiosInstance = axios.create({
   baseURL,
   withCredentials: true,
