@@ -23,6 +23,8 @@ jobs:
           echo "REACT_APP_PROD_DOMAIN=${{ secrets.REACT_APP_PROD_DOMAIN }}" > .env
           echo "REACT_APP_PROD_SOCKET_DOMAIN=${{ secrets.REACT_APP_PROD_SOCKET_DOMAIN }}" >> .env
           echo "REACT_APP_PROD_STATIC_DOMAIN=${{ secrets.REACT_APP_PROD_STATIC_DOMAIN }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
       - name: Build React app
         run: npm run build

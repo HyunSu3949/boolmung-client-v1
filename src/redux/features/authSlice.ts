@@ -17,7 +17,7 @@ const DOMAIN = (
     : process.env.REACT_APP_DEV_STATIC_DOMAIN
 ) as string;
 
-const authSlice = createSlice({
+export const { setLoginState, setLogoutState } = createSlice({
   name: "auth",
   initialState,
   reducers: {
@@ -39,7 +39,27 @@ const authSlice = createSlice({
       state.user = initialState.user;
     },
   },
-});
+}).actions;
+export default createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    setLoginState: (
+      state,
+      action: PayloadAction<{ token: string; user: User }>,
+    ) => {
+      localStorage.setItem("token", action.payload.token);
+      state.isLoggedIn = true;
+      state.user = action.payload.user;
 
-export const { setLoginState, setLogoutState } = authSlice.actions;
-export default authSlice.reducer;
+      state.user.image = action.payload.user.image
+        ? DOMAIN + action.payload.user.image
+        : "/img/defaultFace.png";
+    },
+    setLogoutState: (state) => {
+      localStorage.removeItem("token");
+      state.isLoggedIn = false;
+      state.user = initialState.user;
+    },
+  },
+}).reducer;

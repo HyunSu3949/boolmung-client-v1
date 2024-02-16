@@ -1,6 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const baseURL = "https://www.boolmung.duckdns.org/api/v1"
+const baseURL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV_DOMAIN
+    : process.env.REACT_APP_PROD_DOMAIN;
 
 const axiosInstance = axios.create({
   baseURL,

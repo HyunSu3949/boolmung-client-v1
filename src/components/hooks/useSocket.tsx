@@ -7,11 +7,11 @@ const URL = (
     ? process.env.REACT_APP_DEV_SOCKET_DOMAIN
     : process.env.REACT_APP_PROD_SOCKET_DOMAIN
 ) as string;
-const PATH = "/socket.io";
 
 type Props = {
   room: string;
 };
+
 export default function useSocket({ room }: Props) {
   const socketRef = useRef<null | Socket>(null);
   const [socketData, setSocketData] = useState(null);
