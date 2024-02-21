@@ -2,42 +2,44 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-import {
-  connectSocket,
-  disconnectSocket,
-} from "src/redux/features/socketActions";
 import { RootState } from "src/redux/store";
+import { connect, disconnect, leave } from "src/redux/features/socketSlice";
 
 import { ChatWindow } from "./ChatWindow/ChatWinow";
 
 export function ChatRoomPage() {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
-
   const { roomid } = useParams();
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
+
   const exitRoom = () => {
     navigate("/");
   };
 
   useEffect(() => {
     dispatch(
-      connectSocket({
+      connect({
         _id: user._id,
         roomId: roomid as string,
         name: user.name,
       }),
     );
+    const handleBeforeUnload = () => {
+      localStorage.setItem("isReloading", "true");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    if (localStorage.getItem("isReloading") === "true") {
+      localStorage.removeItem("isReloading");
+    }
 
     return () => {
-      dispatch(
-        disconnectSocket({
-          _id: user._id,
-          roomId: roomid as string,
-          name: user.name,
-        }),
-      );
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (localStorage.getItem("isReloading") !== "true") {
+        dispatch(disconnect());
+      }
     };
   }, [dispatch, roomid, user._id, user.name]);
 

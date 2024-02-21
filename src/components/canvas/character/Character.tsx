@@ -19,22 +19,20 @@ const rotateQuarternion = new THREE.Quaternion();
 const cameraTarget = new THREE.Vector3();
 
 export function Character() {
+  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const currentAction = useRef("");
   const controlsRef = useRef<any>();
-  const imgUrlRef = useRef("");
 
-  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-
-  const { forward, backward, left, right } = useInput();
-  const camera = useThree((state) => state.camera);
   const model = useGLTF("/models/player7.glb") as GLTFResult;
+  const bodyTexture = useLoader(THREE.TextureLoader, "/img/body.png");
+  const faceTexture = useLoader(THREE.TextureLoader, user.image);
+
+  const camera = useThree((state) => state.camera);
   const { animations, scene } = model;
   const { actions } = useAnimations<any>(animations, scene);
-  const imgSrc = user.image;
 
-  const faceTexture = useLoader(THREE.TextureLoader, imgSrc);
-  const bodyTexture = useLoader(THREE.TextureLoader, "/img/body.png");
+  const { forward, backward, left, right } = useInput();
   useEffect(() => {
     model.scene.scale.set(1.2, 1.2, 1.2);
     faceTexture.flipY = false;
@@ -91,12 +89,6 @@ export function Character() {
 
   const elapsedTime = useRef(0);
 
-  useEffect(() => {
-    // console.log("position: ", model.scene.position);
-    // console.log("walkD: ", walkDirection);
-    console.log("qaut: ", rotateQuarternion);
-    console.log("----------------------");
-  }, [model.scene.position, model.scene.position.x]);
   useFrame((_, delta) => {
     elapsedTime.current += delta;
 
@@ -160,6 +152,7 @@ export function Character() {
       }
     }
   });
+
   return (
     <>
       <OrbitControls

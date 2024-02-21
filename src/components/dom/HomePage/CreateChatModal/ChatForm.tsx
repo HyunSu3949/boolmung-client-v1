@@ -1,63 +1,79 @@
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { createRoom } from "src/apis/room/createRoom";
+import { createRoom } from "src/apis/postApis";
 import { RootState } from "src/redux/store";
 
 type FormData = {
   title: string;
   max: number;
 };
-type PropsType = {
-  closeModal: () => void;
-};
 
-export function ChatForm({ closeModal }: PropsType) {
+export function ChatForm() {
+  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
   } = useForm<FormData>();
+  const { data, mutate, isError, isSuccess } = useMutation<
+    any,
+    Error,
+    FormData
+  >({
+    mutationFn: (data: FormData) => {
+      return createRoom({ body: { ...data, owner: user._id } });
+    },
+  });
 
-  const navigate = useNavigate();
-
-  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-
-  const onSubmit = async (data: FormData) => {
-    let roomId;
-    try {
-      const result = await createRoom({ ...data, owner: user._id });
-      console.log(result);
-      roomId = result.data.data.data._id;
-    } catch (error: any) {
-      return;
-    }
-    closeModal();
-
-    navigate(`room/${roomId}`);
+  const onSubmit = (data: FormData) => {
+    mutate(data);
   };
 
+  if (isSuccess) {
+    const roomId = data.data._id;
+    navigate(`room/${roomId}`);
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="title">방 제목</label>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="mx-auto w-full min-w-[32rem] max-w-4xl rounded-lg p-4"
+    >
+      <div className="my-4 mb-4">
+        <label
+          htmlFor="title"
+          className="block mb-2 text-sm font-bold text-gray-700"
+        >
+          방 제목
+        </label>
         <input
           id="title"
           placeholder="방 제목을 입력해주세요"
           type="text"
+          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline focus:outline-none"
           {...register("title", { required: "방 제목을 입력해 주세요" })}
         />
-        {errors.title && <p>{errors.title.message}</p>}
+        {errors.title && (
+          <p className="text-xs italic text-red-500">{errors.title.message}</p>
+        )}
       </div>
-      <div>
-        <label htmlFor="max">참가인원</label>
+      <div className="my-4 mb-6">
+        <label
+          htmlFor="max"
+          className="block mb-2 text-sm font-bold text-gray-700"
+        >
+          참가인원
+        </label>
         <input
           id="max"
           type="number"
           placeholder="2"
+          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline focus:outline-none"
           min={2}
           max={10}
           {...register("max", {
@@ -68,12 +84,16 @@ export function ChatForm({ closeModal }: PropsType) {
             },
           })}
         />
-        {errors.max && <p>{errors.max.message}</p>}
+        {errors.max && (
+          <p className="text-xs italic text-red-500">{errors.max.message}</p>
+        )}
       </div>
-      <div>
-        <button type="submit">개설하기</button>
-        <button type="button" onClick={closeModal}>
-          취소
+      <div className="flex items-center justify-between">
+        <button
+          type="submit"
+          className="px-4 py-2 m-auto font-bold text-white bg-blue-500 rounded focus:shadow-outline hover:bg-blue-700 focus:outline-none"
+        >
+          만들기
         </button>
       </div>
     </form>

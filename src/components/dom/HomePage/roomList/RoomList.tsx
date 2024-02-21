@@ -17,16 +17,16 @@ export function RoomList() {
   if (error) return <div>에러남</div>;
 
   return (
-    <div className="flex w-full">
-      <ul className="flex w-full">
+    <div className="flex w-full p-4 bg-gray-800">
+      <ul className="flex flex-col w-full space-y-2">
         {data.map((room: RoomInfo) => (
           <li key={room._id} className="w-full">
             <Link
               to={`room/${room._id}`}
-              className="flex justify-between w-full"
+              className="flex items-center justify-between w-full p-6 bg-gray-700 rounded-md hover:bg-gray-600"
             >
-              <h2 className="mr-5">{room.title}</h2>
-              <p className="roomInfo">
+              <h2 className="mr-5 text-lg text-white">{room.title}</h2>
+              <p className="text-gray-300 roomInfo">
                 {room.participants.length}/{room.max}
               </p>
             </Link>

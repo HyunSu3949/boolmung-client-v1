@@ -13,7 +13,7 @@ export function ChatScene({ actionInfo, chatSocketRef }: any) {
       <Fire scale={5} position={[0, 2.0, 0]} />
       <Wood />
       <Character />
-      <Others actionInfo={actionInfo} />
+      {/* <Others actionInfo={actionInfo} /> */}
       <Floor />
       <Lights />
     </Canvas>

@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/instance";
+import axiosInstance from "../instance";
 
 export const getme = async () => {
   const result = await axiosInstance("/users/me");

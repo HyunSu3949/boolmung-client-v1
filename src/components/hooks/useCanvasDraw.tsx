@@ -1,30 +1,53 @@
 import { useEffect, useRef, MutableRefObject } from "react";
+import { useDispatch } from "react-redux";
 
-import { updateProfile } from "src/apis/user/userApis";
+import { getPreSignedUrl } from "src/apis/getApis";
+import { patchUserInfo } from "src/apis/patchApis";
+import { updateImage } from "src/redux/features/authSlice";
 
-interface Point {
+type Point = {
   x: number;
   y: number;
-}
+};
 
 export function useCanvasDraw() {
   const canvasRef: MutableRefObject<HTMLCanvasElement | null> = useRef(null);
   const isDrawingRef: MutableRefObject<boolean> = useRef(false);
   const prevPointRef: MutableRefObject<Point | null> = useRef(null);
+  const dispatch = useDispatch();
 
-  const saveDrawing = () => {
-    if (!canvasRef.current) return;
+  const saveDrawing = async () => {
+    if (!canvasRef.current || !canvasRef) return;
 
-    const dataUrl = canvasRef.current.toDataURL("image/png");
-    fetch(dataUrl)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const formData = new FormData();
+    const context = canvasRef.current.getContext("2d");
+    if (context) {
+      context.save();
+      const { width, height } = canvasRef.current;
+      context.globalCompositeOperation = "destination-over";
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, width, height);
+    }
 
-        formData.append("photo", blob);
+    canvasRef.current.toBlob(async (blob) => {
+      if (blob) {
+        const {
+          data: { url, objectKey },
+        } = await getPreSignedUrl({});
 
-        updateProfile(formData);
-      });
+        const res = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "image/png",
+          },
+          body: blob,
+        });
+
+        if (res.status === 200) {
+          dispatch(updateImage({ image: objectKey }));
+          patchUserInfo({ body: { image: objectKey } });
+        }
+      }
+    }, "image/png");
   };
 
   useEffect(() => {

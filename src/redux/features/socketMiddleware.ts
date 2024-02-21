@@ -1,12 +1,8 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { Manager, Socket } from "socket.io-client";
 
-import {
-  SOCKET_CONNECT,
-  SOCKET_CHAT,
-  SOCKET_JOIN,
-  SOCKET_DISCONNECT,
-} from "src/redux/features/socketActions";
+import { setMessageList } from "src/redux/features/socketSlice";
+import { SocketReceiveMessage } from "src/types/index";
 
 const URL = (
   process.env.NODE_ENV === "development"
@@ -14,15 +10,24 @@ const URL = (
     : process.env.REACT_APP_PROD_SOCKET_DOMAIN
 ) as string;
 const ROOM = "/chat";
+const eventName = {
+  SOCKET_CONNECT: "socket/connect",
+  SOCKET_DISCONNECT: "socket/disconnect",
+  SOCKET_REDOAD: "socket/reload",
+  SOCKET_LEAVE: "socket/leave",
+  SOCKET_CHAT: "socket/sendMessage",
+  SOCKET_JOIN: "socket/join",
+  SOCKET_RECIEVE_DISCONNECT: "socket/disconnect",
+  SOCKET_RECIEVE_CHAT: "socket/chat",
+  SOCKET_RECIEVE_JOIN: "socket/join",
+};
 
 export const socketMiddleware: Middleware = (store) => {
   let socket: Socket;
-
+  const { dispatch } = store;
   return (next) => (action: any) => {
-    const { dispatch } = store;
-
     switch (action.type) {
-      case SOCKET_CONNECT:
+      case eventName.SOCKET_CONNECT:
         const manager = new Manager(URL, {
           reconnection: true,
           reconnectionAttempts: 5,
@@ -32,22 +37,24 @@ export const socketMiddleware: Middleware = (store) => {
         });
         socket = manager.socket(ROOM);
 
-        socket.on(SOCKET_JOIN, (data) => {
-          dispatch({ type: SOCKET_JOIN, payload: data });
+        socket.on(eventName.SOCKET_CHAT, (data: SocketReceiveMessage) => {
+          dispatch(setMessageList(data));
         });
 
-        socket.on(SOCKET_CHAT, (data) => {
-          dispatch({ type: SOCKET_CHAT, payload: data });
+        socket.emit(eventName.SOCKET_JOIN, {
+          type: "system",
+          _id: action.payload._id,
+          name: action.payload.name,
+          roomId: action.payload.roomId,
         });
-
         break;
 
-      case SOCKET_DISCONNECT:
+      case eventName.SOCKET_DISCONNECT:
         socket.disconnect();
         break;
 
-      case SOCKET_CHAT:
-        socket.emit(SOCKET_CHAT, action.payload);
+      case eventName.SOCKET_CHAT:
+        socket.emit(eventName.SOCKET_CHAT, action.payload);
         break;
 
       default:

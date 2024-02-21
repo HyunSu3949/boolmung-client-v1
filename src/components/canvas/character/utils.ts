@@ -11,26 +11,26 @@ export const directionOffset = ({
   left,
   right,
 }: directionOffsetType) => {
-  let directionOffset = 0; //기본 w
+  let directionOffset = 0; // 기본 w
 
   if (forward) {
     if (left) {
-      directionOffset = Math.PI / 4; //w+a ,45도 전환
+      directionOffset = Math.PI / 4; // w+a ,45도 전환
     } else if (right) {
       directionOffset = -Math.PI / 4;
     }
   } else if (backward) {
     if (left) {
-      directionOffset = Math.PI / 4 + Math.PI / 2; //s+a
+      directionOffset = Math.PI / 4 + Math.PI / 2; // s+a
     } else if (right) {
       directionOffset = -Math.PI / 4 + -Math.PI / 2;
     } else {
-      directionOffset = Math.PI; //s
+      directionOffset = Math.PI; // s
     }
   } else if (left) {
-    directionOffset = Math.PI / 2; //a
+    directionOffset = Math.PI / 2; // a
   } else if (right) {
-    directionOffset = -Math.PI / 2; //d
+    directionOffset = -Math.PI / 2; // d
   }
 
   return directionOffset;
@@ -43,7 +43,8 @@ export const roundToTwoDecimal = (number: number) => {
 };
 
 export const generateInitialPosition = () => {
-  let x, z;
+  let x;
+  let z;
 
   do {
     x = Math.random() * 8 - 4;

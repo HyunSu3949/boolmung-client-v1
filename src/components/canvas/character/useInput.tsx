@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const useInput = () => {
   const [input, setInput] = useState({
@@ -8,14 +8,17 @@ export const useInput = () => {
     right: false,
   });
 
-  const keys: { [key: string]: string } = {
-    KeyW: "forward",
-    KeyS: "backward",
-    KeyA: "left",
-    KeyD: "right",
-  };
+  const keys: Record<string, string> = useMemo(
+    () => ({
+      KeyW: "forward",
+      KeyS: "backward",
+      KeyA: "left",
+      KeyD: "right",
+    }),
+    [],
+  );
 
-  const findKey = (key: string) => keys[key];
+  const findKey = useCallback((key: string) => keys[key], [keys]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -31,6 +34,6 @@ export const useInput = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, []);
+  }, [findKey]);
   return input;
 };

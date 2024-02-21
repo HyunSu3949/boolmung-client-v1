@@ -52,6 +52,7 @@
     "import/no-unresolved": "off",
     "no-multi-assign": "off",
     "no-underscore-dangle": "off",
+    "no-restricted-syntax": "off",
     "no-restricted-exports": [
       "error",
       { "restrictDefaultExports": { "defaultFrom": false } }

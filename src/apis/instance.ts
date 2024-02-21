@@ -5,7 +5,7 @@ const baseURL =
     ? process.env.REACT_APP_DEV_DOMAIN
     : process.env.REACT_APP_PROD_DOMAIN;
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL,
   withCredentials: true,
 });
@@ -30,4 +30,22 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-export default axiosInstance;
+
+export const axiosPublic = axios.create({
+  baseURL,
+});
+
+axiosPublic.interceptors.response.use(
+  (res: AxiosResponse) => {
+    const responseBody = res.data;
+    const requestUrl = res.config.url;
+
+    // console.log('Request URL:', requestUrl);
+    // console.log('Response Body:', responseBody);
+    return res;
+  },
+  (error: AxiosError<unknown>) => {
+    console.log(error);
+    return Promise.reject(error);
+  },
+);

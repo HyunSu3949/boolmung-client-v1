@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export const SoundButton = () => {
+export function SoundButton() {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioFile = "/sound/fireSound.mp3";
@@ -43,4 +43,4 @@ export const SoundButton = () => {
       </button>
     </>
   );
-};
+}

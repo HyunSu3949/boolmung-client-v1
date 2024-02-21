@@ -10,7 +10,8 @@ module.exports = {
   mode: prod ? "production" : "development",
   entry: "./src/index.tsx",
   output: {
-    path: `${__dirname}/build/`,
+    path: path.resolve(__dirname, "build"),
+    publicPath: "/",
   },
   resolve: {
     alias: {
@@ -19,6 +20,9 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
   },
   module: {
     rules: [

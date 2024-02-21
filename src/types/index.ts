@@ -36,8 +36,8 @@ export type RoomInfo = {
 export type User = {
   [key: string]: any;
   image: string;
-  _id: string;
-  name: string;
+  // _id: string;
+  // name: string;
 };
 export type AuthState = {
   isLoggedIn: boolean;
@@ -49,8 +49,19 @@ export type SocketSendMessage = {
   roomId: string;
   name: string;
 };
+export type SocketReceiveMessage = {
+  [key: string]: any;
+  message: string;
+  type: string;
+};
 export type SocketUserInfo = {
   _id: string;
   roomId: string;
   name: string;
+};
+
+export type CreateRoomFormData = {
+  title: string;
+  max: number;
+  owner: string;
 };

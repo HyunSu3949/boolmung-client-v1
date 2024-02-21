@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/instance";
+import { axiosInstance } from "../instance";
 
 type FormData = {
   title: string;

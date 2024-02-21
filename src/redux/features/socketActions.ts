@@ -1,28 +1,40 @@
-import { SocketUserInfo, SocketSendMessage } from "src/types/index";
+import {
+  SocketUserInfo,
+  SocketSendMessage,
+  SocketReceiveMessage,
+} from "src/types/index";
 
-export const SOCKET_CONNECT = "connect";
-export const SOCKET_DISCONNECT = "disconnect";
-export const SOCKET_CHAT = "chat";
-export const SOCKET_JOIN = "join";
-export const SOCKET_RECIEVE_DISCONNECT = "disconnect";
-export const SOCKET_RECIEVE_CHAT = "chat";
-export const SOCKET_RECIEVE_JOIN = "join";
+export const eventName = {
+  SOCKET_CONNECT: "socket/connect",
+  SOCKET_DISCONNECT: "socket/disconnect",
+  SOCKET_CHAT: "socket/sendMessage",
+  SOCKET_JOIN: "socket/join",
+  SOCKET_RECIEVE_DISCONNECT: "socket/disconnect",
+  SOCKET_RECIEVE_CHAT: "socket/chat",
+  SOCKET_RECIEVE_JOIN: "socket/join",
+};
 
 export const connectSocket = ({ _id, roomId, name }: SocketUserInfo) => ({
-  type: SOCKET_CONNECT,
+  type: eventName.SOCKET_CONNECT,
   payload: { _id, roomId, name },
 });
+
 export const sendMessage = ({
   message,
   _id,
   roomId,
   name,
 }: SocketSendMessage) => ({
-  type: SOCKET_CHAT,
+  type: eventName.SOCKET_CHAT,
   payload: { message, _id, roomId, name },
 });
 
+export const receiveMessage = ({ message, type }: SocketReceiveMessage) => ({
+  type: eventName.SOCKET_RECIEVE_CHAT,
+  payload: { message, type },
+});
+
 export const disconnectSocket = ({ _id, roomId, name }: SocketUserInfo) => ({
-  type: SOCKET_DISCONNECT,
+  type: eventName.SOCKET_DISCONNECT,
   payload: { _id, roomId, name },
 });

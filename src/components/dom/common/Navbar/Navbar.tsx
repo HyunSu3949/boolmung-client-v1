@@ -18,7 +18,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="w-fit flex-col bg-slate-600 p-6">
+    <nav className="flex-col p-6 w-fit bg-slate-600 text-slate-100">
       <div className="mb-4">
         <SoundButton />
       </div>
@@ -35,7 +35,7 @@ export function Navbar() {
       </div>
       <div>
         <button
-          className="p rounded bg-slate-400 p-3 px-6"
+          className="p-3 px-6 rounded p bg-slate-400"
           onClick={handleLogout}
           type="button"
         >

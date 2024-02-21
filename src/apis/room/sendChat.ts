@@ -1,9 +1,9 @@
-import axiosInstance from "../utils/instance";
+import axiosInstance from "../instance";
 
 export const sendChat = async (
   roomId: string,
   name: string,
-  message: string
+  message: string,
 ) => {
   await axiosInstance.post(`/rooms/${roomId}/chat`, {
     name,

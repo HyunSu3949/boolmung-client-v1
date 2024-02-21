@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { CreateChatModal } from "src/components/dom/HomePage/CreateChatModal/CreateChatModal";
+import { Modal } from "src/components/dom/common/Modal";
+import { ChatForm } from "src/components/dom/HomePage/CreateChatModal/ChatForm";
 
 import { RoomList } from "./roomList/RoomList";
 
@@ -16,16 +17,18 @@ export function HomePage() {
   };
 
   return (
-    <div className="flex-col p-6">
+    <div className="flex-col py-6">
       <button
-        className="mb-6 rounded bg-slate-400 p-3 font-semibold"
+        className="p-3 mb-6 ml-2 font-semibold rounded bg-slate-400"
         onClick={openModal}
         type="button"
       >
         채팅방 개설
       </button>
       <RoomList />
-      <CreateChatModal isOpen={isOpen} closeModal={closeModal} />
+      <Modal isOpen={isOpen} closeModal={closeModal}>
+        <ChatForm />
+      </Modal>
     </div>
   );
 }

@@ -8,7 +8,8 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  // eslint-disable-next-line global-require
+  plugins: [require("@tailwindcss/forms")],
   extend: {
     backgroundImage: {
       canvas: "url('./sky.jpg')",

@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/instance";
+import { axiosInstance } from "../instance";
 
 export const getAllRoom = async () => {
   const result = await axiosInstance.get("/rooms", { withCredentials: true });
