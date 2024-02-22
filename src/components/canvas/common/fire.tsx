@@ -18,8 +18,8 @@ class FireMaterial extends THREE.ShaderMaterial {
         scale: { type: "v3", value: null },
         noiseScale: { type: "v4", value: new THREE.Vector4(1, 2, 1, 0.3) },
         magnitude: { type: "f", value: 1.8 },
-        lacunarity: { type: "f", value: 1.8 },
-        gain: { type: "f", value: 0.5 },
+        lacunarity: { type: "f", value: 2.0 },
+        gain: { type: "f", value: 0.3 },
       },
       vertexShader: `
       varying vec3 vWorldPos;

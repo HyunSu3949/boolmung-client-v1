@@ -58,10 +58,20 @@ export type SocketUserInfo = {
   _id: string;
   roomId: string;
   name: string;
+  image: string;
 };
 
 export type CreateRoomFormData = {
   title: string;
   max: number;
   owner: string;
+};
+
+export type ActionInfo = {
+  _id: string;
+  roomId: string;
+  input: any;
+  position: any;
+  cameraCharacterAngleY: any;
+  image: string;
 };

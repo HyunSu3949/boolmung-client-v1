@@ -2,23 +2,26 @@ import { useGLTF } from "@react-three/drei";
 import { useSelector } from "react-redux";
 
 import { RootState } from "src/redux/store";
-import { GLTFResult } from "src/types/index";
 
 import { OtherCharacter } from "./OtherCharacter";
 
-export function Others({ actionInfo }: any) {
-  const model = useGLTF("/models/player7.glb") as GLTFResult;
+export function Others() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const othersInfo = Object.entries(actionInfo).filter(
-    (data: any) => data[1].userId !== user?._id,
+  const { actionInfo } = useSelector(
+    (state: RootState) => state.reducer.socketReducer,
   );
 
-  const characters = othersInfo.map((data: any) => {
-    const [socketId, state] = data;
+  const othersInfo = Object.entries(actionInfo).filter(
+    ([_id, value]) => value._id !== user?._id,
+  );
 
-    return <OtherCharacter key={state.userId} model={model} state={state} />;
-  });
-  return { characters };
+  return (
+    <>
+      {othersInfo.map(([_id, info]) => {
+        return <OtherCharacter key={_id} state={info} image={info.image} />;
+      })}
+    </>
+  );
 }
 
 useGLTF.preload("/models/player7.glb");

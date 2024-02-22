@@ -1,8 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: any = {
+import { ActionInfo } from "src/types/index";
+
+type State = {
+  participants: {
+    [key in string]: any;
+  };
+  messageList: any[];
+  actionInfo: {
+    [key: string]: ActionInfo;
+  };
+  roomInfo: any;
+};
+const initialState: State = {
+  participants: {},
   messageList: [],
-  position: {},
+  actionInfo: {},
+  roomInfo: {},
 };
 
 const socketSlice = createSlice({
@@ -15,30 +29,41 @@ const socketSlice = createSlice({
         _id: string;
         roomId: string;
         name: string;
+        image: string;
       }>,
     ) => {},
-    leave: (state) => {
-      state.messageList = [];
-    },
+
     disconnect: (state) => {
       state.messageList = [];
     },
-    reload: () => {},
+
+    join: (state, action) => {
+      state.participants = {
+        ...state.participants,
+        [action.payload._id]: action.payload,
+      };
+    },
+
     setMessageList: (
       state,
       action: PayloadAction<{ message: string; type: string }>,
     ) => {
       state.messageList.push(action.payload);
     },
-    setPositionList: (state, action: PayloadAction<any>) => {
-      state.position = {
-        ...state.position,
-        [action.payload.user]: action.payload.position,
+
+    move: (state, action: PayloadAction<ActionInfo>) => {
+      state.actionInfo = {
+        ...state.actionInfo,
+        [action.payload._id]: action.payload,
       };
+    },
+
+    getRoomInfo: (state, action) => {
+      state.roomInfo = action.payload;
     },
   },
 });
 
-export const { setMessageList, setPositionList, connect, disconnect, leave } =
+export const { setMessageList, connect, disconnect, move, join, getRoomInfo } =
   socketSlice.actions;
 export const socketReducer = socketSlice.reducer;

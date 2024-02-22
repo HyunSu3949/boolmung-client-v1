@@ -2,7 +2,8 @@ import * as THREE from "three";
 import React, { useEffect, useRef, useState } from "react";
 import { useGLTF, useAnimations, OrbitControls } from "@react-three/drei";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
 
 import { GLTFResult, ActionName } from "src/types";
 import {
@@ -12,6 +13,7 @@ import {
 } from "./utils";
 import { useInput } from "./useInput";
 import { RootState } from "src/redux/store";
+import { move } from "src/redux/features/socketSlice";
 
 const walkDirection = new THREE.Vector3();
 const rotateAxis = new THREE.Vector3(0, 1, 0);
@@ -19,6 +21,8 @@ const rotateQuarternion = new THREE.Quaternion();
 const cameraTarget = new THREE.Vector3();
 
 export function Character() {
+  const { roomid } = useParams();
+  const positionRef = useRef({ x: 0, y: 0, z: 0 });
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const currentAction = useRef("");
@@ -69,9 +73,9 @@ export function Character() {
     if (controlsRef.current) controlsRef.current.target = cameraTarget;
   };
 
+  const dispatch = useDispatch();
   useEffect(() => {
     let action: ActionName = "";
-
     if (forward || backward || left || right) {
       action = "walk";
     } else {
@@ -85,7 +89,29 @@ export function Character() {
       nextActionToPlay?.reset().fadeIn(0.2).play();
       currentAction.current = action;
     }
-  }, [forward, backward, left, right, cameraCharacterAngleY, actions]);
+    if (roomid) {
+      dispatch(
+        move({
+          _id: user._id,
+          roomId: roomid,
+          input: { forward, backward, left, right },
+          position: positionRef.current,
+          cameraCharacterAngleY,
+          image: user.image,
+        }),
+      );
+    }
+  }, [
+    forward,
+    backward,
+    left,
+    right,
+    cameraCharacterAngleY,
+    actions,
+    dispatch,
+    user,
+    roomid,
+  ]);
 
   const elapsedTime = useRef(0);
 
@@ -144,7 +170,7 @@ export function Character() {
 
       const newX = model.scene.position.x + moveX;
       const newZ = model.scene.position.z + moveZ;
-
+      positionRef.current = { x: newX, z: newZ, y: 0 };
       if (!(newX > -2.5 && newX < 2.5 && newZ > -2.5 && newZ < 2.5)) {
         model.scene.position.x = newX;
         model.scene.position.z = newZ;

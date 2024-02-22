@@ -17,10 +17,7 @@ export function ChatList() {
   }, [messageList]);
 
   return (
-    <div
-      className="overflow-auto rounded-lg bg-gray-800 p-4"
-      style={{ maxHeight: "80vh" }}
-    >
+    <div className="flex-1 overflow-auto rounded-lg border border-gray-700 bg-gray-800 p-4">
       <ul ref={messageListRef} className="space-y-2">
         {messageList.map((message: SocketReceiveMessage) => (
           <li
@@ -28,7 +25,7 @@ export function ChatList() {
             className={`rounded-lg p-2 ${
               message.type === "mine"
                 ? "bg-blue-500 text-white"
-                : "bg-gray-700 text-gray-300"
+                : "bg-slate-600 text-center text-gray-300"
             }`}
           >
             <span className="font-bold">{message.name}</span>

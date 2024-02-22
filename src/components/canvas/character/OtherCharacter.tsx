@@ -1,29 +1,49 @@
 import * as THREE from "three";
 import React, { useEffect, useRef, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 
 import { directionOffset } from "./utils";
-
-type ActionName = "default" | "walk" | "";
+import { ActionInfo, ActionName, GLTFResult } from "src/types/index";
 
 const rotateAxis = new THREE.Vector3(0, 1, 0);
 const rotateQuarternion = new THREE.Quaternion();
 
-export function OtherCharacter({ model, state }: any) {
+type Props = {
+  state: ActionInfo;
+  image: string;
+};
+
+export function OtherCharacter({ state, image }: Props) {
+  const currentAction = useRef("");
+  const model = useGLTF("/models/player7.glb") as GLTFResult;
   const { input, position, cameraCharacterAngleY } = state;
 
   const { forward, backward, left, right } = input;
-  const currentAction = useRef("");
 
-  const { animations, scene } = model;
-  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const { animations, scene, materials } = model;
+
+  const faceTexture = useLoader(THREE.TextureLoader, image);
+
+  const clone = useMemo(() => {
+    const clonedScene = SkeletonUtils.clone(scene);
+    faceTexture.flipY = false;
+    clonedScene.traverse((child: any) => {
+      if (child.isMesh && child.material.name === "face") {
+        const clonedMaterial = child.material.clone();
+        clonedMaterial.map = faceTexture;
+        child.material = clonedMaterial;
+
+        child.material.needsUpdate = true;
+      }
+    });
+
+    return clonedScene;
+  }, [faceTexture, scene]);
   const { ref, actions } = useAnimations(animations);
-
   clone.scale.set(1.2, 1.2, 1.2);
-  clone.position.set(position[0], position[1], position[2]);
-
+  clone.position.set(position.x, position.y, position.z);
   useEffect(() => {
     let action: ActionName = "";
 
@@ -33,17 +53,17 @@ export function OtherCharacter({ model, state }: any) {
       action = "default";
     }
 
-    if (currentAction.current != action) {
+    if (currentAction.current !== action) {
       const nextActionToPlay = actions[action];
       const current = actions[currentAction.current];
       current?.fadeOut(0.2);
       nextActionToPlay?.reset().fadeIn(0.2).play();
       currentAction.current = action;
     }
-  }, [forward, backward, left, right]);
+  }, [forward, backward, left, right, actions]);
 
   useFrame((state, delta) => {
-    if (currentAction.current == "walk") {
+    if (currentAction.current === "walk") {
       const newDirectionOffset = directionOffset({
         forward,
         backward,
@@ -65,8 +85,8 @@ export function OtherCharacter({ model, state }: any) {
       );
       direction.applyAxisAngle(rotateAxis, newDirectionOffset);
 
-      const moveX = -direction.x * 2 * delta;
-      const moveZ = -direction.z * 2 * delta;
+      const moveX = -direction.x * 1.5 * delta;
+      const moveZ = -direction.z * 1.5 * delta;
 
       clone.position.x += moveX;
       clone.position.z += moveZ;

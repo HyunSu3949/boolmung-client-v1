@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import { Modal } from "src/components/dom/common/Modal";
-import { ChatForm } from "src/components/dom/HomePage/CreateChatModal/ChatForm";
+import { ChatForm } from "src/components/dom/HomePage/ChatForm";
 
-import { RoomList } from "./roomList/RoomList";
+import { RoomList } from "./RoomList";
 
 export function HomePage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,7 @@ export function HomePage() {
   return (
     <div className="flex-col py-6">
       <button
-        className="p-3 mb-6 ml-2 font-semibold rounded bg-slate-400"
+        className="mb-6 ml-2 rounded bg-slate-400 p-3 font-semibold"
         onClick={openModal}
         type="button"
       >

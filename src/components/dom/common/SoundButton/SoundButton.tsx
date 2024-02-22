@@ -5,21 +5,20 @@ export function SoundButton() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioFile = "/sound/fireSound.mp3";
   useEffect(() => {
-    if (playing) {
-      audioRef.current?.play();
-    } else {
-      audioRef.current?.pause();
-    }
-  }, [playing]);
+    const audio = audioRef.current;
 
-  useEffect(() => {
+    if (playing) {
+      audio?.play();
+    } else {
+      audio?.pause();
+    }
     const handleEnded = () => setPlaying(false);
-    audioRef.current?.addEventListener("ended", handleEnded);
+    audio?.addEventListener("ended", handleEnded);
 
     return () => {
-      audioRef.current?.removeEventListener("ended", handleEnded);
+      audio?.removeEventListener("ended", handleEnded);
     };
-  }, []);
+  }, [playing]);
 
   const togglePlaying = () => {
     setPlaying(!playing);
@@ -28,7 +27,11 @@ export function SoundButton() {
   return (
     <>
       <audio ref={audioRef} src={audioFile} loop />
-      <button className="flex w-fit whitespace-nowrap " onClick={togglePlaying}>
+      <button
+        className="flex w-fit items-center space-x-2 whitespace-nowrap "
+        onClick={togglePlaying}
+        type="button"
+      >
         {playing ? (
           <>
             <img src="/img/volume-on.svg" alt="소리 켜진 아이콘" />

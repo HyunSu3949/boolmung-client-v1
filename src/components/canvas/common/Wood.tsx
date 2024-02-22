@@ -5,7 +5,7 @@ export function Wood() {
   const model = useGLTF("/models/woodStack.glb");
   model.scene.position.y = -0.5;
   return (
-    <primitive object={model.scene} scale={1.5}>
+    <primitive object={model.scene} scale={1.8}>
       <meshPhongMaterial color="gray" />
     </primitive>
   );

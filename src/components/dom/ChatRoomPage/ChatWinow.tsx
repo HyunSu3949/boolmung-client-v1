@@ -1,15 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { ChatList } from "src/components/dom/ChatRoomPage/ChatWindow/ChatList";
+import { ChatList } from "src/components/dom/ChatRoomPage/ChatList";
 import { sendMessage } from "src/redux/features/socketActions";
 import { RootState } from "src/redux/store";
 
 export function ChatWindow() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const { roomid } = useParams();
 
@@ -30,25 +32,40 @@ export function ChatWindow() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (message === "") return;
+    if (message.trim() === "") return;
 
-    handleSendMessage(message);
+    handleSendMessage(message.trim());
     setMessage("");
   };
 
-  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-  };
+  useEffect(() => {
+    const chatPageElement = chatWindowRef.current;
+    const onInputKeyDown = (e: KeyboardEvent) => {
+      e.stopPropagation();
+    };
 
-  const onInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-  };
+    const onInputKeyUp = (e: KeyboardEvent) => {
+      e.stopPropagation();
+    };
+
+    chatPageElement?.addEventListener("keydown", onInputKeyDown);
+    chatPageElement?.addEventListener("keyup", onInputKeyUp);
+
+    return () => {
+      chatPageElement?.removeEventListener("keydown", onInputKeyDown);
+      chatPageElement?.removeEventListener("keyup", onInputKeyUp);
+    };
+  }, []);
+
   return (
-    <div className="rounded-lg bg-gray-900 p-4 text-white">
-      <div className="mb-4">
+    <div
+      ref={chatWindowRef}
+      className="flex w-full flex-1 flex-col bg-gray-900 p-2 text-white"
+    >
+      <div className="flex flex-1 overflow-y-auto ">
         <ChatList />
       </div>
-      <form onSubmit={onSubmit} className="flex space-x-2">
+      <form onSubmit={onSubmit} className="flex space-x-2 py-2">
         <input
           ref={inputRef}
           onChange={onChange}
@@ -61,7 +78,7 @@ export function ChatWindow() {
           className="rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           type="submit"
         >
-          전송
+          <img src="/img/up-arrow.svg" alt="전송 버튼" className="h-5 w-5" />
         </button>
       </form>
     </div>

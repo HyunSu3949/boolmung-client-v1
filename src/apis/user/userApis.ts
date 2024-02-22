@@ -1,4 +1,4 @@
-import axiosInstance from "../instance";
+import { axiosInstance } from "../instance";
 
 type LoginFormData = {
   email: string;

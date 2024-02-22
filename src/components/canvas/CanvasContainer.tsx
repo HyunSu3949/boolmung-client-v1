@@ -10,21 +10,19 @@ export default function CanvasContainer() {
     (state: RootState) => state.reducer.authReducer,
   );
   return (
-    <BrowserRouter>
-      <Routes>
-        {isLoggedIn ? (
-          <>
-            <Route path="/" element={<HomeScene />} />
-            <Route path="/room/:id" element={<ChatScene />} />
-            <Route path="*" element={<HomeScene />} />
-          </>
-        ) : (
-          <>
-            <Route path="/" element={<HomeScene />} />
-            <Route path="*" element={<HomeScene />} />
-          </>
-        )}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {isLoggedIn ? (
+        <>
+          <Route path="/" element={<HomeScene />} />
+          <Route path="/room/:roomid" element={<ChatScene />} />
+          <Route path="*" element={<HomeScene />} />
+        </>
+      ) : (
+        <>
+          <Route path="/" element={<HomeScene />} />
+          <Route path="*" element={<HomeScene />} />
+        </>
+      )}
+    </Routes>
   );
 }
