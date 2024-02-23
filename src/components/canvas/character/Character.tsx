@@ -31,6 +31,7 @@ export function Character() {
   const model = useGLTF("/models/player7.glb") as GLTFResult;
   const bodyTexture = useLoader(THREE.TextureLoader, "/img/body.png");
   const faceTexture = useLoader(THREE.TextureLoader, user.image);
+  console.log(model);
 
   const camera = useThree((state) => state.camera);
   const { animations, scene } = model;

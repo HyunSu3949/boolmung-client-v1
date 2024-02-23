@@ -5,6 +5,7 @@ import {
   getRoomInfo,
   join,
   move,
+  setError,
   setMessageList,
 } from "src/redux/features/socketSlice";
 import { SocketReceiveMessage } from "src/types/index";
@@ -24,6 +25,7 @@ const eventName = {
   FULL: "socket/full",
   NOTFOUND: "socket/notfound",
   GET_ROOM_INFO: "socket/getRoomInfo",
+  LEAVE: "socket/leave",
 };
 
 export const socketMiddleware: Middleware = (store) => {
@@ -56,6 +58,16 @@ export const socketMiddleware: Middleware = (store) => {
 
         socket.on(eventName.GET_ROOM_INFO, (data: any) => {
           dispatch(getRoomInfo(data));
+        });
+
+        socket.on(eventName.NOTFOUND, (data: any) => {
+          const { message } = data;
+          dispatch(setError({ errorState: true, message }));
+        });
+
+        socket.on(eventName.FULL, (data: any) => {
+          const { message } = data;
+          dispatch(setError({ errorState: true, message }));
         });
 
         // 참여 메세지 전송

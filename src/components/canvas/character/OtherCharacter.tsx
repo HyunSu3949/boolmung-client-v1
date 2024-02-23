@@ -22,12 +22,15 @@ export function OtherCharacter({ state, image }: Props) {
 
   const { forward, backward, left, right } = input;
 
-  const { animations, scene, materials } = model;
+  const { animations, scene } = model;
 
   const faceTexture = useLoader(THREE.TextureLoader, image);
 
   const clone = useMemo(() => {
     const clonedScene = SkeletonUtils.clone(scene);
+    clonedScene.animations = animations.filter(
+      (clip: any) => clip.name === "walk" || clip.name === "default",
+    );
     faceTexture.flipY = false;
     clonedScene.traverse((child: any) => {
       if (child.isMesh && child.material.name === "face") {
@@ -40,13 +43,14 @@ export function OtherCharacter({ state, image }: Props) {
     });
 
     return clonedScene;
-  }, [faceTexture, scene]);
-  const { ref, actions } = useAnimations(animations);
+  }, [animations, faceTexture, scene]);
+  console.log(clone);
+
+  const { actions, ref } = useAnimations(clone.animations);
   clone.scale.set(1.2, 1.2, 1.2);
   clone.position.set(position.x, position.y, position.z);
   useEffect(() => {
     let action: ActionName = "";
-
     if (forward || backward || left || right) {
       action = "walk";
     } else {

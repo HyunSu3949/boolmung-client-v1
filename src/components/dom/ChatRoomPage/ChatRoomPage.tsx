@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { RootState } from "src/redux/store";
-import { connect, disconnect } from "src/redux/features/socketSlice";
+import { connect, disconnect, setError } from "src/redux/features/socketSlice";
+import { Modal } from "src/components/dom/common/Modal";
 
 import { ChatWindow } from "./ChatWinow";
 
@@ -12,13 +13,17 @@ export function ChatRoomPage() {
   const navigate = useNavigate();
   const { roomid } = useParams();
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const { roomInfo } = useSelector(
+  const { roomInfo, errorMassage } = useSelector(
     (state: RootState) => state.reducer.socketReducer,
   );
-  console.log(roomInfo);
 
   const exitRoom = () => {
     navigate("/");
+  };
+
+  const closeModal = () => {
+    dispatch(setError({ errorState: false, message: "" }));
+    exitRoom();
   };
 
   useEffect(() => {
@@ -66,6 +71,16 @@ export function ChatRoomPage() {
         <p className="text-xl text-white">{roomInfo.title}</p>
       </div>
       <ChatWindow />
+      {errorMassage && (
+        <Modal isOpen closeModal={closeModal}>
+          <div>
+            <p>{errorMassage}</p>
+            <button onClick={closeModal} type="button">
+              나가기
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

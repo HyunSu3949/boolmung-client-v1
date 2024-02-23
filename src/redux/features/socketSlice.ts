@@ -11,12 +11,16 @@ type State = {
     [key: string]: ActionInfo;
   };
   roomInfo: any;
+  isError: boolean;
+  errorMassage: string;
 };
 const initialState: State = {
   participants: {},
   messageList: [],
   actionInfo: {},
   roomInfo: {},
+  isError: false,
+  errorMassage: "",
 };
 
 const socketSlice = createSlice({
@@ -61,9 +65,21 @@ const socketSlice = createSlice({
     getRoomInfo: (state, action) => {
       state.roomInfo = action.payload;
     },
+
+    setError: (state, action) => {
+      state.isError = action.payload.errorState;
+      state.errorMassage = action.payload.message;
+    },
   },
 });
 
-export const { setMessageList, connect, disconnect, move, join, getRoomInfo } =
-  socketSlice.actions;
+export const {
+  setMessageList,
+  connect,
+  disconnect,
+  move,
+  join,
+  getRoomInfo,
+  setError,
+} = socketSlice.actions;
 export const socketReducer = socketSlice.reducer;
