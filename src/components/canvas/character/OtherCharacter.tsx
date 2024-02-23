@@ -44,7 +44,6 @@ export function OtherCharacter({ state, image }: Props) {
 
     return clonedScene;
   }, [animations, faceTexture, scene]);
-  console.log(clone);
 
   const { actions, ref } = useAnimations(clone.animations);
   clone.scale.set(1.2, 1.2, 1.2);
