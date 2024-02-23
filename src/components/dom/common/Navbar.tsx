@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "src/apis/user/logout";
 import { setLogoutState } from "src/redux/features/authSlice";
+import { RootState } from "src/redux/store";
 
 import { ProfileCard } from "./ProfileCard/ProfileCard";
 import { SoundButton } from "./SoundButton/SoundButton";
@@ -10,7 +11,7 @@ import { SoundButton } from "./SoundButton/SoundButton";
 export function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const handleLogout = async () => {
     await logout();
     dispatch(setLogoutState());
@@ -18,29 +19,31 @@ export function Navbar() {
   };
 
   return (
-    <nav className="w-fit flex-col bg-slate-600 p-6 text-slate-100">
-      <div className="mb-4">
+    <nav className="flex w-full items-center justify-between bg-slate-600 p-6 text-slate-100">
+      <div>
         <SoundButton />
       </div>
-      <div className="mb-4 flex items-center space-x-2">
+      <div className="flex items-center space-x-2">
         <img src="/img/home.svg" alt="홈 아이콘" className="h-6 w-6" />
-        <Link to="/">home</Link>
+        <Link to="/">채팅</Link>
       </div>
-      {/* <div className="mb-4">
-        <Link to="/newface">newface</Link>
-      </div> */}
-      <div className="mb-4">
-        <Link to="/my">
-          <ProfileCard size="sm" />
+      <div>
+        <Link to="/my" className="flex space-x-2">
+          <img
+            src={user.image}
+            alt="프로필 이미지"
+            className="h-6 w-6 rounded-full"
+          />
+          <span>내 정보</span>
         </Link>
       </div>
       <div>
         <button
-          className="p rounded bg-slate-400 p-3 px-6"
+          className="hover:decoration-2"
           onClick={handleLogout}
           type="button"
         >
-          logout
+          로그아웃
         </button>
       </div>
     </nav>

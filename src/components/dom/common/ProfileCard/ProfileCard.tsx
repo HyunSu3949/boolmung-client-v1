@@ -19,14 +19,16 @@ export function ProfileCard({ size }: Props) {
 
   return (
     <ErrorBoundary fallback={<div>wrong</div>}>
-      <div className="m-auto w-fit">
+      <div className="flex w-full flex-col items-center justify-center ">
         <img
           src={user.image}
           onError={handleError}
           alt="유저 프로필 이미지"
           className={`${imageSizeClass} rounded-full object-cover`}
         />
-        <div>{`${user.name} 님`}</div>
+        <div className="space-x-2 text-slate-200">
+          <span className="text-lg font-bold ">{user.name}</span>님
+        </div>
       </div>
     </ErrorBoundary>
   );

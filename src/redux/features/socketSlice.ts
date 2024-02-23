@@ -70,6 +70,11 @@ const socketSlice = createSlice({
       state.isError = action.payload.errorState;
       state.errorMassage = action.payload.message;
     },
+
+    setOthersPosition: (state, action) => {
+      if (state.actionInfo[action.payload._id])
+        state.actionInfo[action.payload._id].position = action.payload.position;
+    },
   },
 });
 
@@ -81,5 +86,6 @@ export const {
   join,
   getRoomInfo,
   setError,
+  setOthersPosition,
 } = socketSlice.actions;
 export const socketReducer = socketSlice.reducer;

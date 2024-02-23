@@ -1,21 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-
-import ProfileImageEditor from "src/components/dom/myPage/ImageEditor/ImageEditor";
-import { increment } from "src/redux/features/counterSlice";
-import { RootState } from "src/redux/store";
-
 import { ProfileCard } from "../common/ProfileCard/ProfileCard";
+import { DrawingEditor } from "./DrawingEditor";
 
 export default function MyPage() {
-  const dispatch = useDispatch();
   return (
-    <>
-      <h1>마이페이지</h1>
-      <div className="flex-col justify-center">
+    <div className="flex flex-col items-center justify-center">
+      <h1 className="sr-only">마이페이지</h1>
+      <div className="border-b-1 w-full border border-slate-900 py-8">
         <ProfileCard size="lg" />
-        <div>얼굴 꾸미기</div>
-        <ProfileImageEditor />
       </div>
-    </>
+      <div className="w-full shadow-md">
+        <DrawingEditor />
+      </div>
+    </div>
   );
 }

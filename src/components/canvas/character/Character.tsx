@@ -90,6 +90,7 @@ export function Character() {
       currentAction.current = action;
     }
     if (roomid) {
+      // 채팅방입장해 있는 경우
       dispatch(
         move({
           _id: user._id,

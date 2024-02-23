@@ -3,9 +3,11 @@ import React, { useEffect, useRef, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
+import { useDispatch } from "react-redux";
 
 import { directionOffset } from "./utils";
 import { ActionInfo, ActionName, GLTFResult } from "src/types/index";
+import { setOthersPosition } from "src/redux/features/socketSlice";
 
 const rotateAxis = new THREE.Vector3(0, 1, 0);
 const rotateQuarternion = new THREE.Quaternion();
@@ -16,9 +18,10 @@ type Props = {
 };
 
 export function OtherCharacter({ state, image }: Props) {
+  const dispatch = useDispatch();
   const currentAction = useRef("");
   const model = useGLTF("/models/player7.glb") as GLTFResult;
-  const { input, position, cameraCharacterAngleY } = state;
+  const { input, position, cameraCharacterAngleY, _id } = state;
 
   const { forward, backward, left, right } = input;
 
@@ -93,6 +96,16 @@ export function OtherCharacter({ state, image }: Props) {
 
       clone.position.x += moveX;
       clone.position.z += moveZ;
+      dispatch(
+        setOthersPosition({
+          _id,
+          position: {
+            x: clone.position.x,
+            y: clone.position.y,
+            z: clone.position.z,
+          },
+        }),
+      );
     }
   });
   return <primitive object={clone} ref={ref} />;

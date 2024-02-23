@@ -4,31 +4,48 @@ export function LoginForm() {
   const { register, handleSubmit, errors, onSubmit } = useLoginForm();
 
   return (
-    <form className="" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="email">이메일</label>
+    <form className="items-center space-y-2" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex">
+        <label htmlFor="email" className="w-20 text-white">
+          이메일
+        </label>
         <input
           id="email"
           type="email"
+          className="rounded-md bg-gray-700 px-4 py-2 text-white focus:border-blue-500 focus:ring-blue-500"
           {...register("email", {
             required: "이메일을 입력해주세요",
           })}
         />
-        {errors.email && <p>{errors.email.message}</p>}
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+        )}
       </div>
-      <div>
-        <label htmlFor="password">비밀번호</label>
+      <div className="flex">
+        <label htmlFor="password" className="w-20 text-white">
+          비밀번호
+        </label>
         <input
           id="password"
           type="password"
+          className="rounded-md bg-gray-700 px-4 py-2 text-white focus:border-blue-500 focus:ring-blue-500"
           {...register("password", {
             required: "비밀번호를 입력해주세요",
           })}
         />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && (
+          <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+        )}
       </div>
-      {errors.root && <p>{errors.root.message}</p>}
-      <button type="submit">로그인</button>
+      {errors.root && (
+        <p className="text-sm text-red-500">{errors.root.message}</p>
+      )}
+      <button
+        type="submit"
+        className="w-full rounded-md bg-slate-500 py-2 text-white hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50"
+      >
+        로그인
+      </button>
     </form>
   );
 }

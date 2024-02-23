@@ -17,7 +17,7 @@ export function ChatList() {
   }, [messageList]);
 
   return (
-    <div className="flex-1 overflow-auto rounded-lg border border-gray-700 bg-gray-800 p-4">
+    <div className="h-full w-full rounded-lg bg-gray-800 p-4 ">
       <ul ref={messageListRef} className="space-y-2">
         {messageList.map((message: SocketReceiveMessage) => (
           <li

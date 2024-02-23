@@ -54,8 +54,8 @@ export function ChatRoomPage() {
   }, [dispatch, roomid, user]);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-gray-800">
-      <div className="flex items-center space-x-2 p-2">
+    <div className="flex h-screen w-full flex-col bg-slate-900">
+      <div className="flex items-center space-x-4 p-4">
         <button
           onClick={exitRoom}
           className="flex items-center rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-400 focus:outline-none"
@@ -70,7 +70,10 @@ export function ChatRoomPage() {
         </button>
         <p className="text-xl text-white">{roomInfo.title}</p>
       </div>
-      <ChatWindow />
+      <div className="flex w-full flex-1">
+        <ChatWindow />
+      </div>
+
       {errorMassage && (
         <Modal isOpen closeModal={closeModal}>
           <div>
