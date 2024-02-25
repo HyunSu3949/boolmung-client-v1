@@ -4,9 +4,9 @@ import { Navbar } from "src/components/dom/common/Navbar";
 
 export default function Layout() {
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex flex-col w-full">
       <Navbar />
-      <main className="w-full">
+      <main className="w-full h-full">
         <Outlet />
       </main>
     </div>

@@ -19,12 +19,12 @@ export function Navbar() {
   };
 
   return (
-    <nav className="flex w-full items-center justify-between bg-slate-600 p-6 text-slate-100">
+    <nav className="flex items-center justify-between w-full p-6 bg-slate-600 text-slate-100">
       <div>
         <SoundButton />
       </div>
       <div className="flex items-center space-x-2">
-        <img src="/img/home.svg" alt="홈 아이콘" className="h-6 w-6" />
+        <img src="/img/chat.svg" alt="채팅 아이콘" className="w-5 h-5" />
         <Link to="/">채팅</Link>
       </div>
       <div>
@@ -32,14 +32,14 @@ export function Navbar() {
           <img
             src={user.image}
             alt="프로필 이미지"
-            className="h-6 w-6 rounded-full"
+            className="w-6 h-6 rounded-full"
           />
           <span>내 정보</span>
         </Link>
       </div>
       <div>
         <button
-          className="hover:decoration-2"
+          className="p-2 border rounded-md border-slate-800 bg-slate-700 hover:bg-slate-400"
           onClick={handleLogout}
           type="button"
         >

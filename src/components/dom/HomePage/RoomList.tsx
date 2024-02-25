@@ -1,38 +1,66 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 
-import { RoomInfo } from "src/types/index";
-import { getAllRoom } from "src/apis/room/getAllRoom";
+import { getAllRoom } from "src/apis/getApis";
 
 export function RoomList() {
-  const { isLoading, error, data } = useQuery({
+  const fetchRooms = async ({ pageParam }: { pageParam: number }) => {
+    const response = await getAllRoom({ queryParameters: { page: pageParam } });
+    return response;
+  };
+  const { ref, inView } = useInView();
+  const {
+    data,
+    error,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    status,
+  } = useInfiniteQuery({
     queryKey: ["roomList"],
-    queryFn: async () => {
-      const response = await getAllRoom();
-      return response.data.data.data;
-    },
+    queryFn: fetchRooms,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasNextPage ? lastPage.nextPage : undefined,
   });
+  console.log(data);
 
-  if (isLoading) return <div>로딩중</div>;
-  if (error) return <div>에러남</div>;
+  useEffect(() => {
+    fetchNextPage();
+  }, [fetchNextPage, inView]);
+
+  if (status === "pending") return <div>loading...</div>;
+  if (status === "error") return <div>error!</div>;
 
   return (
-    <div className="flex w-full bg-gray-800 p-4">
-      <ul className="flex w-full flex-col space-y-2">
-        {data.map((room: RoomInfo) => (
-          <li key={room._id} className="w-full">
-            <Link
-              to={`room/${room._id}`}
-              className="flex w-full items-center justify-between rounded-md bg-gray-700 p-6 hover:bg-gray-600"
-            >
-              <h2 className="mr-5 text-lg text-white">{room.title}</h2>
-              <p className="roomInfo text-gray-300">
-                {room.participants.length}/{room.max}
-              </p>
-            </Link>
-          </li>
-        ))}
+    <div className="h-[80vh] w-full overflow-y-auto  p-4">
+      <ul className="w-full space-y-2">
+        {data.pages.map((group) =>
+          group.data.map((room) => (
+            <li key={room._id} className="w-full">
+              <Link
+                to={`room/${room._id}`}
+                className="flex items-center justify-between w-full p-6 bg-gray-700 rounded-md hover:bg-gray-600"
+              >
+                <h2 className="mr-5 text-lg text-white">{room.title}</h2>
+                <p className="text-gray-300 roomInfo">
+                  {room.participants.length}/{room.max}
+                </p>
+              </Link>
+            </li>
+          )),
+        )}
       </ul>
+      {isFetchingNextPage ? (
+        <div>로딩중...</div>
+      ) : (
+        <div ref={ref}> 더 불러오기</div>
+      )}
     </div>
   );
 }

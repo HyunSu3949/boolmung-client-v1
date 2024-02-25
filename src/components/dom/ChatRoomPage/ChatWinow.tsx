@@ -60,25 +60,25 @@ export function ChatWindow() {
   return (
     <div
       ref={chatWindowRef}
-      className="flex w-full flex-1 flex-col bg-gray-900 p-2 text-white"
+      className="flex flex-col flex-1 w-full p-2 text-white bg-gray-900"
     >
-      <div className="flex w-full flex-1 overflow-y-auto rounded-lg border border-gray-700">
+      <div className="flex flex-1 w-full border border-gray-700 rounded-lg">
         <ChatList />
       </div>
-      <form onSubmit={onSubmit} className="flex space-x-2 py-2">
+      <form onSubmit={onSubmit} className="flex py-2 space-x-2">
         <input
           ref={inputRef}
           onChange={onChange}
           type="text"
           value={message}
-          className="flex-1 rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none"
+          className="flex-1 p-2 text-white bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none"
           placeholder="메시지 입력..."
         />
         <button
-          className="rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
           type="submit"
         >
-          <img src="/img/up-arrow.svg" alt="전송 버튼" className="h-5 w-5" />
+          <img src="/img/up-arrow.svg" alt="전송 버튼" className="w-5 h-5" />
         </button>
       </form>
     </div>

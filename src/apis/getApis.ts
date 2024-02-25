@@ -4,6 +4,7 @@ import { getQueryString, getPathWhitPathVariable } from "src/apis/utils";
 
 const getApiEndPoints = {
   getPreSignedurl: "/s3/url",
+  getAllRoom: "/rooms",
 };
 
 const generateGetApiFunction = (() => {
@@ -37,3 +38,4 @@ const generateGetApiFunction = (() => {
 })();
 
 export const getPreSignedUrl = generateGetApiFunction("getPreSignedurl");
+export const getAllRoom = generateGetApiFunction("getAllRoom");

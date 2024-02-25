@@ -8,8 +8,8 @@ export function Modal({ isOpen, closeModal, children }: PropsType) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative p-5 bg-white rounded-lg shadow-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-slate-800 ">
+      <div className="relative px-4 py-2 rounded-lg shadow-lg bg-slate-800">
         <button
           onClick={closeModal}
           type="button"

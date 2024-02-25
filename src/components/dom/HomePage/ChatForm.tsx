@@ -42,38 +42,32 @@ export function ChatForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto w-full min-w-[32rem] max-w-4xl rounded-lg p-4"
+      className="mx-auto w-full min-w-[32rem] max-w-4xl rounded-lg p-4 "
     >
       <div className="my-4 mb-4">
-        <label
-          htmlFor="title"
-          className="block mb-2 text-sm font-bold text-gray-700"
-        >
+        <label htmlFor="title" className="block mb-2 font-bold text-slate-200">
           방 제목
         </label>
         <input
           id="title"
           placeholder="방 제목을 입력해주세요"
           type="text"
-          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline focus:outline-none"
+          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline placeholder-slate-400 focus:outline-none"
           {...register("title", { required: "방 제목을 입력해 주세요" })}
         />
         {errors.title && (
-          <p className="text-xs italic text-red-500">{errors.title.message}</p>
+          <p className="font-bold text-red-500">{errors.title.message}</p>
         )}
       </div>
       <div className="my-4 mb-6">
-        <label
-          htmlFor="max"
-          className="block mb-2 text-sm font-bold text-gray-700"
-        >
+        <label htmlFor="max" className="block mb-2 font-bold text-slate-200">
           참가인원
         </label>
         <input
           id="max"
           type="number"
           placeholder="2"
-          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline focus:outline-none"
+          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline placeholder-slate-400 focus:outline-none"
           min={2}
           max={10}
           {...register("max", {
@@ -85,7 +79,7 @@ export function ChatForm() {
           })}
         />
         {errors.max && (
-          <p className="text-xs italic text-red-500">{errors.max.message}</p>
+          <p className="font-bold text-red-500">{errors.max.message}</p>
         )}
       </div>
       <div className="flex items-center justify-between">
