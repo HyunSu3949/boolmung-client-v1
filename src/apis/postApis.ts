@@ -5,6 +5,8 @@ import { CreateRoomFormData } from "src/types/index";
 
 const postApiEndPoints = {
   createRoom: "/rooms",
+  login: "/users/login",
+  signup: "/users/signup",
 };
 
 const generatePostApiFunction = (() => {
@@ -13,13 +15,13 @@ const generatePostApiFunction = (() => {
     noNeedToken = false,
   ) => {
     return async ({
+      body,
       pathVariables,
       queryParameters,
-      body,
     }: {
+      body: PostApi[K]["body"];
       pathVariables?: PostApi[K]["pathVariables"];
       queryParameters?: PostApi[K]["queryParameters"];
-      body: CreateRoomFormData;
     }): Promise<PostApi[K]["result"]> => {
       let path = postApiEndPoints[key];
 
@@ -43,3 +45,5 @@ const generatePostApiFunction = (() => {
 })();
 
 export const createRoom = generatePostApiFunction("createRoom");
+export const login = generatePostApiFunction("login");
+export const signup = generatePostApiFunction("signup");

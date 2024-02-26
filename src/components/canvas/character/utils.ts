@@ -51,5 +51,5 @@ export const generateInitialPosition = () => {
     z = Math.random() * 8 - 4;
   } while ((x > -3 && x < 3) || (z > -3 && z < 3));
 
-  return { x, z };
+  return { x, y: 0, z };
 };

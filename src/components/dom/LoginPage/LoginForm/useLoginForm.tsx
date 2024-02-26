@@ -1,7 +1,8 @@
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { login } from "src/apis/user/login";
+import { login } from "src/apis/postApis";
 import { setLoginState } from "src/redux/features/authSlice";
 
 type FormData = {
@@ -18,23 +19,32 @@ export const useLoginForm = () => {
   } = useForm<FormData>();
   const dispatch = useDispatch();
 
-  const onSubmit = async (data: FormData) => {
-    try {
-      const result = await login(data);
-      if (result.data.status === "success") {
-        const {
-          token,
-          data: { user },
-        } = result.data;
-
-        dispatch(setLoginState({ token, user }));
+  const { mutate: loginMutate, isPending } = useMutation({
+    mutationFn: (body: any) => login({ body }),
+    onError: (error: any) => {
+      if (error.response.status === 401) {
+        setError("root", {
+          type: "manual",
+          message: "아이디 또는 비밀번호를 확인해주세요.",
+        });
+      } else {
+        setError("root", {
+          type: "manual",
+          message: "잠시 후 다시 시도해주세요.",
+        });
       }
-    } catch (error: any) {
-      setError("root", {
-        type: "manual",
-        message: "잠시 후 다시 시도해주세요.",
-      });
-    }
+    },
+    onSuccess: (result) => {
+      if (result.status === "success") {
+        const { token, data } = result;
+
+        dispatch(setLoginState({ token, user: data.user }));
+      }
+    },
+  });
+
+  const onSubmit = async (data: FormData) => {
+    loginMutate(data);
   };
 
   return {
@@ -42,5 +52,6 @@ export const useLoginForm = () => {
     handleSubmit,
     errors,
     onSubmit,
+    isPending,
   };
 };

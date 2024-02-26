@@ -52,8 +52,32 @@ export function Character() {
       bodyMaterial.needsUpdate = true;
     }
     const initialPosition = generateInitialPosition();
-    model.scene.position.x = initialPosition.x;
-    model.scene.position.z = initialPosition.z;
+    model.scene.position.set(
+      initialPosition.x,
+      initialPosition.y,
+      initialPosition.z,
+    );
+
+    const angle = Math.atan2(model.scene.position.x, model.scene.position.z);
+
+    model.scene.rotation.y = -angle;
+    const distance = 5; // 모델로부터 5단위 거리
+    const cameraPositionX = model.scene.position.x + Math.sin(angle) * distance;
+    const cameraPositionZ = model.scene.position.z + Math.cos(angle) * distance;
+
+    camera.position.set(cameraPositionX, 1, cameraPositionZ);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    const reverseCameraDrection = new THREE.Vector3(
+      -cameraPositionX,
+      model.scene.position.y,
+      -cameraPositionZ,
+    );
+
+    model.scene.lookAt(reverseCameraDrection);
+    if (controlsRef.current) {
+      controlsRef.current.target.copy(model.scene.position);
+    }
   }, [
     bodyTexture,
     faceTexture,
@@ -61,6 +85,9 @@ export function Character() {
     model.scene.position,
     faceTexture.image.currentSrc,
     model.scene.scale,
+    camera,
+    model.scene.rotation,
+    model.scene,
   ]);
 
   const updateCameraTarget = (moveX: number, moveZ: number) => {
@@ -187,7 +214,7 @@ export function Character() {
         maxPolarAngle={Math.PI / 2}
         minPolarAngle={Math.PI / 2}
       />
-      <primitive object={scene} rotation={[0, -Math.PI / 2, 0]} />
+      <primitive object={scene} rotation={[0, Math.PI / 2, 0]} />
     </>
   );
 }

@@ -1,30 +1,26 @@
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { signup } from "src/apis/user/signup";
 
-type FormData = {
-  name: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-};
+import { signup } from "src/apis/postApis";
+import { SignUpFormData } from "src/types/index";
 
 type PropsType = {
   closeModal: () => void;
+  openConfirmModal: () => void;
 };
 
-export const useSignupForm = ({ closeModal }: PropsType) => {
+export const useSignupForm = ({ closeModal, openConfirmModal }: PropsType) => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
     setError,
-  } = useForm<FormData>();
+  } = useForm<SignUpFormData>();
 
-  const onSubmit = async (data: FormData) => {
-    try {
-      await signup(data);
-    } catch (error: any) {
+  const { mutate, isPending } = useMutation({
+    mutationFn: (body: any) => signup({ body }),
+    onError: (error: any) => {
       const errorMessage = error.response.data.message;
       if (
         errorMessage.includes("Duplicate") &&
@@ -43,11 +39,17 @@ export const useSignupForm = ({ closeModal }: PropsType) => {
           message: "8자리 이상 입력해주세요",
         });
       }
+    },
+    onSuccess: (result) => {
+      if (result.status === "success") {
+        closeModal();
+        openConfirmModal();
+      }
+    },
+  });
 
-      return;
-    }
-    closeModal();
-    alert("회원가입 완료!");
+  const onSubmit = (data: SignUpFormData) => {
+    mutate(data);
   };
 
   const password = watch("password", "");
@@ -58,5 +60,6 @@ export const useSignupForm = ({ closeModal }: PropsType) => {
     errors,
     onSubmit,
     password,
+    isPending,
   };
 };

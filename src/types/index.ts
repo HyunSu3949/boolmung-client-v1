@@ -75,3 +75,10 @@ export type ActionInfo = {
   cameraCharacterAngleY: any;
   image: string;
 };
+
+export type SignUpFormData = {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+};

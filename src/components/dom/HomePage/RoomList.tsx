@@ -28,7 +28,6 @@ export function RoomList() {
     getNextPageParam: (lastPage) =>
       lastPage.hasNextPage ? lastPage.nextPage : undefined,
   });
-  console.log(data);
 
   useEffect(() => {
     fetchNextPage();
@@ -38,29 +37,23 @@ export function RoomList() {
   if (status === "error") return <div>error!</div>;
 
   return (
-    <div className="h-[80vh] w-full overflow-y-auto  p-4">
-      <ul className="w-full space-y-2">
-        {data.pages.map((group) =>
-          group.data.map((room) => (
-            <li key={room._id} className="w-full">
-              <Link
-                to={`room/${room._id}`}
-                className="flex items-center justify-between w-full p-6 bg-gray-700 rounded-md hover:bg-gray-600"
-              >
-                <h2 className="mr-5 text-lg text-white">{room.title}</h2>
-                <p className="text-gray-300 roomInfo">
-                  {room.participants.length}/{room.max}
-                </p>
-              </Link>
-            </li>
-          )),
-        )}
-      </ul>
-      {isFetchingNextPage ? (
-        <div>로딩중...</div>
-      ) : (
-        <div ref={ref}> 더 불러오기</div>
+    <ul className="w-full space-y-2">
+      {data.pages.map((group) =>
+        group.data.map((room) => (
+          <li key={room._id} className="w-full">
+            <Link
+              to={`room/${room._id}`}
+              className="flex items-center justify-between w-full p-6 bg-gray-700 rounded-md hover:bg-gray-600"
+            >
+              <h2 className="mr-5 text-lg text-white">{room.title}</h2>
+              <p className="text-gray-300 roomInfo">
+                {room.participants.length}/{room.max}
+              </p>
+            </Link>
+          </li>
+        )),
       )}
-    </div>
+      {isFetchingNextPage ? <div>로딩중...</div> : <div ref={ref} />}
+    </ul>
   );
 }

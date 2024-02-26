@@ -1,6 +1,12 @@
-import { User } from "src/types/index";
+import { SignUpFormData, User } from "src/types/index";
 
 type ApiEndpointInfo<P, Q, R> = {
+  pathVariables?: P;
+  queryParameters?: Q;
+  result: R;
+};
+type PostApiEndpointInfo<B, P, Q, R> = {
+  body: B;
   pathVariables?: P;
   queryParameters?: Q;
   result: R;
@@ -44,5 +50,25 @@ export type PatchApi = {
 };
 
 export type PostApi = {
-  createRoom: ApiEndpointInfo<never, never, any>;
+  createRoom: PostApiEndpointInfo<any, never, never, any>;
+  login: PostApiEndpointInfo<
+    { email: string; password: string },
+    never,
+    never,
+    {
+      status: string;
+      token: string;
+      data: any;
+    }
+  >;
+  signup: PostApiEndpointInfo<
+    SignUpFormData,
+    never,
+    never,
+    {
+      status: string;
+      token: string;
+      data: any;
+    }
+  >;
 };

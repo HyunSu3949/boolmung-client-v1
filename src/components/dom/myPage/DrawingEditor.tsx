@@ -99,16 +99,15 @@ export function DrawingEditor() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-stone-800 p-4">
-      <p className="mb-4 text-white">얼굴 꾸미기</p>
+    <div className="flex flex-col items-center justify-center p-4 bg-stone-800">
       <div>
-        <div className="flex w-full items-center space-x-2">
+        <div className="flex items-center w-full space-x-2">
           <select
             value={tool}
             onChange={(e) => {
               setTool(e.target.value);
             }}
-            className="mb-2 w-24 rounded border-gray-300 px-1 shadow-sm"
+            className="w-24 px-1 mb-2 border-gray-300 rounded shadow-sm"
           >
             <option className="flex items-center space-x-2" value="pen">
               <span>펜</span>
@@ -120,11 +119,11 @@ export function DrawingEditor() {
           {tool === "pen" ? (
             <img src="/img/edit.svg" alt="연필아이콘" className="h-7 w-7" />
           ) : (
-            <img src="/img/eraser.svg" alt="지우개아이콘" className="h-8 w-8" />
+            <img src="/img/eraser.svg" alt="지우개아이콘" className="w-8 h-8" />
           )}
         </div>
         <Stage
-          className="rounded-md bg-white"
+          className="bg-white rounded-md"
           width={300}
           height={300}
           onMouseDown={handleMouseDown}
@@ -159,7 +158,7 @@ export function DrawingEditor() {
           </Layer>
         </Stage>
         <button
-          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white shadow hover:bg-blue-700"
+          className="px-4 py-2 mt-4 text-white bg-blue-500 rounded shadow hover:bg-blue-700"
           onClick={saveDrawingWithBackground}
           type="button"
         >
@@ -168,7 +167,9 @@ export function DrawingEditor() {
       </div>
       {isOpen && (
         <Modal isOpen={isOpen} closeModal={closeModal}>
-          <p>저장이 완료되었습니다</p>
+          <div className="p-8">
+            <p className="text-slate-200">저장이 완료되었습니다</p>
+          </div>
         </Modal>
       )}
     </div>

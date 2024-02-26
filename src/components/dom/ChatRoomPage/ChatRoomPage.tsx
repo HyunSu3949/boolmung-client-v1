@@ -54,36 +54,40 @@ export function ChatRoomPage() {
   }, [dispatch, roomid, user]);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-slate-900">
-      <div className="flex items-center space-x-4 p-4">
+    <main className="flex flex-col flex-1 w-full bg-slate-900">
+      <div className="flex min-h-[10vh] items-center space-x-4 p-4">
         <button
           onClick={exitRoom}
-          className="flex items-center rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-400 focus:outline-none"
+          className="flex items-center px-4 py-2 text-white rounded bg-slate-600 hover:bg-slate-400 focus:outline-none"
           type="button"
         >
           <img
             src="/img/exit.svg"
-            className="mr-2 h-5 w-5 text-white"
+            className="w-5 h-5 mr-2 text-white"
             alt="나가기 아이콘"
           />
           나가기
         </button>
         <p className="text-xl text-white">{roomInfo.title}</p>
       </div>
-      <div className="flex w-full flex-1">
+      <div className="flex max-h-[90vh] w-full flex-1">
         <ChatWindow />
       </div>
 
       {errorMassage && (
         <Modal isOpen closeModal={closeModal}>
-          <div>
-            <p>{errorMassage}</p>
-            <button onClick={closeModal} type="button">
+          <div className="flex flex-col items-center justify-center p-8">
+            <p className="mb-4 text-slate-200">{errorMassage}</p>
+            <button
+              onClick={closeModal}
+              type="button"
+              className="p-2 rounded-md bg-slate-500 text-slate-200"
+            >
               나가기
             </button>
           </div>
         </Modal>
       )}
-    </div>
+    </main>
   );
 }

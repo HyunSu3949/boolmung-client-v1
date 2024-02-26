@@ -7,10 +7,10 @@ export default function Layout() {
   return (
     <BrowserRouter>
       <div className="grid h-screen w-full grid-cols-[minmax(42rem,_1fr)_30rem] gap-1 overflow-hidden bg-neutral-900">
-        <section className="bg-canvas rounded-lg">
+        <section className="rounded-lg bg-canvas">
           <CanvasContainer />
         </section>
-        <section className="flex overflow-hidden rounded-lg bg-neutral-800">
+        <section className="flex flex-col h-screen overflow-hidden rounded-lg bg-neutral-800">
           <DomContainer />
         </section>
       </div>
