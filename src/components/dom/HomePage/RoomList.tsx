@@ -13,7 +13,6 @@ export function RoomList() {
   const { ref, inView } = useInView();
   const {
     data,
-    error,
     fetchNextPage,
     fetchPreviousPage,
     hasNextPage,

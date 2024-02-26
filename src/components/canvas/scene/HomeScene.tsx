@@ -15,9 +15,7 @@ export default function HomeScene() {
       <Wood />
       <Floor />
       <Lights />
-      <ErrorBoundary fallback={<div style={{ color: "white" }}>wrong</div>}>
-        <Character />
-      </ErrorBoundary>
+      <Character />
     </Canvas>
   );
 }
