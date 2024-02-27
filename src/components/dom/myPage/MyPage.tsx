@@ -1,4 +1,4 @@
-import { ProfileCard } from "../common/ProfileCard/ProfileCard";
+import { ProfileCard } from "../common/ProfileCard";
 import { DrawingEditor } from "./DrawingEditor";
 
 export default function MyPage() {
