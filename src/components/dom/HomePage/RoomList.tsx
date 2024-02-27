@@ -4,6 +4,7 @@ import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 
 import { getAllRoom } from "src/apis/getApis";
+import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 
 export function RoomList() {
   const fetchRooms = async ({ pageParam }: { pageParam: number }) => {
@@ -26,18 +27,16 @@ export function RoomList() {
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.hasNextPage ? lastPage.nextPage : undefined,
+    refetchInterval: 5000,
   });
 
   useEffect(() => {
     fetchNextPage();
   }, [fetchNextPage, inView]);
 
-  if (status === "pending") return <div>loading...</div>;
-  if (status === "error") return <div>error!</div>;
-
   return (
-    <ul className="w-full space-y-2">
-      {data.pages.map((group) =>
+    <ul className="w-full h-full space-y-2 overflow-y-auto">
+      {data?.pages.map((group) =>
         group.data.map((room) => (
           <li key={room._id} className="w-full">
             <Link
@@ -52,7 +51,10 @@ export function RoomList() {
           </li>
         )),
       )}
-      {isFetchingNextPage ? <div>로딩중...</div> : <div ref={ref} />}
+
+      <SpinnerWithText loading={status === "pending" || isFetchingNextPage}>
+        <div className="p-20" ref={ref} />
+      </SpinnerWithText>
     </ul>
   );
 }

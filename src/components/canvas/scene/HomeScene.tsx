@@ -1,5 +1,4 @@
 import { Canvas } from "@react-three/fiber";
-import { ErrorBoundary } from "react-error-boundary";
 
 import { Character } from "src/components/canvas/character/Character";
 

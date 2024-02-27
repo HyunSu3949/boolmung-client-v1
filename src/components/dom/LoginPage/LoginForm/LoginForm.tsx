@@ -1,4 +1,4 @@
-import { SpinnerWithText } from "src/components/dom/SpinnerWithText";
+import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 import { useLoginForm } from "./useLoginForm";
 
 export function LoginForm() {

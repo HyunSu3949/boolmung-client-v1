@@ -12,7 +12,7 @@ export function SpinnerWithText({
   children,
 }: {
   loading: boolean;
-  children: any;
+  children?: any;
 }) {
   return (
     <div>

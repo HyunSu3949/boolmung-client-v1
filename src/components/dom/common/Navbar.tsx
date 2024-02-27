@@ -1,9 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 import { logout } from "src/apis/user/logout";
 import { setLogoutState } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
+import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 
 import { SoundButton } from "./SoundButton/SoundButton";
 
@@ -11,10 +13,13 @@ export function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
+    setIsLoading(true);
     await logout();
     dispatch(setLogoutState());
+    setIsLoading(false);
     navigate("/");
   };
 
@@ -48,7 +53,9 @@ export function Navbar() {
           onClick={handleLogout}
           type="button"
         >
-          로그아웃
+          <SpinnerWithText loading={isLoading}>
+            <span>로그아웃</span>
+          </SpinnerWithText>
         </button>
       </div>
     </nav>

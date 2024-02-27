@@ -11,7 +11,10 @@ import { Modal } from "src/components/dom/common/Modal";
 import { updateImage } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
 
+import { SpinnerWithText } from "../common/SpinnerWithText";
+
 export function DrawingEditor() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [tool, setTool] = useState("pen");
   const [lines, setLines] = useState<any>([]);
@@ -35,7 +38,7 @@ export function DrawingEditor() {
   };
   const saveDrawingWithBackground = async () => {
     if (!stageRef.current) return;
-
+    setIsLoading(true);
     const konvaImage = new Image();
     konvaImage.src = stageRef.current.toDataURL();
 
@@ -71,6 +74,7 @@ export function DrawingEditor() {
             patchUserInfo({ body: { image: objectKey } });
             setIsOpen(true);
           }
+          setIsLoading(false);
         }
       }, "image/png");
     };
@@ -162,7 +166,9 @@ export function DrawingEditor() {
           onClick={saveDrawingWithBackground}
           type="button"
         >
-          저장하기
+          <SpinnerWithText loading={isLoading}>
+            <span>저장하기</span>
+          </SpinnerWithText>
         </button>
       </div>
       {isOpen && (

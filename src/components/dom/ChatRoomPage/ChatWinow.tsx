@@ -62,7 +62,7 @@ export function ChatWindow() {
       ref={chatWindowRef}
       className="flex flex-col flex-1 w-full p-2 text-white bg-gray-900"
     >
-      <div className="flex flex-1 w-full overflow-auto border border-gray-700 rounded-lg">
+      <div className="flex flex-1 w-full overflow-auto bg-gray-800 border border-gray-700 rounded-lg">
         <ChatList />
       </div>
       <form onSubmit={onSubmit} className="flex py-2 space-x-2">

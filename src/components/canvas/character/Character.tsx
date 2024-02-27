@@ -30,7 +30,6 @@ export function Character() {
 
   const model = useGLTF("/models/player7.glb") as GLTFResult;
   const bodyTexture = useLoader(THREE.TextureLoader, "/img/body.png");
-  const faceTexture = useLoader(THREE.TextureLoader, user.image);
 
   const camera = useThree((state) => state.camera);
   const { animations, scene } = model;
@@ -38,14 +37,32 @@ export function Character() {
 
   const { forward, backward, left, right } = useInput();
   useEffect(() => {
-    model.scene.scale.set(1.2, 1.2, 1.2);
-    faceTexture.flipY = false;
-    bodyTexture.flipY = false;
-    const faceMaterial = model.materials.face;
-    if (faceMaterial) {
-      faceMaterial.map = faceTexture;
+    const updateMaterial = (texture: any) => {
+      texture.flipY = false;
+      const faceMaterial = model.materials.face;
+      faceMaterial.map = texture;
       faceMaterial.needsUpdate = true;
-    }
+    };
+
+    const loadTexture = async () => {
+      try {
+        const loader = new THREE.TextureLoader();
+        const loadedTexture = await loader.loadAsync(user.image);
+        if (loadedTexture) {
+          updateMaterial(loadedTexture);
+        }
+      } catch (e: any) {
+        const loader = new THREE.TextureLoader();
+        const defaultTexture = await loader.loadAsync("/img/defaultFace.png");
+        if (defaultTexture) {
+          updateMaterial(defaultTexture);
+        }
+      }
+    };
+    loadTexture();
+
+    model.scene.scale.set(1.2, 1.2, 1.2);
+    bodyTexture.flipY = false;
     const bodyMaterial = model.materials["Material.001"];
     if (bodyMaterial) {
       bodyMaterial.map = bodyTexture;
@@ -61,7 +78,7 @@ export function Character() {
     const angle = Math.atan2(model.scene.position.x, model.scene.position.z);
 
     model.scene.rotation.y = -angle;
-    const distance = 5; // 모델로부터 5단위 거리
+    const distance = 5;
     const cameraPositionX = model.scene.position.x + Math.sin(angle) * distance;
     const cameraPositionZ = model.scene.position.z + Math.cos(angle) * distance;
 
@@ -80,14 +97,13 @@ export function Character() {
     }
   }, [
     bodyTexture,
-    faceTexture,
     model.materials,
     model.scene.position,
-    faceTexture.image.currentSrc,
     model.scene.scale,
     camera,
     model.scene.rotation,
     model.scene,
+    user.image,
   ]);
 
   const updateCameraTarget = (moveX: number, moveZ: number) => {

@@ -17,7 +17,7 @@ export function HomePage() {
   };
 
   return (
-    <main className="flex flex-col flex-1 w-full">
+    <main className="flex flex-col w-full min-h-screen">
       <div className="w-full px-2 py-6">
         <button
           className="flex items-center p-3 font-semibold rounded bg-slate-500 text-slate-100 hover:bg-slate-400"
@@ -32,7 +32,7 @@ export function HomePage() {
           방만들기
         </button>
       </div>
-      <div className="max-h-[80vh] w-full flex-1 overflow-y-auto bg-gray-800 p-4">
+      <div className="flex flex-col flex-1 w-full p-2 overflow-y-auto bg-gray-800">
         <RoomList />
       </div>
       <Modal isOpen={isOpen} closeModal={closeModal}>

@@ -1,3 +1,4 @@
+import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 import { useSignupForm } from "./useSignupForm";
 
 type propsType = {
@@ -107,9 +108,7 @@ export function SignupForm({ closeModal, openConfirmModal }: propsType) {
         )}
       </div>
       <div className="flex justify-center">
-        {isPending ? (
-          <div>스피너</div>
-        ) : (
+        <SpinnerWithText loading={isPending}>
           <div className="space-x-2">
             <button
               type="submit"
@@ -125,7 +124,7 @@ export function SignupForm({ closeModal, openConfirmModal }: propsType) {
               취소
             </button>
           </div>
-        )}
+        </SpinnerWithText>
       </div>
     </form>
   );
