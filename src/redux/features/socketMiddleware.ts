@@ -2,13 +2,18 @@ import { Middleware } from "@reduxjs/toolkit";
 import { Manager, Socket } from "socket.io-client";
 
 import {
+  deleteInfo,
   getRoomInfo,
   join,
+  leave,
   move,
+  positions,
   setError,
   setMessageList,
+  setOthersPosition,
 } from "src/redux/features/socketSlice";
 import { SocketReceiveMessage } from "src/types/index";
+import { authReducer } from "src/redux/features/authSlice";
 
 const URL = (
   process.env.NODE_ENV === "development"
@@ -26,11 +31,13 @@ const eventName = {
   NOTFOUND: "socket/notfound",
   GET_ROOM_INFO: "socket/getRoomInfo",
   LEAVE: "socket/leave",
+  POS: "socket/pos",
+  SENDINITIALPOS: "socket/initpos",
 };
 
 export const socketMiddleware: Middleware = (store) => {
   let socket: Socket;
-  const { dispatch } = store;
+  const { dispatch, getState } = store;
   return (next) => (action: any) => {
     switch (action.type) {
       case eventName.CONNECT:
@@ -54,6 +61,22 @@ export const socketMiddleware: Middleware = (store) => {
 
         socket.on(eventName.JOIN, (data: any) => {
           dispatch(join(data));
+          socket.emit(eventName.POS, {
+            _id: getState().reducer.authReducer.user._id,
+            position: getState().reducer.socketReducer.myInfo.position,
+          });
+        });
+
+        socket.on(eventName.LEAVE, (data: any) => {
+          dispatch(deleteInfo(data));
+        });
+
+        socket.on(eventName.POS, (data: any) => {
+          dispatch(positions(data));
+        });
+
+        socket.on(eventName.SENDINITIALPOS, (data: any) => {
+          dispatch(setOthersPosition(data));
         });
 
         socket.on(eventName.GET_ROOM_INFO, (data: any) => {
@@ -93,7 +116,12 @@ export const socketMiddleware: Middleware = (store) => {
         socket.emit(eventName.MOVE, action.payload);
         break;
 
-      case eventName.GET_ROOM_INFO:
+      case eventName.LEAVE:
+        socket.emit(eventName.LEAVE, action.payload);
+        break;
+
+      case eventName.SENDINITIALPOS:
+        socket.emit(eventName.SENDINITIALPOS, action.payload);
         break;
 
       default:

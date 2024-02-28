@@ -15,9 +15,10 @@ const rotateQuarternion = new THREE.Quaternion();
 type Props = {
   state: ActionInfo;
   image: string;
+  initialPos: any;
 };
 
-export function OtherCharacter({ state, image }: Props) {
+export function OtherCharacter({ state, image, initialPos }: Props) {
   const dispatch = useDispatch();
   const currentAction = useRef("");
   const model = useGLTF("/models/player7.glb") as GLTFResult;
@@ -51,6 +52,7 @@ export function OtherCharacter({ state, image }: Props) {
   const { actions, ref } = useAnimations(clone.animations);
   clone.scale.set(1.2, 1.2, 1.2);
   clone.position.set(position.x, position.y, position.z);
+
   useEffect(() => {
     let action: ActionName = "";
     if (forward || backward || left || right) {

@@ -13,7 +13,7 @@ import {
 } from "./utils";
 import { useInput } from "./useInput";
 import { RootState } from "src/redux/store";
-import { move } from "src/redux/features/socketSlice";
+import { initpos, move, setMyPosition } from "src/redux/features/socketSlice";
 
 const walkDirection = new THREE.Vector3();
 const rotateAxis = new THREE.Vector3(0, 1, 0);
@@ -27,6 +27,7 @@ export function Character() {
   const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const currentAction = useRef("");
   const controlsRef = useRef<any>();
+  const dispatch = useDispatch();
 
   const model = useGLTF("/models/player7.glb") as GLTFResult;
   const bodyTexture = useLoader(THREE.TextureLoader, "/img/body.png");
@@ -69,12 +70,15 @@ export function Character() {
       bodyMaterial.needsUpdate = true;
     }
     const initialPosition = generateInitialPosition();
+    positionRef.current = initialPosition;
     model.scene.position.set(
       initialPosition.x,
       initialPosition.y,
       initialPosition.z,
     );
-
+    if (roomid) {
+      dispatch(initpos({ _id: user._id, position: positionRef.current }));
+    }
     const angle = Math.atan2(model.scene.position.x, model.scene.position.z);
 
     model.scene.rotation.y = -angle;
@@ -104,6 +108,9 @@ export function Character() {
     model.scene.rotation,
     model.scene,
     user.image,
+    dispatch,
+    user._id,
+    roomid,
   ]);
 
   const updateCameraTarget = (moveX: number, moveZ: number) => {
@@ -116,7 +123,6 @@ export function Character() {
     if (controlsRef.current) controlsRef.current.target = cameraTarget;
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     let action: ActionName = "";
     if (forward || backward || left || right) {
@@ -144,6 +150,7 @@ export function Character() {
           image: user.image,
         }),
       );
+      dispatch(setMyPosition({ position: positionRef.current }));
     }
   }, [
     forward,

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ActionInfo } from "src/types/index";
 
 type State = {
+  myInfo: any;
   participants: {
     [key in string]: any;
   };
@@ -13,8 +14,11 @@ type State = {
   roomInfo: any;
   isError: boolean;
   errorMassage: string;
+  positions: any;
 };
 const initialState: State = {
+  myInfo: {},
+  positions: {},
   participants: {},
   messageList: [],
   actionInfo: {},
@@ -39,6 +43,8 @@ const socketSlice = createSlice({
 
     disconnect: (state) => {
       state.messageList = [];
+      state.participants = {};
+      state.actionInfo = {};
     },
 
     join: (state, action) => {
@@ -72,8 +78,23 @@ const socketSlice = createSlice({
     },
 
     setOthersPosition: (state, action) => {
-      if (state.actionInfo[action.payload._id])
-        state.actionInfo[action.payload._id].position = action.payload.position;
+      state.actionInfo[action.payload._id].position = action.payload.position;
+    },
+
+    setMyPosition: (state, action) => {
+      state.myInfo.position = action.payload.position;
+    },
+
+    deleteInfo: (state, action) => {
+      delete state.actionInfo[action.payload._id];
+    },
+    leave: (state, action) => {},
+    initpos: (state, action) => {
+      state.myInfo.position = action.payload.position;
+    },
+
+    positions: (state, action) => {
+      state.positions[action.payload._id] = action.payload.position;
     },
   },
 });
@@ -87,5 +108,10 @@ export const {
   getRoomInfo,
   setError,
   setOthersPosition,
+  deleteInfo,
+  leave,
+  setMyPosition,
+  initpos,
+  positions,
 } = socketSlice.actions;
 export const socketReducer = socketSlice.reducer;
