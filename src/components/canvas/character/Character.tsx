@@ -150,15 +150,6 @@ export function Character() {
           image: user.image,
         }),
       );
-      console.log("캐릭터에서 마운트시 처음 보내는 정보: ", {
-        _id: user._id,
-        roomId: roomid,
-        input: { forward, backward, left, right },
-        position: positionRef.current,
-        cameraCharacterAngleY,
-        image: user.image,
-      });
-
       dispatch(
         setMyPosition({
           _id: user._id,

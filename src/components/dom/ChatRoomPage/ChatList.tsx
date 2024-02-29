@@ -10,6 +10,7 @@ export function ChatList() {
   const { messageList } = useSelector(
     (state: RootState) => state.reducer.socketReducer,
   );
+  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
 
   useEffect(() => {
     const scrollHeight = messageListRef.current?.scrollHeight;
@@ -30,9 +31,11 @@ export function ChatList() {
             // eslint-disable-next-line react/no-array-index-key
             key={idx}
             className={`rounded-lg p-2 ${
-              message.type === "mine"
-                ? "bg-blue-500 text-white"
-                : "bg-slate-600 text-center text-gray-300"
+              message.type === "user"
+                ? `${
+                    user._id === message._id ? "bg-blue-500" : " bg-slate-400"
+                  } text-white`
+                : "bg-slate-700 text-center text-gray-300"
             }`}
           >
             <span className="font-bold">{message.name}</span>

@@ -10,10 +10,10 @@ export function Others() {
   const { actionInfo, positions } = useSelector(
     (state: RootState) => state.reducer.socketReducer,
   );
-  const othersInfo = Object.entries(actionInfo).filter(
-    ([_id, value]) => value._id !== user?._id,
-  );
-  // console.log(othersInfo);
+
+  const othersInfo = Object.entries(actionInfo).filter(([_id, value]) => {
+    return _id !== user._id && _id !== undefined;
+  });
 
   return (
     <>

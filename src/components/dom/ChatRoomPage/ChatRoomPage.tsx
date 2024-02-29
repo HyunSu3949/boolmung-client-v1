@@ -12,6 +12,7 @@ import {
 import { Modal } from "src/components/dom/common/Modal";
 
 import { ChatWindow } from "./ChatWinow";
+import { SoundButton } from "../common/SoundButton/SoundButton";
 
 export function ChatRoomPage() {
   const dispatch = useDispatch();
@@ -60,16 +61,19 @@ export function ChatRoomPage() {
   }, [dispatch, roomid, user]);
 
   return (
-    <main className="flex w-full flex-1 flex-col bg-slate-900">
+    <main className="static flex flex-col flex-1 w-full bg-slate-900">
       <div className="flex min-h-[10vh] items-center space-x-4 p-4">
+        <div className="absolute p-4 rounded-md left-3 bg-slate-600">
+          <SoundButton />
+        </div>
         <button
           onClick={exitRoom}
-          className="flex items-center rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-400 focus:outline-none"
+          className="flex items-center px-4 py-2 text-white rounded bg-slate-600 hover:bg-slate-400 focus:outline-none"
           type="button"
         >
           <img
             src="/img/exit.svg"
-            className="mr-2 h-5 w-5 text-white"
+            className="w-5 h-5 mr-2 text-white"
             alt="나가기 아이콘"
           />
           나가기
@@ -87,7 +91,7 @@ export function ChatRoomPage() {
             <button
               onClick={closeModal}
               type="button"
-              className="rounded-md bg-slate-500 p-2 text-slate-200"
+              className="p-2 rounded-md bg-slate-500 text-slate-200"
             >
               나가기
             </button>
