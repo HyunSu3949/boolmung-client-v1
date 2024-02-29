@@ -5,15 +5,11 @@ import {
   deleteInfo,
   getRoomInfo,
   join,
-  leave,
   move,
-  positions,
   setError,
   setMessageList,
-  setOthersPosition,
 } from "src/redux/features/socketSlice";
 import { SocketReceiveMessage } from "src/types/index";
-import { authReducer } from "src/redux/features/authSlice";
 
 const URL = (
   process.env.NODE_ENV === "development"
@@ -31,7 +27,6 @@ const eventName = {
   NOTFOUND: "socket/notfound",
   GET_ROOM_INFO: "socket/getRoomInfo",
   LEAVE: "socket/leave",
-  POS: "socket/pos",
   SENDINITIALPOS: "socket/initpos",
 };
 
@@ -61,22 +56,11 @@ export const socketMiddleware: Middleware = (store) => {
 
         socket.on(eventName.JOIN, (data: any) => {
           dispatch(join(data));
-          socket.emit(eventName.POS, {
-            _id: getState().reducer.authReducer.user._id,
-            position: getState().reducer.socketReducer.myInfo.position,
-          });
+          dispatch(move(getState().reducer.socketReducer.myInfo));
         });
 
         socket.on(eventName.LEAVE, (data: any) => {
           dispatch(deleteInfo(data));
-        });
-
-        socket.on(eventName.POS, (data: any) => {
-          dispatch(positions(data));
-        });
-
-        socket.on(eventName.SENDINITIALPOS, (data: any) => {
-          dispatch(setOthersPosition(data));
         });
 
         socket.on(eventName.GET_ROOM_INFO, (data: any) => {
@@ -118,10 +102,6 @@ export const socketMiddleware: Middleware = (store) => {
 
       case eventName.LEAVE:
         socket.emit(eventName.LEAVE, action.payload);
-        break;
-
-      case eventName.SENDINITIALPOS:
-        socket.emit(eventName.SENDINITIALPOS, action.payload);
         break;
 
       default:

@@ -13,7 +13,7 @@ import {
 } from "./utils";
 import { useInput } from "./useInput";
 import { RootState } from "src/redux/store";
-import { initpos, move, setMyPosition } from "src/redux/features/socketSlice";
+import { move, setMyPosition } from "src/redux/features/socketSlice";
 
 const walkDirection = new THREE.Vector3();
 const rotateAxis = new THREE.Vector3(0, 1, 0);
@@ -76,9 +76,9 @@ export function Character() {
       initialPosition.y,
       initialPosition.z,
     );
-    if (roomid) {
-      dispatch(initpos({ _id: user._id, position: positionRef.current }));
-    }
+    // if (roomid) {
+    //   dispatch(initpos({ _id: user._id, position: positionRef.current }));
+    // }
     const angle = Math.atan2(model.scene.position.x, model.scene.position.z);
 
     model.scene.rotation.y = -angle;
@@ -150,7 +150,25 @@ export function Character() {
           image: user.image,
         }),
       );
-      dispatch(setMyPosition({ position: positionRef.current }));
+      console.log("캐릭터에서 마운트시 처음 보내는 정보: ", {
+        _id: user._id,
+        roomId: roomid,
+        input: { forward, backward, left, right },
+        position: positionRef.current,
+        cameraCharacterAngleY,
+        image: user.image,
+      });
+
+      dispatch(
+        setMyPosition({
+          _id: user._id,
+          roomId: roomid,
+          input: { forward, backward, left, right },
+          position: positionRef.current,
+          cameraCharacterAngleY,
+          image: user.image,
+        }),
+      );
     }
   }, [
     forward,

@@ -4,6 +4,7 @@ import { Modal } from "src/components/dom/common/Modal";
 
 import { LoginForm } from "./LoginForm/LoginForm";
 import { SignupForm } from "./SignupForm/SignupForm";
+import Alert from "./Alert";
 
 export function LoginPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +45,7 @@ export function LoginPage() {
         <Modal isOpen={confirmOpen} closeModal={closeConfirmModal}>
           <div className="p-4 py-8 text-slate-200">회원 가입 완료!</div>
         </Modal>
+        <Alert />
       </div>
     </div>
   );

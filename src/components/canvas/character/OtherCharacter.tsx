@@ -15,10 +15,9 @@ const rotateQuarternion = new THREE.Quaternion();
 type Props = {
   state: ActionInfo;
   image: string;
-  initialPos: any;
 };
 
-export function OtherCharacter({ state, image, initialPos }: Props) {
+export function OtherCharacter({ state, image }: Props) {
   const dispatch = useDispatch();
   const currentAction = useRef("");
   const model = useGLTF("/models/player7.glb") as GLTFResult;

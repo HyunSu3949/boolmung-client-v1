@@ -13,18 +13,12 @@ export function Others() {
   const othersInfo = Object.entries(actionInfo).filter(
     ([_id, value]) => value._id !== user?._id,
   );
+  // console.log(othersInfo);
 
   return (
     <>
       {othersInfo.map(([_id, info]) => {
-        return (
-          <OtherCharacter
-            key={_id}
-            state={info}
-            image={info.image}
-            initialPos={positions[_id]}
-          />
-        );
+        return <OtherCharacter key={_id} state={info} image={info.image} />;
       })}
     </>
   );

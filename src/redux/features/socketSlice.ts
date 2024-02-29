@@ -82,16 +82,13 @@ const socketSlice = createSlice({
     },
 
     setMyPosition: (state, action) => {
-      state.myInfo.position = action.payload.position;
+      state.myInfo = action.payload;
     },
 
     deleteInfo: (state, action) => {
       delete state.actionInfo[action.payload._id];
     },
     leave: (state, action) => {},
-    initpos: (state, action) => {
-      state.myInfo.position = action.payload.position;
-    },
 
     positions: (state, action) => {
       state.positions[action.payload._id] = action.payload.position;
@@ -111,7 +108,6 @@ export const {
   deleteInfo,
   leave,
   setMyPosition,
-  initpos,
   positions,
 } = socketSlice.actions;
 export const socketReducer = socketSlice.reducer;
