@@ -12,10 +12,9 @@ import {
 import { Modal } from "src/components/dom/common/Modal";
 import { Svgs } from "src/components/dom/common/Svgs";
 import { SoundButton } from "src/components/dom/common/SoundButton/SoundButton";
+import { ChatWindow } from "src/components/dom/chatRoomPage/ChatWinow";
 
-import { ChatWindow } from "./ChatWinow";
-
-export function ChatRoomPage() {
+export default function ChatRoomPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { roomid } = useParams();

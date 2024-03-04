@@ -7,6 +7,31 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const prod = process.env.NODE_ENV === "production";
 
+const plugins = [
+  new HtmlWebpackPlugin({
+    template: "./public/index.html",
+  }),
+  new MiniCssExtractPlugin(),
+  new CopyWebpackPlugin({
+    patterns: [
+      { from: "./src/assets/img", to: "./img" },
+      { from: "./src/assets/models", to: "./models" },
+      { from: "./src/assets/sound", to: "./sound" },
+    ],
+  }),
+  new Dotenv(),
+];
+
+if (prod) {
+  plugins.push(
+    new BundleAnalyzerPlugin({
+      analyzerMode: "static",
+      openAnalyzer: false,
+      generateStatsFile: true,
+      statsFilename: "bundle-report.json",
+    }),
+  );
+}
 module.exports = {
   mode: prod ? "production" : "development",
   entry: "./src/index.tsx",
@@ -54,24 +79,5 @@ module.exports = {
     ],
   },
   devtool: prod ? undefined : "source-map",
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./public/index.html",
-    }),
-    new MiniCssExtractPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: "./src/assets/img", to: "./img" },
-        { from: "./src/assets/models", to: "./models" },
-        { from: "./src/assets/sound", to: "./sound" },
-      ],
-    }),
-    new Dotenv(),
-    // new BundleAnalyzerPlugin({
-    //   analyzerMode: "static",
-    //   openAnalyzer: false,
-    //   generateStatsFile: true,
-    //   statsFilename: "bundle-report.json",
-    // }),
-  ],
+  plugins,
 };

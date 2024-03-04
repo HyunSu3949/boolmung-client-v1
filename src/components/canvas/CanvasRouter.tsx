@@ -5,7 +5,7 @@ import { ChatScene } from "src/components/canvas/scene/ChatScene";
 import HomeScene from "src/components/canvas/scene/HomeScene";
 import { RootState } from "src/redux/store";
 
-export default function CanvasContainer() {
+export default function CanvasRouter() {
   const { isLoggedIn } = useSelector(
     (state: RootState) => state.reducer.authReducer,
   );

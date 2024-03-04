@@ -7,10 +7,6 @@ import { getAllRoom } from "src/apis/getApis";
 import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 
 export function RoomList() {
-  const fetchRooms = async ({ pageParam }: { pageParam: number }) => {
-    const response = await getAllRoom({ queryParameters: { page: pageParam } });
-    return response;
-  };
   const { ref, inView } = useInView();
   const {
     data,
@@ -23,7 +19,12 @@ export function RoomList() {
     status,
   } = useInfiniteQuery({
     queryKey: ["roomList"],
-    queryFn: fetchRooms,
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      const response = await getAllRoom({
+        queryParameters: { page: pageParam },
+      });
+      return response;
+    },
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.hasNextPage ? lastPage.nextPage : undefined,

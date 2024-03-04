@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { ChatList } from "src/components/dom/ChatRoomPage/ChatList";
+import { ChatList } from "src/components/dom/chatRoomPage/ChatList";
 import { sendMessage } from "src/redux/features/socketActions";
 import { RootState } from "src/redux/store";
 import { Svgs } from "src/components/dom/common/Svgs";
@@ -61,22 +61,22 @@ export function ChatWindow() {
   return (
     <div
       ref={chatWindowRef}
-      className="flex flex-col flex-1 w-full p-2 text-white bg-gray-900"
+      className="flex w-full flex-1 flex-col bg-gray-900 p-2 text-white"
     >
-      <div className="flex flex-1 w-full overflow-auto bg-gray-800 border border-gray-700 rounded-lg">
+      <div className="flex w-full flex-1 overflow-auto rounded-lg border border-gray-700 bg-gray-800">
         <ChatList />
       </div>
-      <form onSubmit={onSubmit} className="flex py-2 space-x-2">
+      <form onSubmit={onSubmit} className="flex space-x-2 py-2">
         <input
           ref={inputRef}
           onChange={onChange}
           type="text"
           value={message}
-          className="flex-1 p-2 text-white bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none"
+          className="flex-1 rounded-lg border border-gray-700 bg-gray-800 p-2 text-white focus:border-blue-500 focus:outline-none"
           placeholder="메시지 입력..."
         />
         <button
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
+          className="rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           type="submit"
         >
           <Svgs id="up-arrow" size="1.25rem" title="전송버튼" />
