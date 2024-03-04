@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { ChatList } from "src/components/dom/ChatRoomPage/ChatList";
 import { sendMessage } from "src/redux/features/socketActions";
 import { RootState } from "src/redux/store";
+import { Svgs } from "src/components/dom/common/Svgs";
 
 export function ChatWindow() {
   const dispatch = useDispatch();
@@ -78,7 +79,7 @@ export function ChatWindow() {
           className="px-4 py-2 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
           type="submit"
         >
-          <img src="/img/up-arrow.svg" alt="전송 버튼" className="w-5 h-5" />
+          <Svgs id="up-arrow" size="1.25rem" title="전송버튼" />
         </button>
       </form>
     </div>

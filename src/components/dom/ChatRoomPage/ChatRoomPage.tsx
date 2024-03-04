@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { RootState } from "src/redux/store";
 import {
@@ -10,9 +10,10 @@ import {
   setError,
 } from "src/redux/features/socketSlice";
 import { Modal } from "src/components/dom/common/Modal";
+import { Svgs } from "src/components/dom/common/Svgs";
+import { SoundButton } from "src/components/dom/common/SoundButton/SoundButton";
 
 import { ChatWindow } from "./ChatWinow";
-import { SoundButton } from "../common/SoundButton/SoundButton";
 
 export function ChatRoomPage() {
   const dispatch = useDispatch();
@@ -71,11 +72,7 @@ export function ChatRoomPage() {
           className="flex items-center px-4 py-2 text-white rounded bg-slate-600 hover:bg-slate-400 focus:outline-none"
           type="button"
         >
-          <img
-            src="/img/exit.svg"
-            className="w-5 h-5 mr-2 text-white"
-            alt="나가기 아이콘"
-          />
+          <Svgs id="exit" size="1.25rem" title="나가기 아이콘" />
           나가기
         </button>
         <p className="text-xl text-white">{roomInfo.title}</p>

@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const prod = process.env.NODE_ENV === "production";
 
@@ -43,7 +44,7 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
-        test: /\.(png|jpe?g|gif|glb|gltf)$/i,
+        test: /\.(png|jpe?g|gif|glb|gltf|svg)$/i,
         loader: "file-loader",
         options: {
           publicPath: "./",
@@ -66,5 +67,11 @@ module.exports = {
       ],
     }),
     new Dotenv(),
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: "static",
+    //   openAnalyzer: false,
+    //   generateStatsFile: true,
+    //   statsFilename: "bundle-report.json",
+    // }),
   ],
 };

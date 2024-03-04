@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+
 import "./alert.css";
+import { Svgs } from "src/components/dom/common/Svgs";
 
 export default function Alert() {
   useEffect(() => {
@@ -23,16 +25,8 @@ export default function Alert() {
   return (
     <div className="absolute left-5 top-0 flex w-[100vw-480px] flex-col items-center">
       <div className="flex items-center">
-        <img
-          src="/img/wasd.svg"
-          alt="키보드 동작 알림"
-          className="blink h-60 w-60"
-        />
-        <img
-          src="/img/drag.svg"
-          alt="마우스 동작 알림"
-          className="w-40 h-40 blink"
-        />
+        <Svgs id="wasd" size="15rem" className="blink" title="키보드 아이콘" />
+        <Svgs id="drag" size="13rem" className="blink" title="마우스 아이콘" />
       </div>
       <p className="blink text-slate-200">
         키보드를 눌러 캐릭터를 움직여보세요!{" "}

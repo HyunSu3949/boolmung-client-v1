@@ -6,6 +6,7 @@ import { logout } from "src/apis/user/logout";
 import { setLogoutState } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
 import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
+import { Svgs } from "src/components/dom/common/Svgs";
 
 import { SoundButton } from "./SoundButton/SoundButton";
 
@@ -32,19 +33,23 @@ export function Navbar() {
         <SoundButton />
       </div>
       <div className="flex items-center space-x-2">
-        <img src="/img/chat.svg" alt="채팅 아이콘" className="w-5 h-5" />
         <NavLink to="/" className={getNavLinkClass}>
-          채팅
+          <div className="flex items-center space-x-1">
+            <Svgs id="chat" size="1.25rem" title="채팅 아이콘" />
+            <span>채팅</span>
+          </div>
         </NavLink>
       </div>
       <div className="flex items-center space-x-2">
-        <img
-          src={user.image}
-          alt="프로필 이미지"
-          className="w-6 h-6 rounded-full"
-        />
         <NavLink to="/my" className={getNavLinkClass}>
-          <span>내 정보</span>
+          <div className="flex items-center space-x-1">
+            <img
+              src={user.image}
+              alt="프로필 이미지"
+              className="w-6 h-6 rounded-full"
+            />
+            <span>내 정보</span>
+          </div>
         </NavLink>
       </div>
       <div>

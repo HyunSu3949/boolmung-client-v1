@@ -1,3 +1,5 @@
+import { Svgs } from "src/components/dom/common/Svgs";
+
 type PropsType = {
   isOpen: boolean;
   closeModal: () => void;
@@ -15,7 +17,7 @@ export function Modal({ isOpen, closeModal, children }: PropsType) {
           type="button"
           className="absolute p-2 right-2 top-2"
         >
-          <img src="/img/close.svg" alt="닫기 버튼" className="w-4 h-4" />
+          <Svgs id="close" size="1.25rem" title="엑스 아이콘" />
         </button>
         {children}
       </div>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import { Svgs } from "src/components/dom/common/Svgs";
+
 export function SoundButton() {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -28,18 +30,18 @@ export function SoundButton() {
     <>
       <audio ref={audioRef} src={audioFile} loop />
       <button
-        className="flex items-center space-x-2 w-fit whitespace-nowrap "
+        className="flex w-fit items-center space-x-2 whitespace-nowrap "
         onClick={togglePlaying}
         type="button"
       >
         {playing ? (
           <>
-            <img src="/img/volume-on.svg" alt="소리 켜진 아이콘" />
+            <Svgs id="volume-on" size="1.5rem" title="소리 켜진 아이콘" />
             <span className="text-slate-200">소리 끄기</span>
           </>
         ) : (
           <>
-            <img src="/img/volume-off.svg" alt="소리 꺼진 아이콘" />
+            <Svgs id="volume-off" size="1.5rem" title="소리 꺼진 아이콘" />
             <span className="text-slate-200">소리 켜기</span>
           </>
         )}

@@ -10,10 +10,11 @@ import { patchUserInfo } from "src/apis/patchApis";
 import { Modal } from "src/components/dom/common/Modal";
 import { updateImage } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
+import { Svgs } from "src/components/dom/common/Svgs";
 
 import { SpinnerWithText } from "../common/SpinnerWithText";
 
-export function DrawingEditor() {
+export default function DrawingEditor() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [tool, setTool] = useState("pen");
@@ -121,9 +122,9 @@ export function DrawingEditor() {
             </option>
           </select>
           {tool === "pen" ? (
-            <img src="/img/edit.svg" alt="연필아이콘" className="h-7 w-7" />
+            <Svgs id="edit" size="1.75rem" title="연필 아이콘" />
           ) : (
-            <img src="/img/eraser.svg" alt="지우개아이콘" className="w-8 h-8" />
+            <Svgs id="eraser" size="1.75rem" title="지우개 아이콘" />
           )}
         </div>
         <Stage

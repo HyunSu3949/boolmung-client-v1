@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "module": "ES2015",
+    "module": "ES2020",
     "moduleResolution": "node",
     "lib": ["dom", "ES2015"],
     "strict": true,
@@ -16,7 +16,7 @@
     }
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "./src/types"],
+  "include": ["**/*.ts", "**/*.tsx", "./src/types", "src/**/*", "src/.d.ts"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },

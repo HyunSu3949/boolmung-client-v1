@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Modal } from "src/components/dom/common/Modal";
 import { ChatForm } from "src/components/dom/HomePage/ChatForm";
+import { Svgs } from "src/components/dom/common/Svgs";
 
 import { RoomList } from "./RoomList";
 
@@ -24,11 +25,7 @@ export function HomePage() {
           onClick={openModal}
           type="button"
         >
-          <img
-            src="/img/plus.svg"
-            alt="플러스 이미지"
-            className="w-5 h-5 mr-1"
-          />
+          <Svgs id="plus" size="1.25rem" title="플러스 아이콘" />
           방만들기
         </button>
       </div>
