@@ -8,9 +8,9 @@ import Layout from "src/components/dom/DomLayout";
 import { RootState } from "src/redux/store";
 import { Spinner } from "src/components/dom/common/Spinner";
 
-const Home = lazy(() => import("src/components/dom/homePage/HomePage"));
+const Home = lazy(() => import("src/components/dom/HomePage/HomePage"));
 const My = lazy(() => import("src/components/dom/myPage/MyPage"));
-const Chat = lazy(() => import("src/components/dom/chatRoomPage/ChatRoomPage"));
+const Chat = lazy(() => import("src/components/dom/ChatRoomPage/ChatRoomPage"));
 
 export default function DomRouter() {
   const { isLoggedIn } = useSelector(
