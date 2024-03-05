@@ -1,4 +1,4 @@
-import { SignUpFormData, User } from "src/types/index";
+import { RoomInfo, SignUpFormData, User } from "src/types/index";
 
 type ApiEndpointInfo<P, Q, R> = {
   pathVariables?: P;
@@ -43,6 +43,12 @@ export type GetApi = {
       }[];
     }
   >;
+  joinRoom: ApiEndpointInfo<
+    { roomid: string },
+    never,
+    { status: string; data: RoomInfo }
+  >;
+  logout: ApiEndpointInfo<never, never, { status: string }>;
 };
 
 export type PatchApi = {
