@@ -13,7 +13,7 @@ import {
 } from "./utils";
 import { useInput } from "./useInput";
 import { RootState } from "src/redux/store";
-import { move, setMyPosition } from "src/redux/features/socketSlice";
+import { move, sendMove, setMyPosition } from "src/redux/features/socketSlice";
 
 const walkDirection = new THREE.Vector3();
 const rotateAxis = new THREE.Vector3(0, 1, 0);
@@ -76,9 +76,7 @@ export function Character() {
       initialPosition.y,
       initialPosition.z,
     );
-    // if (roomid) {
-    //   dispatch(initpos({ _id: user._id, position: positionRef.current }));
-    // }
+
     const angle = Math.atan2(model.scene.position.x, model.scene.position.z);
 
     model.scene.rotation.y = -angle;
@@ -138,10 +136,10 @@ export function Character() {
       nextActionToPlay?.reset().fadeIn(0.2).play();
       currentAction.current = action;
     }
+    // 채팅방입장해 있는 경우
     if (roomid) {
-      // 채팅방입장해 있는 경우
       dispatch(
-        move({
+        sendMove({
           _id: user._id,
           roomId: roomid,
           input: { forward, backward, left, right },

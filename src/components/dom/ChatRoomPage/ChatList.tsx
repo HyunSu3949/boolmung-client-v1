@@ -7,8 +7,8 @@ import { SocketReceiveMessage } from "src/types/index";
 export function ChatList() {
   const messageListRef = useRef<HTMLUListElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
-  const { messageList } = useSelector(
-    (state: RootState) => state.reducer.socketReducer,
+  const messageList = useSelector(
+    (state: RootState) => state.reducer.socketReducer.messageList,
   );
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
 

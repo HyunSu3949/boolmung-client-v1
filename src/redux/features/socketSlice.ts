@@ -62,6 +62,8 @@ const socketSlice = createSlice({
     },
 
     move: (state, action: PayloadAction<ActionInfo>) => {
+      // console.log(action.payload);
+
       state.actionInfo = {
         ...state.actionInfo,
         [action.payload._id]: action.payload,
@@ -93,6 +95,8 @@ const socketSlice = createSlice({
     positions: (state, action) => {
       state.positions[action.payload._id] = action.payload.position;
     },
+
+    sendMove: (state, action) => {},
   },
 });
 
@@ -109,5 +113,6 @@ export const {
   leave,
   setMyPosition,
   positions,
+  sendMove,
 } = socketSlice.actions;
 export const socketReducer = socketSlice.reducer;

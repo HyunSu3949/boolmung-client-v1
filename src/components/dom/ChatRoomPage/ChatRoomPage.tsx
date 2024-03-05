@@ -19,8 +19,11 @@ export default function ChatRoomPage() {
   const navigate = useNavigate();
   const { roomid } = useParams();
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const { roomInfo, errorMassage } = useSelector(
-    (state: RootState) => state.reducer.socketReducer,
+  const { title } = useSelector(
+    (state: RootState) => state.reducer.socketReducer.roomInfo,
+  );
+  const errorMassage = useSelector(
+    (state: RootState) => state.reducer.socketReducer.errorMassage,
   );
 
   const exitRoom = () => {
@@ -74,7 +77,7 @@ export default function ChatRoomPage() {
           <Svgs id="exit" size="1.25rem" title="나가기 아이콘" />
           나가기
         </button>
-        <p className="text-xl text-white">{roomInfo.title}</p>
+        <p className="text-xl text-white">{title}</p>
       </div>
       <div className="flex max-h-[90vh] w-full flex-1">
         <ChatWindow />

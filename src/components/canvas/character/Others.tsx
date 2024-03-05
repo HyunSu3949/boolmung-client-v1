@@ -7,8 +7,8 @@ import { OtherCharacter } from "./OtherCharacter";
 
 export function Others() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const { actionInfo, positions } = useSelector(
-    (state: RootState) => state.reducer.socketReducer,
+  const actionInfo = useSelector(
+    (state: RootState) => state.reducer.socketReducer.actionInfo,
   );
 
   const othersInfo = Object.entries(actionInfo).filter(([_id, value]) => {

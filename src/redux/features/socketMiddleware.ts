@@ -10,6 +10,7 @@ import {
   setMessageList,
 } from "src/redux/features/socketSlice";
 import { SocketReceiveMessage } from "src/types/index";
+import { authReducer } from "src/redux/features/authSlice";
 
 const URL = (
   process.env.NODE_ENV === "development"
@@ -28,6 +29,7 @@ const eventName = {
   GET_ROOM_INFO: "socket/getRoomInfo",
   LEAVE: "socket/leave",
   SENDINITIALPOS: "socket/initpos",
+  SENDMOVE: "socket/sendMove",
 };
 
 export const socketMiddleware: Middleware = (store) => {
@@ -51,11 +53,14 @@ export const socketMiddleware: Middleware = (store) => {
         });
 
         socket.on(eventName.MOVE, (data: any) => {
-          dispatch(move(data));
+          if (getState().reducer.authReducer.user._id !== data._id) {
+            dispatch(move(data));
+          }
         });
 
         socket.on(eventName.JOIN, (data: any) => {
           dispatch(join(data));
+          socket.emit(eventName.MOVE, getState().reducer.socketReducer.myInfo);
           dispatch(move(getState().reducer.socketReducer.myInfo));
         });
 
@@ -96,7 +101,7 @@ export const socketMiddleware: Middleware = (store) => {
         socket.emit(eventName.CHAT, action.payload);
         break;
 
-      case eventName.MOVE:
+      case eventName.SENDMOVE:
         socket.emit(eventName.MOVE, action.payload);
         break;
 

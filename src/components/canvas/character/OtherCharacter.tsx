@@ -97,16 +97,16 @@ export function OtherCharacter({ state, image }: Props) {
 
       clone.position.x += moveX;
       clone.position.z += moveZ;
-      dispatch(
-        setOthersPosition({
-          _id,
-          position: {
-            x: clone.position.x,
-            y: clone.position.y,
-            z: clone.position.z,
-          },
-        }),
-      );
+      // dispatch(
+      //   setOthersPosition({
+      //     _id,
+      //     position: {
+      //       x: clone.position.x,
+      //       y: clone.position.y,
+      //       z: clone.position.z,
+      //     },
+      //   }),
+      // );
     }
   });
   return <primitive object={clone} ref={ref} />;
