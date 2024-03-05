@@ -1,4 +1,4 @@
-import { PostApi } from "src/apis/types";
+import { PostApi } from "src/apis/apiTypes";
 import { axiosInstance, axiosPublic } from "src/apis/instance";
 import { getQueryString, getPathWhitPathVariable } from "src/apis/utils";
 import { CreateRoomFormData } from "src/types/index";

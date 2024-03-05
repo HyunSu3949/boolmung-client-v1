@@ -172,7 +172,6 @@ export function Character() {
   ]);
 
   const elapsedTime = useRef(0);
-
   useFrame((_, delta) => {
     elapsedTime.current += delta;
 

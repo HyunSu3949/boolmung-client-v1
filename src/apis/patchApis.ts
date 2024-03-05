@@ -1,4 +1,4 @@
-import { PatchApi } from "src/apis/types";
+import { PatchApi } from "src/apis/apiTypes";
 import { axiosInstance, axiosPublic } from "src/apis/instance";
 import { getQueryString, getPathWhitPathVariable } from "src/apis/utils";
 
