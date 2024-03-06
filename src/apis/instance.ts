@@ -13,8 +13,6 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (res: AxiosResponse) => res,
   (error: AxiosError<any>) => {
-    console.log(error);
-
     return Promise.reject(error);
   },
 );
@@ -45,7 +43,6 @@ axiosPublic.interceptors.response.use(
     return res;
   },
   (error: AxiosError<unknown>) => {
-    console.log(error);
     return Promise.reject(error);
   },
 );

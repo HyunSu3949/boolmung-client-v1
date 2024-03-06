@@ -46,38 +46,44 @@ export default function DrawingEditor() {
     konvaImage.onload = async () => {
       if (!stageRef.current) return;
       const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = stageRef.current.width();
-      tempCanvas.height = stageRef.current.height();
+
+      const scaleFactor = 0.5; // 이미지를 50%로 축소
+      tempCanvas.width = stageRef.current.width() * scaleFactor;
+      tempCanvas.height = stageRef.current.height() * scaleFactor;
       const ctx = tempCanvas.getContext("2d") as CanvasRenderingContext2D;
 
       // 하얀색 배경 추가
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-      ctx.drawImage(konvaImage, 0, 0);
+      ctx.drawImage(konvaImage, 0, 0, tempCanvas.width, tempCanvas.height);
 
-      tempCanvas.toBlob(async (blob) => {
-        if (blob) {
-          const {
-            data: { url, objectKey },
-          } = await getPreSignedUrl({});
+      tempCanvas.toBlob(
+        async (blob) => {
+          if (blob) {
+            const {
+              data: { url, objectKey },
+            } = await getPreSignedUrl({});
 
-          const res = await fetch(url, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "image/png",
-            },
-            body: blob,
-          });
+            const res = await fetch(url, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "image/png",
+              },
+              body: blob,
+            });
 
-          if (res.status === 200) {
-            dispatch(updateImage({ image: objectKey }));
-            patchUserInfo({ body: { image: objectKey } });
-            setIsOpen(true);
+            if (res.status === 200) {
+              dispatch(updateImage({ image: objectKey }));
+              patchUserInfo({ body: { image: objectKey } });
+              setIsOpen(true);
+            }
+            setIsLoading(false);
           }
-          setIsLoading(false);
-        }
-      }, "image/png");
+        },
+        "image/png",
+        scaleFactor,
+      );
     };
   };
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
@@ -104,15 +110,15 @@ export default function DrawingEditor() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-stone-800">
+    <div className="flex flex-col items-center justify-center bg-stone-800 p-4">
       <div>
-        <div className="flex items-center w-full space-x-2">
+        <div className="flex w-full items-center space-x-2">
           <select
             value={tool}
             onChange={(e) => {
               setTool(e.target.value);
             }}
-            className="w-24 px-1 mb-2 border-gray-300 rounded shadow-sm"
+            className="mb-2 w-24 rounded border-gray-300 px-1 shadow-sm"
           >
             <option className="flex items-center space-x-2" value="pen">
               <span>펜</span>
@@ -128,7 +134,7 @@ export default function DrawingEditor() {
           )}
         </div>
         <Stage
-          className="bg-white rounded-md"
+          className="rounded-md bg-white"
           width={300}
           height={300}
           onMouseDown={handleMouseDown}
@@ -163,7 +169,7 @@ export default function DrawingEditor() {
           </Layer>
         </Stage>
         <button
-          className="px-4 py-2 mt-4 text-white bg-blue-500 rounded shadow hover:bg-blue-700"
+          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white shadow hover:bg-blue-700"
           onClick={saveDrawingWithBackground}
           type="button"
         >
