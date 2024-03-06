@@ -1,5 +1,5 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 
@@ -8,16 +8,7 @@ import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 
 export function RoomList() {
   const { ref, inView } = useInView();
-  const {
-    data,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    status,
-  } = useInfiniteQuery({
+  const { data, fetchNextPage, isFetchingNextPage, status } = useInfiniteQuery({
     queryKey: ["roomList"],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       const response = await getAllRoom({
@@ -36,16 +27,16 @@ export function RoomList() {
   }, [fetchNextPage, inView]);
 
   return (
-    <ul className="w-full h-full space-y-2 overflow-y-auto">
+    <ul className="h-full w-full space-y-2 overflow-y-auto">
       {data?.pages.map((group) =>
         group.data.map((room) => (
           <li key={room._id} className="w-full">
             <Link
               to={`room/${room._id}`}
-              className="flex items-center justify-between w-full p-6 bg-gray-700 rounded-md hover:bg-gray-600"
+              className="flex w-full items-center justify-between rounded-md bg-gray-700 p-6 hover:bg-gray-600"
             >
               <h2 className="mr-5 text-lg text-white">{room.title}</h2>
-              <p className="text-gray-300 roomInfo">
+              <p className="roomInfo text-gray-300">
                 {room.participants.length}/{room.max}
               </p>
             </Link>

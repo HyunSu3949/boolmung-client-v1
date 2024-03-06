@@ -8,6 +8,7 @@ import {
   move,
   setError,
   setMessageList,
+  setMyPosition,
 } from "src/redux/features/socketSlice";
 import { SocketReceiveMessage } from "src/types/index";
 
@@ -102,6 +103,7 @@ export const socketMiddleware: Middleware = (store) => {
 
       case eventName.SENDMOVE:
         socket.emit(eventName.MOVE, action.payload);
+        dispatch(setMyPosition(action.payload));
         break;
 
       case eventName.LEAVE:

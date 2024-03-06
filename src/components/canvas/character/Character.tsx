@@ -137,20 +137,9 @@ export function Character() {
       nextActionToPlay?.reset().fadeIn(0.2).play();
       currentAction.current = action;
     }
-    // 채팅방입장해 있는 경우
     if (roomid) {
       dispatch(
         sendMove({
-          _id: user._id,
-          roomId: roomid,
-          input: { forward, backward, left, right },
-          position: positionRef.current,
-          cameraCharacterAngleY,
-          image: user.image,
-        }),
-      );
-      dispatch(
-        setMyPosition({
           _id: user._id,
           roomId: roomid,
           input: { forward, backward, left, right },
