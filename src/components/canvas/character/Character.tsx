@@ -13,14 +13,20 @@ import {
 import { RootState } from "src/redux/store";
 import useMovement from "src/components/canvas/character/useMovement";
 
+const url = {
+  face: "/img/defaultFace.png",
+  body: "/img/body.png",
+  model: "/models/player7.glb",
+};
+
 export function Character() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
 
   const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const orbitControlsRef = useRef<any>();
 
-  const model = useGLTF("/models/player7.glb") as GLTFResult;
-  const bodyTexture = useLoader(THREE.TextureLoader, "/img/body.png");
+  const model = useGLTF(url.model) as GLTFResult;
+  const bodyTexture = useLoader(THREE.TextureLoader, url.body);
   const camera = useThree((state) => state.camera);
 
   const { animations, scene } = model;
@@ -32,39 +38,35 @@ export function Character() {
     actions,
     cameraCharacterAngleY,
   });
-
   useEffect(() => {
     // material 세팅
-    const updateMaterial = (texture: any) => {
+    const updateMaterial = (texture: any, materials: any) => {
       texture.flipY = false;
-      const faceMaterial = model.materials.face;
-      faceMaterial.map = texture;
-      faceMaterial.needsUpdate = true;
+      materials.map = texture;
+      materials.needsUpdate = true;
     };
 
-    const loadTexture = async () => {
+    const loadTexture = async (
+      materials: any,
+      url: string,
+      defaultUrl: string,
+    ) => {
       try {
         const loader = new THREE.TextureLoader();
-        const loadedTexture = await loader.loadAsync(user.image);
+        const loadedTexture = await loader.loadAsync(url);
         if (loadedTexture) {
-          updateMaterial(loadedTexture);
+          updateMaterial(loadedTexture, materials);
         }
       } catch (e: any) {
         const loader = new THREE.TextureLoader();
-        const defaultTexture = await loader.loadAsync("/img/defaultFace.png");
+        const defaultTexture = await loader.loadAsync(defaultUrl);
         if (defaultTexture) {
-          updateMaterial(defaultTexture);
+          updateMaterial(defaultTexture, materials);
         }
       }
     };
-    loadTexture();
-
-    bodyTexture.flipY = false;
-    const bodyMaterial = model.materials["Material.001"];
-    if (bodyMaterial) {
-      bodyMaterial.map = bodyTexture;
-      bodyMaterial.needsUpdate = true;
-    }
+    loadTexture(model.materials.face, user.image, url.face);
+    loadTexture(model.materials["Material.001"], url.body, url.body);
 
     // 포지션, 위치 세팅
     model.scene.scale.set(1.2, 1.2, 1.2);
@@ -86,8 +88,8 @@ export function Character() {
       model.scene.position.y,
       -cameraPositionZ,
     );
-
     model.scene.lookAt(reverseCameraDrection);
+
     orbitControlsRef.current.target.copy(model.scene.position);
   }, [camera, bodyTexture, model, user.image]);
 
@@ -151,6 +153,7 @@ export function Character() {
       const newZ = model.scene.position.z + moveZ;
       positionRef.current = { x: newX, z: newZ, y: 0 };
 
+      // 캐릭터 위치 제한
       const MID_EMPTY_SIZE = 3.5;
       const MAX_MAP_SIZE = 20;
       if (
