@@ -49,7 +49,7 @@ export const generateInitialPosition = () => {
   do {
     x = Math.random() * 8 - 4;
     z = Math.random() * 8 - 4;
-  } while ((x > -3 && x < 3) || (z > -3 && z < 3));
+  } while ((x > -3.6 && x < 3.6) || (z > -3.6 && z < 3.6));
 
   return { x, y: 0, z };
 };
