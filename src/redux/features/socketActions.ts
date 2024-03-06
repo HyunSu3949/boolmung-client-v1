@@ -1,40 +1,28 @@
-import {
-  SocketUserInfo,
-  SocketSendMessage,
-  SocketReceiveMessage,
-} from "src/types/index";
+import { createAction } from "@reduxjs/toolkit";
 
-export const eventName = {
-  SOCKET_CONNECT: "socket/connect",
-  SOCKET_DISCONNECT: "socket/disconnect",
-  SOCKET_CHAT: "socket/sendMessage",
-  SOCKET_JOIN: "socket/join",
-  SOCKET_RECIEVE_DISCONNECT: "socket/disconnect",
-  SOCKET_RECIEVE_CHAT: "socket/chat",
-  SOCKET_RECIEVE_JOIN: "socket/join",
+import { SocketSendMessage, ActionInfo } from "src/types/index";
+
+const eventName = {
+  CONNECT: "socket/connect",
+  DISCONNECT: "socket/disconnect",
+  CHAT: "socket/sendMessage",
+  JOIN: "socket/join",
+  MOVE: "socket/move",
+  FULL: "socket/full",
+  NOTFOUND: "socket/notfound",
+  GET_ROOM_INFO: "socket/getRoomInfo",
+  LEAVE: "socket/leave",
+  SENDINITIALPOS: "socket/initpos",
+  SENDMOVE: "socket/sendMove",
 };
 
-export const connectSocket = ({ _id, roomId, name }: SocketUserInfo) => ({
-  type: eventName.SOCKET_CONNECT,
-  payload: { _id, roomId, name },
-});
+export const sendMove = createAction<ActionInfo>(eventName.SENDMOVE);
+export const connect = createAction<{
+  _id: string;
+  roomId: string;
+  name: string;
+  image: string;
+}>(eventName.CONNECT);
+export const leave = createAction<{ _id: string }>(eventName.LEAVE);
 
-export const sendMessage = ({
-  message,
-  _id,
-  roomId,
-  name,
-}: SocketSendMessage) => ({
-  type: eventName.SOCKET_CHAT,
-  payload: { message, _id, roomId, name },
-});
-
-export const receiveMessage = ({ message, type }: SocketReceiveMessage) => ({
-  type: eventName.SOCKET_RECIEVE_CHAT,
-  payload: { message, type },
-});
-
-export const disconnectSocket = ({ _id, roomId, name }: SocketUserInfo) => ({
-  type: eventName.SOCKET_DISCONNECT,
-  payload: { _id, roomId, name },
-});
+export const sendMessage = createAction<SocketSendMessage>(eventName.CHAT);

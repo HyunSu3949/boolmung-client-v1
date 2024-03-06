@@ -13,7 +13,8 @@ import {
 } from "./utils";
 import { useInput } from "./useInput";
 import { RootState } from "src/redux/store";
-import { move, sendMove, setMyPosition } from "src/redux/features/socketSlice";
+import { setMyPosition } from "src/redux/features/socketSlice";
+import { sendMove } from "src/redux/features/socketActions";
 
 const walkDirection = new THREE.Vector3();
 const rotateAxis = new THREE.Vector3(0, 1, 0);

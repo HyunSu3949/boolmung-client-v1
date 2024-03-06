@@ -31,16 +31,6 @@ const socketSlice = createSlice({
   name: "socket",
   initialState,
   reducers: {
-    connect: (
-      state,
-      action: PayloadAction<{
-        _id: string;
-        roomId: string;
-        name: string;
-        image: string;
-      }>,
-    ) => {},
-
     disconnect: (state) => {
       state.messageList = [];
       state.participants = {};
@@ -90,19 +80,15 @@ const socketSlice = createSlice({
     deleteInfo: (state, action) => {
       delete state.actionInfo[action.payload._id];
     },
-    leave: (state, action) => {},
 
     positions: (state, action) => {
       state.positions[action.payload._id] = action.payload.position;
     },
-
-    sendMove: (state, action) => {},
   },
 });
 
 export const {
   setMessageList,
-  connect,
   disconnect,
   move,
   join,
@@ -110,9 +96,7 @@ export const {
   setError,
   setOthersPosition,
   deleteInfo,
-  leave,
   setMyPosition,
   positions,
-  sendMove,
 } = socketSlice.actions;
 export const socketReducer = socketSlice.reducer;

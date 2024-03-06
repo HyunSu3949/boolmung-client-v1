@@ -3,16 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import { RootState } from "src/redux/store";
-import {
-  connect,
-  disconnect,
-  leave,
-  setError,
-} from "src/redux/features/socketSlice";
+import { disconnect, setError } from "src/redux/features/socketSlice";
 import { Modal } from "src/components/dom/common/Modal";
 import { Svgs } from "src/components/dom/common/Svgs";
 import { SoundButton } from "src/components/dom/common/SoundButton/SoundButton";
 import { ChatWindow } from "src/components/dom/ChatRoomPage/ChatWinow";
+import { connect, leave } from "src/redux/features/socketActions";
 
 export default function ChatRoomPage() {
   const dispatch = useDispatch();
@@ -64,14 +60,14 @@ export default function ChatRoomPage() {
   }, [dispatch, roomid, user]);
 
   return (
-    <main className="static flex w-full flex-1 flex-col bg-slate-900">
+    <main className="static flex flex-col flex-1 w-full bg-slate-900">
       <div className="flex min-h-[10vh] items-center space-x-4 p-4">
-        <div className="absolute left-3 rounded-md bg-slate-600 p-4">
+        <div className="absolute p-4 rounded-md left-3 bg-slate-600">
           <SoundButton />
         </div>
         <button
           onClick={exitRoom}
-          className="flex items-center rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-400 focus:outline-none"
+          className="flex items-center px-4 py-2 text-white rounded bg-slate-600 hover:bg-slate-400 focus:outline-none"
           type="button"
         >
           <Svgs id="exit" size="1.25rem" title="나가기 아이콘" />
@@ -90,7 +86,7 @@ export default function ChatRoomPage() {
             <button
               onClick={closeModal}
               type="button"
-              className="rounded-md bg-slate-500 p-2 text-slate-200"
+              className="p-2 rounded-md bg-slate-500 text-slate-200"
             >
               나가기
             </button>

@@ -10,7 +10,6 @@ import {
   setMessageList,
 } from "src/redux/features/socketSlice";
 import { SocketReceiveMessage } from "src/types/index";
-import { authReducer } from "src/redux/features/authSlice";
 
 const URL = (
   process.env.NODE_ENV === "development"
