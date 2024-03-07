@@ -9,7 +9,11 @@ import { RootState } from "src/redux/store";
 import useDispatchMovement from "src/components/canvas/myCharacter.tsx/useDispatchMovement";
 import OrbitControl from "src/components/canvas/myCharacter.tsx/OrbitControl";
 import useMovement from "src/components/canvas/myCharacter.tsx/useMovement";
-import { BODY_MATERIAL, assetsUrl } from "src/components/canvas/constant";
+import {
+  BODY_MATERIAL,
+  MODEL_SCALE,
+  assetsUrl,
+} from "src/components/canvas/constant";
 
 export function Character() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
@@ -30,6 +34,8 @@ export function Character() {
   });
 
   useEffect(() => {
+    // 크기 세팅
+    model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
     // material 세팅
     const updateMaterial = (texture: any, materials: any) => {
       texture.flipY = false;
@@ -59,7 +65,7 @@ export function Character() {
 
     loadTexture(model.materials.face, user.image, assetsUrl.face);
     loadTexture(model.materials[BODY_MATERIAL], assetsUrl.body, assetsUrl.body);
-  }, [model.materials, user.image]);
+  }, [model.materials, model.scene.scale, user.image]);
 
   return (
     <>

@@ -23,15 +23,14 @@ type Props = {
 };
 
 export function OtherCharacter({ state, image }: Props) {
-  const currentAction = useRef("");
-  const model = useGLTF(assetsUrl.model) as GLTFResult;
   const { input, position, cameraCharacterAngleY, _id } = state;
-
   const { forward, backward, left, right } = input;
 
-  const { animations, scene } = model;
-
   const faceTexture = useLoader(THREE.TextureLoader, image);
+  const currentAction = useRef("");
+
+  const model = useGLTF(assetsUrl.model) as GLTFResult;
+  const { animations, scene } = model;
 
   const clone = useMemo(() => {
     const clonedScene = SkeletonUtils.clone(scene);

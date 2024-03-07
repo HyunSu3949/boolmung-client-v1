@@ -11,9 +11,10 @@ import { ActionName, GLTFResult } from "src/types/index";
 import {
   CAMERE_MODEL_DISTANCE,
   DEBOUNCE,
+  FADE_IN,
+  FADE_OUT,
   MAX_MAP_SIZE,
   MID_EMPTY_SIZE,
-  MODEL_SCALE,
   SPEED,
 } from "src/components/canvas/constant";
 
@@ -33,7 +34,6 @@ export default function useMovement({ model, positionRef, actions }: Props) {
   // 모델 초기 상태 세팅
   useEffect(() => {
     // 모델 포지션, 위치 세팅
-    model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
     const { x, y, z } = positionRef.current;
     model.scene.position.set(x, y, z);
 
@@ -66,8 +66,8 @@ export default function useMovement({ model, positionRef, actions }: Props) {
     if (actionRef.current !== action) {
       const nextActionToPlay = actions[action];
       const current = actions[actionRef.current];
-      current?.fadeOut(0.2);
-      nextActionToPlay?.reset().fadeIn(0.2).play();
+      current?.fadeOut(FADE_OUT);
+      nextActionToPlay?.reset().fadeIn(FADE_IN).play();
       actionRef.current = action;
     }
   }, [actions, backward, forward, left, right]);
