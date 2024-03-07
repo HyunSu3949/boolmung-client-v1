@@ -4,18 +4,18 @@ import * as THREE from "three";
 
 import {
   directionOffset,
-  generateInitialPosition,
   roundToTwoDecimal,
 } from "src/components/canvas/utils";
 import { useInput } from "src/components/canvas/myCharacter.tsx/useInput";
 import { ActionName, GLTFResult } from "src/types/index";
-
-const MODEL_SCALE = 1.2;
-const CAMERE_MODEL_DISTANCE = 5;
-const DEBOUNCE = 0.3;
-const SPEED = 1.5;
-const MID_EMPTY_SIZE = 3.5;
-const MAX_MAP_SIZE = 20;
+import {
+  CAMERE_MODEL_DISTANCE,
+  DEBOUNCE,
+  MAX_MAP_SIZE,
+  MID_EMPTY_SIZE,
+  MODEL_SCALE,
+  SPEED,
+} from "src/components/canvas/constant";
 
 type Props = {
   model: GLTFResult;
@@ -151,7 +151,6 @@ export default function useMovement({ model, positionRef, actions }: Props) {
       }
     }
   });
-  console.log("리렌더링");
 
   return {
     keyBoardInput: { forward, backward, left, right },

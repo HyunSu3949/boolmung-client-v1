@@ -3,10 +3,16 @@ import React, { useEffect, useRef, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
-import { useDispatch } from "react-redux";
 
 import { directionOffset } from "../utils";
 import { ActionInfo, ActionName, GLTFResult } from "src/types/index";
+import {
+  FADE_IN,
+  FADE_OUT,
+  MODEL_SCALE,
+  SPEED,
+  assetsUrl,
+} from "src/components/canvas/constant";
 
 const rotateAxis = new THREE.Vector3(0, 1, 0);
 const rotateQuarternion = new THREE.Quaternion();
@@ -18,7 +24,7 @@ type Props = {
 
 export function OtherCharacter({ state, image }: Props) {
   const currentAction = useRef("");
-  const model = useGLTF("/models/player7.glb") as GLTFResult;
+  const model = useGLTF(assetsUrl.model) as GLTFResult;
   const { input, position, cameraCharacterAngleY, _id } = state;
 
   const { forward, backward, left, right } = input;
@@ -47,7 +53,7 @@ export function OtherCharacter({ state, image }: Props) {
   }, [animations, faceTexture, scene]);
 
   const { actions, ref } = useAnimations(clone.animations);
-  clone.scale.set(1.2, 1.2, 1.2);
+  clone.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
   clone.position.set(position.x, position.y, position.z);
 
   useEffect(() => {
@@ -61,8 +67,8 @@ export function OtherCharacter({ state, image }: Props) {
     if (currentAction.current !== action) {
       const nextActionToPlay = actions[action];
       const current = actions[currentAction.current];
-      current?.fadeOut(0.2);
-      nextActionToPlay?.reset().fadeIn(0.2).play();
+      current?.fadeOut(FADE_OUT);
+      nextActionToPlay?.reset().fadeIn(FADE_IN).play();
       currentAction.current = action;
     }
   }, [forward, backward, left, right, actions]);
@@ -90,8 +96,8 @@ export function OtherCharacter({ state, image }: Props) {
       );
       direction.applyAxisAngle(rotateAxis, newDirectionOffset);
 
-      const moveX = -direction.x * 1.5 * delta;
-      const moveZ = -direction.z * 1.5 * delta;
+      const moveX = -direction.x * SPEED * delta;
+      const moveZ = -direction.z * SPEED * delta;
 
       clone.position.x += moveX;
       clone.position.z += moveZ;

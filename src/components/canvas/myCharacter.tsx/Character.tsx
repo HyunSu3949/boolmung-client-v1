@@ -9,17 +9,11 @@ import { RootState } from "src/redux/store";
 import useDispatchMovement from "src/components/canvas/myCharacter.tsx/useDispatchMovement";
 import OrbitControl from "src/components/canvas/myCharacter.tsx/OrbitControl";
 import useMovement from "src/components/canvas/myCharacter.tsx/useMovement";
-
-const url = {
-  face: "/img/defaultFace.png",
-  body: "/img/body.png",
-  model: "/models/player7.glb",
-};
-const BODY_MATERIAL = "Material.001";
+import { BODY_MATERIAL, assetsUrl } from "src/components/canvas/constant";
 
 export function Character() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const model = useGLTF(url.model) as GLTFResult;
+  const model = useGLTF(assetsUrl.model) as GLTFResult;
   const { animations, scene } = model;
   const { actions } = useAnimations<any>(animations, scene);
 
@@ -63,8 +57,8 @@ export function Character() {
       }
     };
 
-    loadTexture(model.materials.face, user.image, url.face);
-    loadTexture(model.materials[BODY_MATERIAL], url.body, url.body);
+    loadTexture(model.materials.face, user.image, assetsUrl.face);
+    loadTexture(model.materials[BODY_MATERIAL], assetsUrl.body, assetsUrl.body);
   }, [model.materials, user.image]);
 
   return (

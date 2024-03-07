@@ -11,7 +11,7 @@ export function Others() {
     (state: RootState) => state.reducer.socketReducer.actionInfo,
   );
 
-  const othersInfo = Object.entries(actionInfo).filter(([_id, value]) => {
+  const othersInfo = Object.entries(actionInfo).filter(([_id, _]) => {
     return _id !== user._id && _id !== undefined;
   });
 
