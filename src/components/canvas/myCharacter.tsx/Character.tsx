@@ -12,12 +12,21 @@ import {
 } from "../utils";
 import { RootState } from "src/redux/store";
 import useMovement from "src/components/canvas/myCharacter.tsx/useMovement";
+import OrbitControl from "src/components/canvas/myCharacter.tsx/OrbitControl";
 
 const url = {
   face: "/img/defaultFace.png",
   body: "/img/body.png",
   model: "/models/player7.glb",
 };
+const BODY_MATERIAL = "Material.001";
+const CONTROLER_HEIGHT_DIFFRENCE = 2;
+const MID_EMPTY_SIZE = 3.5;
+const MAX_MAP_SIZE = 20;
+const MODEL_SCALE = 1.2;
+const CAMERE_MODEL_DISTANCE = 5;
+const SPEED = 1.5;
+const DEBOUNCE = 0.3;
 
 export function Character() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
@@ -63,20 +72,22 @@ export function Character() {
         }
       }
     };
-    loadTexture(model.materials.face, user.image, url.face);
-    loadTexture(model.materials["Material.001"], url.body, url.body);
 
-    // 포지션, 위치 세팅
-    model.scene.scale.set(1.2, 1.2, 1.2);
+    loadTexture(model.materials.face, user.image, url.face);
+    loadTexture(model.materials[BODY_MATERIAL], url.body, url.body);
+
+    // 모델 포지션, 위치 세팅
+    model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
     const { x, y, z } = positionRef.current;
     model.scene.position.set(x, y, z);
 
     // 카메라 포지션 세팅
     const angle = Math.atan2(model.scene.position.x, model.scene.position.z);
     model.scene.rotation.y = -angle;
-    const distance = 5;
-    const cameraPositionX = model.scene.position.x + Math.sin(angle) * distance;
-    const cameraPositionZ = model.scene.position.z + Math.cos(angle) * distance;
+    const cameraPositionX =
+      model.scene.position.x + Math.sin(angle) * CAMERE_MODEL_DISTANCE;
+    const cameraPositionZ =
+      model.scene.position.z + Math.cos(angle) * CAMERE_MODEL_DISTANCE;
     camera.position.set(cameraPositionX, 1, cameraPositionZ);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -88,7 +99,8 @@ export function Character() {
     );
     model.scene.lookAt(reverseCameraDrection);
 
-    orbitControlsRef.current.target.copy(model.scene.position);
+    // 컨트롤러 세팅
+    // orbitControlsRef.current.target.copy(positionRef.current);
   }, [camera, model, user.image]);
 
   const elapsedTime = useRef(0);
@@ -103,7 +115,6 @@ export function Character() {
           camera.position.z - model.scene.position.z,
         ),
       );
-      const DEBOUNCE = 0.3;
       if (
         elapsedTime.current >= DEBOUNCE &&
         currentAngle !== cameraCharacterAngleY
@@ -144,16 +155,13 @@ export function Character() {
       direction.applyAxisAngle(rotateAxis, newDirectionOffset);
 
       // 캐릭터 위치 이동 구현
-      const SPEED = 1.5;
       const moveX = -direction.x * SPEED * delta;
       const moveZ = -direction.z * SPEED * delta;
-      const newX = model.scene.position.x + moveX;
-      const newZ = model.scene.position.z + moveZ;
-      positionRef.current = { x: newX, z: newZ, y: 0 };
+      const newX = positionRef.current.x + moveX;
+      const newZ = positionRef.current.z + moveZ;
 
       // 캐릭터 위치 제한
-      const MID_EMPTY_SIZE = 3.5;
-      const MAX_MAP_SIZE = 20;
+
       if (
         !(
           newX > -MID_EMPTY_SIZE &&
@@ -166,23 +174,29 @@ export function Character() {
         newZ >= -MAX_MAP_SIZE &&
         newZ <= MAX_MAP_SIZE
       ) {
-        model.scene.position.x = newX;
-        model.scene.position.z = newZ;
+        positionRef.current = { x: newX, z: newZ, y: 0 };
+        model.scene.position.x = positionRef.current.x;
+        model.scene.position.z = positionRef.current.z;
         camera.position.x += moveX;
         camera.position.z += moveZ;
-        const { x, y, z } = model.scene.position;
-        orbitControlsRef.current.target = new THREE.Vector3(x, y + 2, z);
+        const { x, y, z } = positionRef.current;
+        // orbitControlsRef.current.target = new THREE.Vector3(
+        //   x,
+        //   y + CONTROLER_HEIGHT_DIFFRENCE,
+        //   z,
+        // );
       }
     }
   });
 
   return (
     <>
-      <OrbitControls
+      {/* <OrbitControls
         ref={orbitControlsRef}
         maxPolarAngle={Math.PI / 2}
         minPolarAngle={Math.PI / 2}
-      />
+      /> */}
+      <OrbitControl positionRef={positionRef} />
       <primitive object={scene} rotation={[0, Math.PI / 2, 0]} />
     </>
   );

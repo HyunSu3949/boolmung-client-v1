@@ -1,11 +1,10 @@
 import { Canvas } from "@react-three/fiber";
-import { useEffect } from "react";
 
 import { Fire } from "../common/fire";
 import { Floor } from "../common/Floor";
 import { Lights } from "../common/Light";
 import { Character } from "../myCharacter.tsx/Character";
-import { Others } from "../character/Others";
+import { Others } from "../otherCharacter/Others";
 import { Wood } from "../common/Wood";
 
 export function ChatScene() {
