@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Fire } from "../common/fire";
 import { Floor } from "../common/Floor";
 import { Lights } from "../common/Light";
-import { Character } from "../character/Character";
+import { Character } from "../myCharacter.tsx/Character";
 import { Others } from "../character/Others";
 import { Wood } from "../common/Wood";
 

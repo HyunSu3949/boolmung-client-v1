@@ -5,7 +5,7 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 import { useDispatch } from "react-redux";
 
-import { directionOffset } from "./utils";
+import { directionOffset } from "../utils";
 import { ActionInfo, ActionName, GLTFResult } from "src/types/index";
 import { setOthersPosition } from "src/redux/features/socketSlice";
 

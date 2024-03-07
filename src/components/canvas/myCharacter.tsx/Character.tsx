@@ -9,9 +9,9 @@ import {
   directionOffset,
   roundToTwoDecimal,
   generateInitialPosition,
-} from "./utils";
+} from "../utils";
 import { RootState } from "src/redux/store";
-import useMovement from "src/components/canvas/character/useMovement";
+import useMovement from "src/components/canvas/myCharacter.tsx/useMovement";
 
 const url = {
   face: "/img/defaultFace.png",
@@ -22,13 +22,11 @@ const url = {
 export function Character() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
 
-  const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const orbitControlsRef = useRef<any>();
+  const camera = useThree((state) => state.camera);
+  const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
 
   const model = useGLTF(url.model) as GLTFResult;
-  const bodyTexture = useLoader(THREE.TextureLoader, url.body);
-  const camera = useThree((state) => state.camera);
-
   const { animations, scene } = model;
   const { actions } = useAnimations<any>(animations, scene);
 
@@ -91,7 +89,7 @@ export function Character() {
     model.scene.lookAt(reverseCameraDrection);
 
     orbitControlsRef.current.target.copy(model.scene.position);
-  }, [camera, bodyTexture, model, user.image]);
+  }, [camera, model, user.image]);
 
   const elapsedTime = useRef(0);
   useFrame((_, delta) => {

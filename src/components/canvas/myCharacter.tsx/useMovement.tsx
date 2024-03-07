@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { useInput } from "src/components/canvas/character/useInput";
+import { useInput } from "src/components/canvas/myCharacter.tsx/useInput";
 import { sendMove } from "src/redux/features/socketActions";
 import { RootState } from "src/redux/store";
 import { ActionName } from "src/types/index";
