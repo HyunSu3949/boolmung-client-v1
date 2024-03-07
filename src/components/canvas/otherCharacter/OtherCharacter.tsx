@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 
 import { directionOffset } from "../utils";
 import { ActionInfo, ActionName, GLTFResult } from "src/types/index";
-import { setOthersPosition } from "src/redux/features/socketSlice";
 
 const rotateAxis = new THREE.Vector3(0, 1, 0);
 const rotateQuarternion = new THREE.Quaternion();
@@ -18,7 +17,6 @@ type Props = {
 };
 
 export function OtherCharacter({ state, image }: Props) {
-  const dispatch = useDispatch();
   const currentAction = useRef("");
   const model = useGLTF("/models/player7.glb") as GLTFResult;
   const { input, position, cameraCharacterAngleY, _id } = state;
@@ -97,16 +95,6 @@ export function OtherCharacter({ state, image }: Props) {
 
       clone.position.x += moveX;
       clone.position.z += moveZ;
-      // dispatch(
-      //   setOthersPosition({
-      //     _id,
-      //     position: {
-      //       x: clone.position.x,
-      //       y: clone.position.y,
-      //       z: clone.position.z,
-      //     },
-      //   }),
-      // );
     }
   });
   return <primitive object={clone} ref={ref} />;

@@ -22,10 +22,17 @@ export const useInput = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      setInput((prev) => ({ ...prev, [findKey(e.code)]: true }));
+      const action = findKey(e.code);
+      setInput((prev: any) =>
+        prev[action] ? prev : { ...prev, [action]: true },
+      );
     };
+
     const handleKeyUp = (e: KeyboardEvent) => {
-      setInput((prev) => ({ ...prev, [findKey(e.code)]: false }));
+      const action = findKey(e.code);
+      setInput((prev: any) =>
+        !prev[action] ? prev : { ...prev, [action]: false },
+      );
     };
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
@@ -35,5 +42,6 @@ export const useInput = () => {
       document.removeEventListener("keyup", handleKeyUp);
     };
   }, [findKey]);
+
   return input;
 };

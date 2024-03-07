@@ -1,13 +1,14 @@
 import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import * as THREE from "three";
+
+const CONTROLER_HEIGHT_DIFFRENCE = 2;
 
 type Props = {
   positionRef: RefObject<{ x: number; y: number; z: number }>;
 };
 
-const CONTROLER_HEIGHT_DIFFRENCE = 2;
 export default function OrbitControl({ positionRef }: Props) {
   const orbitControlsRef = useRef<any>();
 
