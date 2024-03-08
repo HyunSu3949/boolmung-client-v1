@@ -20,8 +20,14 @@ import {
 
 type Props = {
   model: GLTFResult;
-  positionRef: any;
-  actions: any;
+  positionRef: React.MutableRefObject<{
+    x: number;
+    y: number;
+    z: number;
+  }>;
+  actions: {
+    [key: string]: THREE.AnimationAction | null;
+  };
 };
 
 export default function useMovement({ model, positionRef, actions }: Props) {
@@ -31,19 +37,20 @@ export default function useMovement({ model, positionRef, actions }: Props) {
   const { forward, backward, left, right } = useInput();
   const camera = useThree((state) => state.camera);
 
-  // 모델 초기 상태 세팅
+  // 모델 초기 위치 세팅
   useEffect(() => {
-    // 모델 포지션, 위치 세팅
     const { x, y, z } = positionRef.current;
-    model.scene.position.set(x, y, z);
 
     // 카메라 포지션 세팅
     const angle = Math.atan2(x, z);
-    model.scene.rotation.y = -angle;
     const cameraPositionX = x + Math.sin(angle) * CAMERE_MODEL_DISTANCE;
     const cameraPositionZ = z + Math.cos(angle) * CAMERE_MODEL_DISTANCE;
     camera.position.set(cameraPositionX, 1, cameraPositionZ);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    // 모델 포지션, 방향 세팅
+    model.scene.position.set(x, y, z);
+    model.scene.rotation.y = -angle;
 
     // 모델이 처음에 카메라를 바라보도록 세팅
     const reverseCameraDrection = new THREE.Vector3(
@@ -65,9 +72,11 @@ export default function useMovement({ model, positionRef, actions }: Props) {
 
     if (actionRef.current !== action) {
       const nextActionToPlay = actions[action];
-      const current = actions[actionRef.current];
-      current?.fadeOut(FADE_OUT);
+      const currentAction = actions[actionRef.current];
+
+      currentAction?.fadeOut(FADE_OUT);
       nextActionToPlay?.reset().fadeIn(FADE_IN).play();
+
       actionRef.current = action;
     }
   }, [actions, backward, forward, left, right]);
@@ -83,7 +92,7 @@ export default function useMovement({ model, positionRef, actions }: Props) {
           camera.position.z - model.scene.position.z,
         ),
       );
-      // 카메라 각 움직임시 값 세팅
+      // 카메라 각 움직임시 값 세팅, 디바운스 적용
       if (
         elapsedTime.current >= DEBOUNCE &&
         currentAngle !== cameraCharacterAngleY

@@ -5,12 +5,21 @@ import { useParams } from "react-router-dom";
 import { sendMove } from "src/redux/features/socketActions";
 import { RootState } from "src/redux/store";
 
+type Props = {
+  positionRef: React.MutableRefObject<{
+    x: number;
+    y: number;
+    z: number;
+  }>;
+  cameraCharacterAngleY: number;
+  keyBoardInput: Record<string, boolean>;
+};
+
 export default function useDispatchMovement({
   positionRef,
-  actions,
   cameraCharacterAngleY,
   keyBoardInput,
-}: any) {
+}: Props) {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const { roomid } = useParams();
   const dispatch = useDispatch();
@@ -32,7 +41,6 @@ export default function useDispatchMovement({
   }, [
     keyBoardInput,
     cameraCharacterAngleY,
-    actions,
     dispatch,
     user,
     roomid,

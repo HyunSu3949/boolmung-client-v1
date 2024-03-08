@@ -6,21 +6,23 @@ import * as THREE from "three";
 const CONTROLER_HEIGHT_DIFFRENCE = 2;
 
 type Props = {
-  positionRef: RefObject<{ x: number; y: number; z: number }>;
+  positionRef: React.MutableRefObject<{
+    x: number;
+    y: number;
+    z: number;
+  }>;
 };
 
 export default function OrbitControl({ positionRef }: Props) {
   const orbitControlsRef = useRef<any>();
 
   useFrame((_, $) => {
-    if (positionRef.current) {
-      const { x, y, z } = positionRef.current;
-      orbitControlsRef.current.target = new THREE.Vector3(
-        x,
-        y + CONTROLER_HEIGHT_DIFFRENCE,
-        z,
-      );
-    }
+    const { x, y, z } = positionRef.current;
+    orbitControlsRef.current.target = new THREE.Vector3(
+      x,
+      y + CONTROLER_HEIGHT_DIFFRENCE,
+      z,
+    );
   });
 
   useEffect(() => {

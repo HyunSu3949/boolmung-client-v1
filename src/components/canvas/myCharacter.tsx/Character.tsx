@@ -32,7 +32,7 @@ export function Character() {
     cameraCharacterAngleY,
     keyBoardInput,
   });
-
+  // 캐릭터 초기값 세팅
   useEffect(() => {
     // 크기 세팅
     model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
