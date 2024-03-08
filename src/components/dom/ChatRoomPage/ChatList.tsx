@@ -6,7 +6,7 @@ import { SocketReceiveMessage } from "src/types/index";
 
 export function ChatList() {
   const messageListRef = useRef<HTMLUListElement>(null);
-  const divRef = useRef<HTMLDivElement>(null);
+  const listContainerRef = useRef<HTMLDivElement>(null);
   const messageList = useSelector(
     (state: RootState) => state.reducer.socketReducer.messageList,
   );
@@ -14,9 +14,9 @@ export function ChatList() {
 
   useEffect(() => {
     const scrollHeight = messageListRef.current?.scrollHeight;
-    const divHeight = divRef.current?.clientHeight;
+    const clientHeight = listContainerRef.current?.clientHeight;
 
-    if (scrollHeight && divHeight && scrollHeight > divHeight) {
+    if (scrollHeight && clientHeight && scrollHeight > clientHeight) {
       messageListRef.current.lastElementChild?.scrollIntoView({
         behavior: "smooth",
       });
@@ -33,7 +33,7 @@ export function ChatList() {
   );
 
   return (
-    <div ref={divRef} className="w-full rounded-lg bg-gray-800 p-4 ">
+    <div ref={listContainerRef} className="w-full rounded-lg bg-gray-800 p-4 ">
       <ul ref={messageListRef} className="space-y-2">
         {messageList.map((message: SocketReceiveMessage, idx: number) => (
           <li
