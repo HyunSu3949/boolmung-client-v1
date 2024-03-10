@@ -39,7 +39,7 @@ export default function MessageInput({ userId, userName, roomId }: Props) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex space-x-2 py-2">
+    <form onSubmit={onSubmit} className="h-15 flex space-x-2 py-2">
       <input
         ref={inputRef}
         onChange={onChange}

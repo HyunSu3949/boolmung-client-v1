@@ -102,7 +102,7 @@ export const socketMiddleware: Middleware = (store) => {
         break;
 
       case eventName.SENDMOVE:
-        socket.emit(eventName.MOVE, action.payload);
+        socket?.emit(eventName.MOVE, action.payload);
         dispatch(setMyPosition(action.payload));
         break;
 

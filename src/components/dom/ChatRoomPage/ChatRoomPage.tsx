@@ -5,19 +5,17 @@ import { useEffect } from "react";
 import { RootState } from "src/redux/store";
 import { disconnect, setError } from "src/redux/features/socketSlice";
 import { Modal } from "src/components/dom/common/Modal";
-import { Svgs } from "src/components/dom/common/Svgs";
-import { SoundButton } from "src/components/dom/common/SoundButton/SoundButton";
 import { ChatWindow } from "src/components/dom/ChatRoomPage/ChatWinow";
 import { connect, leave } from "src/redux/features/socketActions";
+
+import Header from "./Header";
 
 export default function ChatRoomPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { roomid } = useParams();
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const { title } = useSelector(
-    (state: RootState) => state.reducer.socketReducer.roomInfo,
-  );
+
   const errorMassage = useSelector(
     (state: RootState) => state.reducer.socketReducer.errorMassage,
   );
@@ -60,25 +58,13 @@ export default function ChatRoomPage() {
   }, [dispatch, roomid, user]);
 
   return (
-    <main className="static flex flex-col flex-1 w-full bg-slate-900">
-      <div className="flex min-h-[10vh] items-center space-x-4 p-4">
-        <div className="absolute p-4 rounded-md left-3 bg-slate-600">
-          <SoundButton />
-        </div>
-        <button
-          onClick={exitRoom}
-          className="flex items-center px-4 py-2 text-white rounded bg-slate-600 hover:bg-slate-400 focus:outline-none"
-          type="button"
-        >
-          <Svgs id="exit" size="1.25rem" title="나가기 아이콘" />
-          나가기
-        </button>
-        <p className="text-xl text-white">{title}</p>
+    <main className="static flex w-full flex-1 flex-col bg-slate-900">
+      <div className="h-15 flex items-center space-x-4 p-4">
+        <Header />
       </div>
-      <div className="flex max-h-[90vh] w-full flex-1">
+      <div className="flex w-full flex-1">
         <ChatWindow />
       </div>
-
       {errorMassage && (
         <Modal isOpen closeModal={closeModal}>
           <div className="flex flex-col items-center justify-center p-8">
@@ -86,7 +72,7 @@ export default function ChatRoomPage() {
             <button
               onClick={closeModal}
               type="button"
-              className="p-2 rounded-md bg-slate-500 text-slate-200"
+              className="rounded-md bg-slate-500 p-2 text-slate-200"
             >
               나가기
             </button>

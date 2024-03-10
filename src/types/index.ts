@@ -50,7 +50,8 @@ export type SocketSendMessage = {
   name: string;
 };
 export type SocketReceiveMessage = {
-  [key: string]: any;
+  _id: string;
+  name: string;
   message: string;
   type: string;
 };
