@@ -6,7 +6,7 @@ import { setLogoutState } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
 import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 import { Svgs } from "src/components/dom/common/Svgs";
-import { logout } from "src/apis/getApis";
+import { logout } from "src/utils/apis/getApis";
 
 import { SoundButton } from "./SoundButton/SoundButton";
 

@@ -16,7 +16,13 @@
     }
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "./src/types", "src/**/*", "src/.d.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "./src/types",
+    "src/**/*",
+    "src/types/.d.ts"
+  ],
   "parserOptions": {
     "ecmaVersion": "latest"
   },

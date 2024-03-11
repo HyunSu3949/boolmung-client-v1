@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 
-import { getAllRoom } from "src/apis/getApis";
+import { getAllRoom } from "src/utils/apis/getApis";
 import { SpinnerWithText } from "src/components/dom/common/SpinnerWithText";
 
 export function RoomList() {

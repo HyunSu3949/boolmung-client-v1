@@ -1,12 +1,14 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { useAnimations } from "@react-three/drei";
 
 import {
   directionOffset,
+  generateInitialPosition,
   roundToTwoDecimal,
 } from "src/components/canvas/utils";
-import { useInput } from "src/components/canvas/myCharacter.tsx/useInput";
+import { useInput } from "src/components/canvas/myCharacter/useInput";
 import { ActionName, GLTFResult } from "src/types/index";
 import {
   CAMERE_MODEL_DISTANCE,
@@ -17,25 +19,21 @@ import {
   MID_EMPTY_SIZE,
   SPEED,
 } from "src/components/canvas/constant";
+import useDispatchMovement from "src/components/canvas/myCharacter/useDispatchMovement";
 
 type Props = {
   model: GLTFResult;
-  positionRef: React.MutableRefObject<{
-    x: number;
-    y: number;
-    z: number;
-  }>;
-  actions: {
-    [key: string]: THREE.AnimationAction | null;
-  };
 };
 
-export default function useMovement({ model, positionRef, actions }: Props) {
+export default function useMovement({ model }: Props) {
+  const positionRef = useRef(generateInitialPosition());
   const actionRef = useRef("");
   const elapsedTime = useRef(0);
   const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const { forward, backward, left, right } = useInput();
   const camera = useThree((state) => state.camera);
+  const { animations, scene } = model;
+  const { actions } = useAnimations<any>(animations, scene);
 
   // 모델 초기 위치 세팅
   useEffect(() => {
@@ -161,8 +159,11 @@ export default function useMovement({ model, positionRef, actions }: Props) {
     }
   });
 
-  return {
-    keyBoardInput: { forward, backward, left, right },
+  useDispatchMovement({
+    positionRef,
     cameraCharacterAngleY,
-  };
+    keyBoardInput: { forward, backward, left, right },
+  });
+
+  return { positionRef };
 }
