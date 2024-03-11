@@ -7,7 +7,7 @@ import {
   List,
 } from "react-virtualized";
 
-import Message from "src/components/dom/ChatRoomPage/Message";
+import Message from "src/components/ChatRoomPage/Message";
 import { RootState } from "src/redux/store";
 
 export function MessageList() {

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { Modal } from "src/components/dom/common/Modal";
+import { Modal } from "src/components/common/Modal";
 
-import { LoginForm } from "../components/dom/LoginPage/LoginForm/LoginForm";
-import { SignupForm } from "../components/dom/LoginPage/SignupForm/SignupForm";
-import Alert from "../components/dom/LoginPage/Alert";
+import { LoginForm } from "../components/LoginPage/LoginForm/LoginForm";
+import { SignupForm } from "../components/LoginPage/SignupForm/SignupForm";
+import Alert from "../components/LoginPage/Alert";
 
 export default function LoginPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,11 +26,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="m-auto flex w-full items-center justify-center">
-      <div className="m-auto flex w-fit flex-col items-center justify-center">
+    <div className="flex items-center justify-center w-full m-auto">
+      <div className="flex flex-col items-center justify-center m-auto w-fit">
         <LoginForm />
         <button
-          className="mt-2 w-full rounded-md bg-blue-500 px-6 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          className="w-full px-6 py-2 mt-2 font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           onClick={openModal}
           type="button"
         >

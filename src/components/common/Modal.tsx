@@ -1,4 +1,4 @@
-import { Svgs } from "src/components/dom/common/Svgs";
+import { Svgs } from "src/components/common/Svgs";
 
 type PropsType = {
   isOpen: boolean;

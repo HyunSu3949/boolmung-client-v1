@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Svgs } from "src/components/dom/common/Svgs";
+import { Svgs } from "src/components/common/Svgs";
 
 export function SoundButton() {
   const [playing, setPlaying] = useState(false);
@@ -30,7 +30,7 @@ export function SoundButton() {
     <>
       <audio ref={audioRef} src={audioFile} loop />
       <button
-        className="flex w-fit items-center space-x-2 whitespace-nowrap "
+        className="flex items-center space-x-2 w-fit whitespace-nowrap "
         onClick={togglePlaying}
         type="button"
       >

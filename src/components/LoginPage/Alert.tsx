@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import "./alert.css";
-import { Svgs } from "src/components/dom/common/Svgs";
+import { Svgs } from "src/components/common/Svgs";
 
 export default function Alert() {
   useEffect(() => {

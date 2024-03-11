@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import { Modal } from "src/components/dom/common/Modal";
-import { ChatForm } from "src/components/dom/HomePage/ChatForm";
-import { Svgs } from "src/components/dom/common/Svgs";
+import { Modal } from "src/components/common/Modal";
+import { ChatForm } from "src/components/HomePage/ChatForm";
+import { Svgs } from "src/components/common/Svgs";
 
-import { RoomList } from "../components/dom/HomePage/RoomList";
+import { RoomList } from "../components/HomePage/RoomList";
 
 export default function HomePage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,10 +18,10 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col">
+    <main className="flex flex-col w-full min-h-screen">
       <div className="w-full px-2 py-6">
         <button
-          className="flex items-center rounded bg-slate-500 p-3 font-semibold text-slate-100 hover:bg-slate-400"
+          className="flex items-center p-3 font-semibold rounded bg-slate-500 text-slate-100 hover:bg-slate-400"
           onClick={openModal}
           type="button"
         >
@@ -29,7 +29,7 @@ export default function HomePage() {
           방만들기
         </button>
       </div>
-      <div className="flex w-full flex-1 flex-col overflow-y-auto bg-gray-800 p-2">
+      <div className="flex flex-col flex-1 w-full p-2 overflow-y-auto bg-gray-800">
         <RoomList />
       </div>
       <Modal isOpen={isOpen} closeModal={closeModal}>
