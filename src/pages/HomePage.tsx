@@ -4,7 +4,7 @@ import { Modal } from "src/components/dom/common/Modal";
 import { ChatForm } from "src/components/dom/HomePage/ChatForm";
 import { Svgs } from "src/components/dom/common/Svgs";
 
-import { RoomList } from "./RoomList";
+import { RoomList } from "../components/dom/HomePage/RoomList";
 
 export default function HomePage() {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 
-import { Character } from "src/components/canvas/myCharacter.tsx/Character";
+import { Character } from "src/components/canvas/myCharacter/Character";
 
 import { Fire } from "../common/fire";
 import { Floor } from "../common/Floor";
