@@ -8,7 +8,7 @@ import { Modal } from "src/components/dom/common/Modal";
 import { ChatWindow } from "src/components/dom/ChatRoomPage/ChatWinow";
 import { connect, leave } from "src/redux/features/socketActions";
 
-import Header from "./Header";
+import Header from "../components/dom/ChatRoomPage/Header";
 
 export default function ChatRoomPage() {
   const dispatch = useDispatch();
@@ -65,20 +65,20 @@ export default function ChatRoomPage() {
       <div className="flex w-full flex-1">
         <ChatWindow />
       </div>
-      {errorMassage && (
-        <Modal isOpen closeModal={closeModal}>
-          <div className="flex flex-col items-center justify-center p-8">
-            <p className="mb-4 text-slate-200">{errorMassage}</p>
-            <button
-              onClick={closeModal}
-              type="button"
-              className="rounded-md bg-slate-500 p-2 text-slate-200"
-            >
-              나가기
-            </button>
-          </div>
-        </Modal>
-      )}
     </main>
+    // {errorMassage && (
+    //   <Modal isOpen closeModal={closeModal}>
+    //     <div className="flex flex-col items-center justify-center p-8">
+    //       <p className="mb-4 text-slate-200">{errorMassage}</p>
+    //       <button
+    //         onClick={closeModal}
+    //         type="button"
+    //         className="p-2 rounded-md bg-slate-500 text-slate-200"
+    //       >
+    //         나가기
+    //       </button>
+    //     </div>
+    //   </Modal>
+    // )}
   );
 }

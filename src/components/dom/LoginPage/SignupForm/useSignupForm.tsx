@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import { signup } from "src/apis/postApis";
+import { signup } from "src/utils/apis/postApis";
 import { SignUpFormData } from "src/types/index";
 
 type PropsType = {

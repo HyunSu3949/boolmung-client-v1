@@ -5,8 +5,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Line, Circle } from "react-konva";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getPreSignedUrl } from "src/apis/getApis";
-import { patchUserInfo } from "src/apis/patchApis";
+import { getPreSignedUrl } from "src/utils/apis/getApis";
+import { patchUserInfo } from "src/utils/apis/patchApis";
 import { Modal } from "src/components/dom/common/Modal";
 import { updateImage } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
@@ -24,6 +24,7 @@ export default function DrawingEditor() {
   const stageRef = useRef<Konva.Stage>(null);
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
+
   useEffect(() => {
     const image = new window.Image();
     image.src = user.image;
@@ -34,9 +35,11 @@ export default function DrawingEditor() {
       }
     };
   }, [user.image]);
+
   const closeModal = () => {
     setIsOpen(false);
   };
+
   const saveDrawingWithBackground = async () => {
     if (!stageRef.current) return;
     setIsLoading(true);
@@ -86,6 +89,7 @@ export default function DrawingEditor() {
       );
     };
   };
+
   const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
     isDrawing.current = true;
     const pos = e.target.getStage()?.getPointerPosition() as Vector2d;

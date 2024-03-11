@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { createRoom } from "src/apis/postApis";
+import { createRoom } from "src/utils/apis/postApis";
 import { RootState } from "src/redux/store";
 
 type FormData = {
@@ -45,14 +45,14 @@ export function ChatForm() {
       className="mx-auto w-full min-w-[32rem] max-w-4xl rounded-lg p-4 "
     >
       <div className="my-4 mb-4">
-        <label htmlFor="title" className="block mb-2 font-bold text-slate-200">
+        <label htmlFor="title" className="mb-2 block font-bold text-slate-200">
           방 제목
         </label>
         <input
           id="title"
           placeholder="방 제목을 입력해주세요"
           type="text"
-          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline placeholder-slate-400 focus:outline-none"
+          className="focus:shadow-outline w-full appearance-none rounded border px-3 leading-tight text-gray-700 placeholder-slate-400 shadow focus:outline-none"
           {...register("title", { required: "방 제목을 입력해 주세요" })}
         />
         {errors.title && (
@@ -60,14 +60,14 @@ export function ChatForm() {
         )}
       </div>
       <div className="my-4 mb-6">
-        <label htmlFor="max" className="block mb-2 font-bold text-slate-200">
+        <label htmlFor="max" className="mb-2 block font-bold text-slate-200">
           참가인원
         </label>
         <input
           id="max"
           type="number"
           placeholder="2"
-          className="w-full px-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:shadow-outline placeholder-slate-400 focus:outline-none"
+          className="focus:shadow-outline w-full appearance-none rounded border px-3 leading-tight text-gray-700 placeholder-slate-400 shadow focus:outline-none"
           min={2}
           max={10}
           {...register("max", {
@@ -85,7 +85,7 @@ export function ChatForm() {
       <div className="flex items-center justify-between">
         <button
           type="submit"
-          className="px-4 py-2 m-auto font-bold text-white bg-blue-500 rounded focus:shadow-outline hover:bg-blue-700 focus:outline-none"
+          className="focus:shadow-outline m-auto rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
         >
           만들기
         </button>

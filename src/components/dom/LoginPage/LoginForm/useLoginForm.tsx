@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { login } from "src/apis/postApis";
+import { login } from "src/utils/apis/postApis";
 import { setLoginState } from "src/redux/features/authSlice";
 
 type FormData = {
@@ -18,6 +19,7 @@ export const useLoginForm = () => {
     setError,
   } = useForm<FormData>();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: (body: any) => login({ body }),
@@ -39,6 +41,7 @@ export const useLoginForm = () => {
         const { token, data } = result;
 
         dispatch(setLoginState({ token, user: data.user }));
+        navigate("/");
       }
     },
   });

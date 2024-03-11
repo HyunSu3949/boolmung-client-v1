@@ -1,6 +1,6 @@
-import { GetApi } from "src/apis/apiTypes";
-import { axiosInstance, axiosPublic } from "src/apis/instance";
-import { getQueryString, getPathWhitPathVariable } from "src/apis/utils";
+import { GetApi } from "src/types/apiTypes";
+import { axiosInstance, axiosPublic } from "src/utils/apis/instance";
+import { getQueryString, getPathWhitPathVariable } from "src/utils/apis/utils";
 
 const getApiEndPoints = {
   getPreSignedurl: "/s3/url",

@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { Fire } from "../common/fire";
 import { Floor } from "../common/Floor";
 import { Lights } from "../common/Light";
-import { Character } from "../myCharacter.tsx/Character";
+import { Character } from "../myCharacter/Character";
 import { Others } from "../otherCharacter/Others";
 import { Wood } from "../common/Wood";
 
