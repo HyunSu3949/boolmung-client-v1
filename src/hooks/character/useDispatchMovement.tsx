@@ -12,20 +12,20 @@ type Props = {
     z: number;
   }>;
   cameraCharacterAngleY: number;
-  keyBoardInput: Record<string, boolean>;
+  input: Record<string, boolean>;
 };
 
 export default function useDispatchMovement({
   positionRef,
   cameraCharacterAngleY,
-  keyBoardInput,
+  input,
 }: Props) {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const { roomid } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const { forward, backward, left, right } = keyBoardInput;
+    const { forward, backward, left, right } = input;
     if (roomid) {
       dispatch(
         sendMove({
@@ -38,12 +38,5 @@ export default function useDispatchMovement({
         }),
       );
     }
-  }, [
-    keyBoardInput,
-    cameraCharacterAngleY,
-    dispatch,
-    user,
-    roomid,
-    positionRef,
-  ]);
+  }, [input, cameraCharacterAngleY, dispatch, user, roomid, positionRef]);
 }

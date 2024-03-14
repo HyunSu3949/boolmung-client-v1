@@ -1,21 +1,19 @@
 import * as THREE from "three";
-import React, { useEffect, useRef, useMemo } from "react";
+import { useRef, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 
-import { directionOffset } from "../utils";
-import { ActionInfo, ActionName, GLTFResult } from "src/types/index";
-import {
-  FADE_IN,
-  FADE_OUT,
-  MODEL_SCALE,
-  SPEED,
-  assetsUrl,
-} from "src/components/canvas/constant";
+import { ActionInfo, GLTFResult } from "src/types/index";
+import { MODEL_SCALE, SPEED, assetsUrl } from "src/utils/character/constants";
+import useActions from "src/hooks/character/useActions";
 
-const rotateAxis = new THREE.Vector3(0, 1, 0);
-const rotateQuarternion = new THREE.Quaternion();
+import {
+  directionOffset,
+  getDirection,
+  getRotateQuaternion,
+  calcNewCharacterPos,
+} from "../../../utils/character/movementUtils";
 
 type Props = {
   state: ActionInfo;
@@ -23,11 +21,9 @@ type Props = {
 };
 
 export function OtherCharacter({ state, image }: Props) {
-  const { input, position, cameraCharacterAngleY, _id } = state;
-  const { forward, backward, left, right } = input;
+  const { input, position, cameraCharacterAngleY } = state;
 
   const faceTexture = useLoader(THREE.TextureLoader, image);
-  const currentAction = useRef("");
 
   const model = useGLTF(assetsUrl.model) as GLTFResult;
   const { animations, scene } = model;
@@ -55,51 +51,23 @@ export function OtherCharacter({ state, image }: Props) {
   clone.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
   clone.position.set(position.x, position.y, position.z);
 
-  useEffect(() => {
-    let action: ActionName = "";
-    if (forward || backward || left || right) {
-      action = "walk";
-    } else {
-      action = "default";
-    }
+  const { action } = useActions({ actions, input });
 
-    if (currentAction.current !== action) {
-      const nextActionToPlay = actions[action];
-      const current = actions[currentAction.current];
-      current?.fadeOut(FADE_OUT);
-      nextActionToPlay?.reset().fadeIn(FADE_IN).play();
-      currentAction.current = action;
-    }
-  }, [forward, backward, left, right, actions]);
+  useFrame((_, delta) => {
+    if (action === "walk") {
+      const offset = directionOffset(input);
 
-  useFrame((state, delta) => {
-    if (currentAction.current === "walk") {
-      const newDirectionOffset = directionOffset({
-        forward,
-        backward,
-        left,
-        right,
-      });
-
-      rotateQuarternion.setFromAxisAngle(
-        rotateAxis,
-        cameraCharacterAngleY + newDirectionOffset,
+      const rotateQuarternion = getRotateQuaternion(
+        cameraCharacterAngleY,
+        offset,
       );
-
       clone.quaternion.rotateTowards(rotateQuarternion, 0.2);
 
-      const direction = new THREE.Vector3(
-        Math.sin(cameraCharacterAngleY),
-        0,
-        Math.cos(cameraCharacterAngleY),
-      );
-      direction.applyAxisAngle(rotateAxis, newDirectionOffset);
+      const direction = getDirection(cameraCharacterAngleY, offset);
 
-      const moveX = -direction.x * SPEED * delta;
-      const moveZ = -direction.z * SPEED * delta;
-
-      clone.position.x += moveX;
-      clone.position.z += moveZ;
+      const newPosition = calcNewCharacterPos(direction, delta, clone.position);
+      clone.position.x = newPosition.x;
+      clone.position.z = newPosition.z;
     }
   });
   return <primitive object={clone} ref={ref} />;

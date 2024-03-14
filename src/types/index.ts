@@ -83,3 +83,16 @@ export type SignUpFormData = {
   password: string;
   passwordConfirm: string;
 };
+
+export type Input = {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
+};
+
+export type Position = {
+  x: number;
+  y: number;
+  z: number;
+};

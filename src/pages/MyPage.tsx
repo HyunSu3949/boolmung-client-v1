@@ -1,11 +1,6 @@
-import React, { Suspense, lazy } from "react";
-
-import { Spinner } from "src/components/common/Spinner";
 import DrawingEditor from "src/components/myPage/DrawingEditor";
 
 import { ProfileCard } from "../components/common/ProfileCard";
-
-// const DrawingEditor = lazy(() => import("./DrawingEditor"));
 
 export default function MyPage() {
   return (
@@ -17,9 +12,7 @@ export default function MyPage() {
       </div>
       <div className="w-full p-4 shadow-md">
         <span className="p-4 text-slate-200">얼굴 꾸미기</span>
-        <Suspense fallback={<Spinner />}>
-          <DrawingEditor />
-        </Suspense>
+        <DrawingEditor />
       </div>
     </div>
   );

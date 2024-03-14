@@ -1,19 +1,18 @@
-import * as THREE from "three";
-import { useEffect, useRef } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useEffect } from "react";
+import { useGLTF } from "@react-three/drei";
 import { useSelector } from "react-redux";
 
 import { GLTFResult } from "src/types";
-import { generateInitialPosition } from "../utils";
 import { RootState } from "src/redux/store";
-import useDispatchMovement from "src/components/canvas/myCharacter/useDispatchMovement";
 import OrbitControl from "src/components/canvas/myCharacter/OrbitControl";
-import useMovement from "src/components/canvas/myCharacter/useMovement";
+import useMovement from "src/hooks/character/useMovement";
 import {
+  FACE_MATERIAL,
   BODY_MATERIAL,
   MODEL_SCALE,
   assetsUrl,
-} from "src/components/canvas/constant";
+} from "src/utils/character/constants";
+import { getTextureLoader } from "src/utils/character/textureUtils";
 
 export function Character() {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
@@ -24,39 +23,29 @@ export function Character() {
     model,
   });
 
-  // 캐릭터 초기값 세팅
   useEffect(() => {
-    // 크기 세팅
-    model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
-    // material 세팅
-    const updateMaterial = (texture: any, materials: any) => {
-      texture.flipY = false;
-      materials.map = texture;
-      materials.needsUpdate = true;
-    };
-
-    const loadTexture = async (
-      materials: any,
-      url: string,
-      defaultUrl: string,
+    const updateModelMaterial = async (
+      materialKey: string,
+      textureUrl: string,
+      defaultTextureUrl: string,
     ) => {
-      try {
-        const loader = new THREE.TextureLoader();
-        const loadedTexture = await loader.loadAsync(url);
-        if (loadedTexture) {
-          updateMaterial(loadedTexture, materials);
-        }
-      } catch (e: any) {
-        const loader = new THREE.TextureLoader();
-        const defaultTexture = await loader.loadAsync(defaultUrl);
-        if (defaultTexture) {
-          updateMaterial(defaultTexture, materials);
-        }
+      const asyncLoader = getTextureLoader();
+      const texture =
+        (await asyncLoader(textureUrl)) ||
+        (await asyncLoader(defaultTextureUrl));
+      if (texture) {
+        model.materials[materialKey].map = texture;
+        model.materials[materialKey].needsUpdate = true;
       }
     };
 
-    loadTexture(model.materials.face, user.image, assetsUrl.face);
-    loadTexture(model.materials[BODY_MATERIAL], assetsUrl.body, assetsUrl.body);
+    const applyTextures = async () => {
+      updateModelMaterial(FACE_MATERIAL, user.image, assetsUrl.face);
+      updateModelMaterial(BODY_MATERIAL, assetsUrl.body, assetsUrl.body);
+    };
+
+    model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
+    applyTextures();
   }, [model.materials, model.scene.scale, user.image]);
 
   return (

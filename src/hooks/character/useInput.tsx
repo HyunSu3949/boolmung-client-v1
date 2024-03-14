@@ -1,4 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { setDirectionInput } from "src/redux/features/actionSlice";
+import { Input } from "src/types/index";
 
 export const useInput = () => {
   const [input, setInput] = useState({
@@ -8,7 +12,7 @@ export const useInput = () => {
     right: false,
   });
 
-  const keys: Record<string, string> = useMemo(
+  const keys: Record<string, keyof Input> = useMemo(
     () => ({
       KeyW: "forward",
       KeyS: "backward",
@@ -18,21 +22,27 @@ export const useInput = () => {
     [],
   );
 
+  const dispatch = useDispatch();
   const findKey = useCallback((key: string) => keys[key], [keys]);
 
   useEffect(() => {
+    const activeKeys = new Set();
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!keys[e.code] || activeKeys.has(e.code)) return;
+
       const action = findKey(e.code);
-      setInput((prev: any) =>
-        prev[action] ? prev : { ...prev, [action]: true },
-      );
+      setInput((prev: any) => ({ ...prev, [action]: true }));
+      dispatch(setDirectionInput({ [action]: true }));
+      activeKeys.add(e.code);
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
+      if (!keys[e.code]) return;
+
       const action = findKey(e.code);
-      setInput((prev: any) =>
-        !prev[action] ? prev : { ...prev, [action]: false },
-      );
+      setInput((prev: any) => ({ ...prev, [action]: false }));
+      dispatch(setDirectionInput({ [action]: false }));
+      activeKeys.delete(e.code);
     };
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
@@ -41,7 +51,7 @@ export const useInput = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [findKey]);
+  }, [dispatch, findKey, keys]);
 
   return input;
 };
