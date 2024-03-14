@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef } from "react";
 import {
   AutoSizer,
   CellMeasurer,
@@ -7,20 +6,19 @@ import {
   List,
 } from "react-virtualized";
 
-import Message from "src/components/ChatRoomPage/Message";
-import { RootState } from "src/redux/store";
+type Props<T> = {
+  list: T[];
+  ItemComponent: React.ComponentType<{ item: T }>;
+};
 
-export function MessageList() {
-  const messageList = useSelector(
-    (state: RootState) => state.reducer.socketReducer.messageList,
-  );
+export function VirtualScroll<T>({ list, ItemComponent }: Props<T>) {
   const listRef = useRef<List>(null);
 
   useEffect(() => {
     if (listRef.current) {
-      listRef.current.scrollToRow(messageList.length - 1);
+      listRef.current.scrollToRow(list.length - 1);
     }
-  }, [messageList.length]);
+  }, [list.length]);
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,
@@ -28,6 +26,8 @@ export function MessageList() {
   });
 
   function rowRenderer({ index, key, parent, style }: any) {
+    const item = list[index];
+
     return (
       <CellMeasurer
         cache={cache}
@@ -38,7 +38,7 @@ export function MessageList() {
       >
         {() => (
           <div style={style}>
-            <Message message={messageList[index]} />
+            <ItemComponent item={item} />
           </div>
         )}
       </CellMeasurer>
@@ -46,14 +46,14 @@ export function MessageList() {
   }
 
   return (
-    <div className="w-full h-full p-4 bg-gray-800 rounded-lg">
+    <div className="h-full w-full rounded-lg bg-gray-800 p-4">
       <AutoSizer>
         {({ width, height }) => (
           <List
             ref={listRef}
             width={width}
             height={height}
-            rowCount={messageList.length}
+            rowCount={list.length}
             rowHeight={cache.rowHeight}
             // eslint-disable-next-line react/jsx-no-bind
             rowRenderer={rowRenderer}

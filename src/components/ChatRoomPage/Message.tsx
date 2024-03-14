@@ -4,11 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "src/redux/store";
 import { SocketReceiveMessage } from "src/types/index";
 
-export default function Message({
-  message,
-}: {
-  message: SocketReceiveMessage;
-}) {
+export default function Message({ item }: { item: SocketReceiveMessage }) {
   const { user } = useSelector((state: RootState) => state.reducer.authReducer);
 
   const getMessageStyle = useCallback(
@@ -21,23 +17,22 @@ export default function Message({
   );
 
   const getMessageElement = (type: string) => {
-    if (type === "system")
-      return <p className="text-base">{message.message}</p>;
+    if (type === "system") return <p className="text-base">{item.message}</p>;
     return (
       <>
-        <span className="block h-8 font-bold">{message.name}</span>
-        <p className="text-base">{message.message}</p>
+        <span className="block h-8 font-bold">{item.name}</span>
+        <p className="text-base">{item.message}</p>
       </>
     );
   };
   return (
     <li
       className={`mb-2 flex list-none	flex-col rounded-lg p-2 ${getMessageStyle(
-        message.type,
-        message._id,
+        item.type,
+        item._id,
       )}`}
     >
-      {getMessageElement(message.type)}
+      {getMessageElement(item.type)}
     </li>
   );
 }
