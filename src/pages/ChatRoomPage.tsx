@@ -23,22 +23,10 @@ export default function ChatRoomPage() {
         image: user.image,
       }),
     );
-    const handleBeforeUnload = () => {
-      localStorage.setItem("isReloading", "true");
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    if (localStorage.getItem("isReloading") === "true") {
-      localStorage.removeItem("isReloading");
-    }
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       dispatch(leave({ _id: user._id }));
-      if (localStorage.getItem("isReloading") !== "true") {
-        dispatch(disconnect());
-      }
+      dispatch(disconnect());
     };
   }, [dispatch, roomid, user]);
 

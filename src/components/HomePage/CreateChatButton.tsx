@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 
 import { Svgs } from "src/components/common/Svgs";
-import CreateChatModal from "src/components/modal/CreateChatModal";
 import { openModal } from "src/redux/features/modalSlice";
 
 export default function CreateChatButton() {
@@ -9,7 +8,7 @@ export default function CreateChatButton() {
   const openCreateChatModal = () => {
     dispatch(
       openModal({
-        Component: CreateChatModal,
+        componentId: "createChatModal",
       }),
     );
   };

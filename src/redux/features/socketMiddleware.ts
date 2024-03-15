@@ -79,7 +79,7 @@ export const socketMiddleware: Middleware = (store) => {
           dispatch(setError({ errorState: true, message }));
           dispatch(
             openModal({
-              Component: ErrorModal,
+              componentId: "errorModal",
               props: { message: "이미 삭제된 방입니다." },
             }),
           );
@@ -90,7 +90,7 @@ export const socketMiddleware: Middleware = (store) => {
           dispatch(setError({ errorState: true, message }));
           dispatch(
             openModal({
-              Component: ErrorModal,
+              componentId: "errorModal",
               props: { message: "인원이 가득 찼습니다." },
             }),
           );

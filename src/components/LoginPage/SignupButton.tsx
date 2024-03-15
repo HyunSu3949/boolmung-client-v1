@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
 
-import SignupModal from "src/components/modal/SignupModal";
 import { openModal } from "src/redux/features/modalSlice";
 
 export default function SignupButton() {
@@ -8,7 +7,7 @@ export default function SignupButton() {
   const openSignupModal = () => {
     dispatch(
       openModal({
-        Component: SignupModal,
+        componentId: "signupModal",
       }),
     );
   };

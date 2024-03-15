@@ -1,10 +1,7 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import { SoundButton } from "src/components/common/SoundButton/SoundButton";
 import { Svgs } from "src/components/common/Svgs";
-import ExitModal from "src/components/modal/ExitModal";
 import { openModal } from "src/redux/features/modalSlice";
 import { RootState } from "src/redux/store";
 
@@ -16,7 +13,7 @@ export default function Header() {
   const onClick = () => {
     dispatch(
       openModal({
-        Component: ExitModal,
+        componentId: "exitModal",
         props: {
           message: "정말 나가시겠어요?",
         },

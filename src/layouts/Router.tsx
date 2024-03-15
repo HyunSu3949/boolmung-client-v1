@@ -5,7 +5,7 @@ import DomLayout from "src/layouts/NavLayout";
 import { Spinner } from "src/components/common/Spinner";
 import Layout from "src/layouts/Layout";
 import NoMatch from "src/pages/Nomatch";
-import Modals from "src/components/modal/Modals";
+import ModalManeger from "src/components/modal/ModalManeger";
 
 import RequireAuth from "./RequireAuth";
 
@@ -17,7 +17,7 @@ const Chat = lazy(() => import("src/pages/ChatRoomPage"));
 export default function Router() {
   return (
     <BrowserRouter>
-      <Modals />
+      <ModalManeger />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/login" element={<LoginPage />} />
