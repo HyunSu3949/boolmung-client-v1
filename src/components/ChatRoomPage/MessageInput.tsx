@@ -1,27 +1,25 @@
 import React, { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import { sendMessage } from "src/redux/features/socketActions";
 import { Svgs } from "src/components/common/Svgs";
+import { RootState } from "src/redux/store";
 
-type Props = {
-  userId: string;
-  userName: string;
-  roomId: string;
-};
-
-export default function MessageInput({ userId, userName, roomId }: Props) {
+export default function MessageInput() {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
+  const { roomid } = useParams();
 
   const handleSendMessage = (message: string) => {
     dispatch(
       sendMessage({
         message,
-        _id: userId,
-        name: userName,
-        roomId,
+        _id: user._id,
+        name: user.image,
+        roomId: roomid as string,
       }),
     );
   };

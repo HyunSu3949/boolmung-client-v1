@@ -1,15 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 import { signup } from "src/utils/apis/postApis";
 import { SignUpFormData } from "src/types/index";
+import { openModal } from "src/redux/features/modalSlice";
+import ConfirmModal from "src/components/modal/ConfirmModal";
 
 type PropsType = {
   closeModal: () => void;
-  openConfirmModal: () => void;
 };
 
-export const useSignupForm = ({ closeModal, openConfirmModal }: PropsType) => {
+export const useSignupForm = ({ closeModal }: PropsType) => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -43,7 +46,12 @@ export const useSignupForm = ({ closeModal, openConfirmModal }: PropsType) => {
     onSuccess: (result) => {
       if (result.status === "success") {
         closeModal();
-        openConfirmModal();
+        dispatch(
+          openModal({
+            Component: ConfirmModal,
+            props: { message: "회원가입이 완료되었습니다!" },
+          }),
+        );
       }
     },
   });

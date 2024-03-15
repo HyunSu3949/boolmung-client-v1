@@ -1,22 +1,22 @@
 import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Vector2d } from "konva/lib/types";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Line, Circle } from "react-konva";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getPreSignedUrl } from "src/utils/apis/getApis";
 import { patchUserInfo } from "src/utils/apis/patchApis";
-import { Modal } from "src/components/common/Modal";
 import { updateImage } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
-import { Svgs } from "src/components/common/Svgs";
+import { openModal } from "src/redux/features/modalSlice";
+import ConfirmModal from "src/components/modal/ConfirmModal";
 
 import { SpinnerWithText } from "../common/SpinnerWithText";
+import ToolDropdown from "./ToolDropdown";
 
 export default function DrawingEditor() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [tool, setTool] = useState("pen");
   const [lines, setLines] = useState<any>([]);
   const isDrawing = useRef(false);
@@ -36,10 +36,6 @@ export default function DrawingEditor() {
     };
   }, [user.image]);
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
   const saveDrawingWithBackground = async () => {
     if (!stageRef.current) return;
     setIsLoading(true);
@@ -50,7 +46,7 @@ export default function DrawingEditor() {
       if (!stageRef.current) return;
       const tempCanvas = document.createElement("canvas");
 
-      const scaleFactor = 0.5; // 이미지를 50%로 축소
+      const scaleFactor = 0.5;
       tempCanvas.width = stageRef.current.width() * scaleFactor;
       tempCanvas.height = stageRef.current.height() * scaleFactor;
       const ctx = tempCanvas.getContext("2d") as CanvasRenderingContext2D;
@@ -77,9 +73,14 @@ export default function DrawingEditor() {
             });
 
             if (res.status === 200) {
+              dispatch(
+                openModal({
+                  Component: ConfirmModal,
+                  props: { message: "저장이 완료되었습니다" },
+                }),
+              );
               dispatch(updateImage({ image: objectKey }));
               patchUserInfo({ body: { image: objectKey } });
-              setIsOpen(true);
             }
             setIsLoading(false);
           }
@@ -117,25 +118,7 @@ export default function DrawingEditor() {
     <div className="flex flex-col items-center justify-center p-4 bg-stone-800">
       <div>
         <div className="flex items-center w-full space-x-2">
-          <select
-            value={tool}
-            onChange={(e) => {
-              setTool(e.target.value);
-            }}
-            className="w-24 px-1 mb-2 border-gray-300 rounded shadow-sm"
-          >
-            <option className="flex items-center space-x-2" value="pen">
-              <span>펜</span>
-            </option>
-            <option className="flex items-center space-x-2" value="eraser">
-              <span>지우개</span>
-            </option>
-          </select>
-          {tool === "pen" ? (
-            <Svgs id="edit" size="1.75rem" title="연필 아이콘" />
-          ) : (
-            <Svgs id="eraser" size="1.75rem" title="지우개 아이콘" />
-          )}
+          <ToolDropdown selectedValue={tool} onChange={setTool} />
         </div>
         <Stage
           className="bg-white rounded-md"
@@ -182,13 +165,6 @@ export default function DrawingEditor() {
           </SpinnerWithText>
         </button>
       </div>
-      {isOpen && (
-        <Modal isOpen={isOpen} closeModal={closeModal}>
-          <div className="p-8">
-            <p className="text-slate-200">저장이 완료되었습니다</p>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }

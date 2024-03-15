@@ -1,16 +1,14 @@
 import { SpinnerWithText } from "src/components/common/SpinnerWithText";
 import { useSignupForm } from "./useSignupForm";
 
-type propsType = {
+type Props = {
   closeModal: () => void;
-  openConfirmModal: () => void;
 };
 
-export function SignupForm({ closeModal, openConfirmModal }: propsType) {
+export function SignupForm({ closeModal }: Props) {
   const { register, handleSubmit, errors, onSubmit, password, isPending } =
     useSignupForm({
       closeModal,
-      openConfirmModal,
     });
 
   return (
