@@ -20,7 +20,7 @@ export default function Message({ item }: { item: SocketReceiveMessage }) {
     if (type === "system") return <p className="text-base">{item.message}</p>;
     return (
       <>
-        <span className="block h-8 font-bold">{item.name}</span>
+        <span className="block h-8 font-bold">{user.name}</span>
         <p className="text-base">{item.message}</p>
       </>
     );
