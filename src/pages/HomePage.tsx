@@ -1,10 +1,7 @@
 import { useState } from "react";
 
-import { Modal } from "src/components/dom/common/Modal";
-import { ChatForm } from "src/components/dom/HomePage/ChatForm";
-import { Svgs } from "src/components/dom/common/Svgs";
-
-import { RoomList } from "../components/dom/HomePage/RoomList";
+import { RoomList } from "../components/HomePage/RoomList";
+import CreateChatButton from "../components/HomePage/CreateChatButton";
 
 export default function HomePage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,28 +10,14 @@ export default function HomePage() {
     setIsOpen(true);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
   return (
-    <main className="flex min-h-screen w-full flex-col">
+    <main className="flex flex-col w-full min-h-screen">
       <div className="w-full px-2 py-6">
-        <button
-          className="flex items-center rounded bg-slate-500 p-3 font-semibold text-slate-100 hover:bg-slate-400"
-          onClick={openModal}
-          type="button"
-        >
-          <Svgs id="plus" size="1.25rem" title="플러스 아이콘" />
-          방만들기
-        </button>
+        <CreateChatButton />
       </div>
-      <div className="flex w-full flex-1 flex-col overflow-y-auto bg-gray-800 p-2">
+      <div className="flex flex-col flex-1 w-full p-2 overflow-y-auto bg-gray-800">
         <RoomList />
       </div>
-      <Modal isOpen={isOpen} closeModal={closeModal}>
-        <ChatForm />
-      </Modal>
     </main>
   );
 }

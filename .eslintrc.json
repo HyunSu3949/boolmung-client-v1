@@ -48,6 +48,7 @@
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "react/no-unknown-property": "off",
+    "react/no-array-index-key": "off",
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
     "no-multi-assign": "off",

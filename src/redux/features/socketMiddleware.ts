@@ -1,6 +1,8 @@
 import { Middleware } from "@reduxjs/toolkit";
 import { Manager, Socket } from "socket.io-client";
 
+import ErrorModal from "src/components/modal/ErrorModal";
+import { openModal } from "src/redux/features/modalSlice";
 import {
   deleteInfo,
   getRoomInfo,
@@ -75,11 +77,23 @@ export const socketMiddleware: Middleware = (store) => {
         socket.on(eventName.NOTFOUND, (data: any) => {
           const { message } = data;
           dispatch(setError({ errorState: true, message }));
+          dispatch(
+            openModal({
+              Component: ErrorModal,
+              props: { message: "이미 삭제된 방입니다." },
+            }),
+          );
         });
 
         socket.on(eventName.FULL, (data: any) => {
           const { message } = data;
           dispatch(setError({ errorState: true, message }));
+          dispatch(
+            openModal({
+              Component: ErrorModal,
+              props: { message: "인원이 가득 찼습니다." },
+            }),
+          );
         });
 
         // 참여 메세지 전송

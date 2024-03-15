@@ -1,6 +1,6 @@
 import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { RefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const CONTROLER_HEIGHT_DIFFRENCE = 2;
