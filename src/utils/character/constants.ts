@@ -9,6 +9,8 @@ export const FACE_MATERIAL = "face";
 export const FADE_IN = 0.2;
 export const FADE_OUT = 0.2;
 export const DEFAULT_CAMERA_Y = 1;
+export const POSITION_CHANGE_THRESHOLD = 0.1;
+export const CONTROLER_HEIGHT_DIFFRENCE = 2;
 
 export const assetsUrl = {
   face: "/img/defaultFace.png",

@@ -51,6 +51,21 @@ export const getDirection = (currentAngle: number, offset: number) => {
   return direction;
 };
 
+function limitMove(
+  currentPosition: { x: number; y: number; z: number },
+  moveX: number,
+  moveZ: number,
+) {
+  const newX = currentPosition.x + moveX;
+  const newZ = currentPosition.z + moveZ;
+
+  if (!isOutsideMiddleEmptyArea(newX, newZ) && isInMapBounds(newX, newZ)) {
+    return { x: newX, y: currentPosition.y, z: newZ };
+  }
+
+  return currentPosition;
+}
+
 export const calcNewCharacterPos = (
   direction: THREE.Vector3,
   delta: number,
@@ -62,13 +77,10 @@ export const calcNewCharacterPos = (
 ) => {
   const moveX = -direction.x * SPEED * delta;
   const moveZ = -direction.z * SPEED * delta;
-  const newX = currentPosition.x + moveX;
-  const newZ = currentPosition.z + moveZ;
 
-  if (!isOutsideMiddleEmptyArea(newX, newZ) && isInMapBounds(newX, newZ))
-    return { x: newX, y: 0, z: newZ };
-  return currentPosition;
+  return limitMove(currentPosition, moveX, moveZ);
 };
+
 export const calcNewCameraPos = (
   direction: THREE.Vector3,
   delta: number,

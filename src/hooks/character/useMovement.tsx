@@ -1,112 +1,81 @@
-import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useEffect, useState } from "react";
 import { useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-import { GLTFResult } from "src/types/index";
-import useDispatchMovement from "src/hooks/character/useDispatchMovement";
-import useActions from "src/hooks/character/useActions";
-import { DEBOUNCE, FADE_IN, actionNames } from "src/utils/character/constants";
-import { generateInitialPosition } from "src/utils/character/positionUtils";
+import { GLTFResult, Input, Position } from "src/types/index";
+import { FADE_IN, FADE_OUT, actionNames } from "src/utils/character/constants";
+import { getCameraPosition } from "src/utils/character/cameraUtils";
 import {
-  calculateCameraToModelDirectionAngle,
-  getCameraPosition,
-} from "src/utils/character/cameraUtils";
-import {
-  calcNewCameraPos,
   calcNewCharacterPos,
   directionOffset,
   getDirection,
   getRotateQuaternion,
 } from "src/utils/character/movementUtils";
-import { useInput } from "src/hooks/character/useInput";
+import useAction from "src/hooks/character/useAction";
 
 type Props = {
   model: GLTFResult;
+  input: Input;
+  cameraAngle: number;
+  positionRef: React.MutableRefObject<Position>;
 };
 
-export default function useMovement({ model }: Props) {
-  const positionRef = useRef(generateInitialPosition());
-  const elapsedTimeRef = useRef(0);
+export default function useMovement({
+  model,
+  input,
+  cameraAngle,
+  positionRef,
+}: Props) {
+  const [currentAction, setCurrentAction] = useState("");
 
-  const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
-  const input = useInput();
-
-  const camera = useThree((state) => state.camera);
   const { animations, scene } = model;
   const { actions } = useAnimations<any>(animations, scene);
 
-  const { action } = useActions({ actions, input });
+  const nextAction = useAction({ input });
 
-  useDispatchMovement({
-    positionRef,
-    cameraCharacterAngleY,
-    input,
-  });
+  useEffect(() => {
+    if (currentAction !== nextAction) {
+      setCurrentAction(nextAction);
+
+      actions[currentAction]?.fadeOut(FADE_OUT);
+      actions[nextAction]?.reset().fadeIn(FADE_IN).play();
+    }
+  }, [actions, currentAction, nextAction]);
 
   useEffect(() => {
     const { x, y, z } = positionRef.current;
-    const { cameraPositionX, cameraPositionY, cameraPositionZ } =
-      getCameraPosition(x, z);
-    camera.position.set(cameraPositionX, cameraPositionY, cameraPositionZ);
+    const { cameraPositionX, cameraPositionZ } = getCameraPosition(x, z);
     const reverseCameraDrection = new THREE.Vector3(
       -cameraPositionX,
-      model.scene.position.y,
+      scene.position.y,
       -cameraPositionZ,
     );
-    model.scene.position.set(x, y, z);
-    model.scene.lookAt(reverseCameraDrection);
-  }, [camera, model.scene, positionRef]);
+    scene.position.set(x, y, z);
+    scene.lookAt(reverseCameraDrection);
+  }, [scene, positionRef]);
 
   useFrame((_, delta) => {
-    elapsedTimeRef.current += delta;
-    const currentAngle = calculateCameraToModelDirectionAngle(
-      camera.position,
-      model.scene.position,
-    );
-
-    if (
-      elapsedTimeRef.current >= DEBOUNCE &&
-      currentAngle !== cameraCharacterAngleY
-    ) {
-      setCameraCharacterAngleY(currentAngle);
-      elapsedTimeRef.current = 0;
-    }
-
-    // move
-    if (action === actionNames.walk) {
+    if (currentAction === actionNames.walk) {
       const offset = directionOffset(input);
-      const rotateQuaternion = getRotateQuaternion(currentAngle, offset);
 
-      const direction = getDirection(currentAngle, offset);
+      scene.quaternion.rotateTowards(
+        getRotateQuaternion(cameraAngle, offset),
+        FADE_IN,
+      );
 
       const newCharacterPosition = calcNewCharacterPos(
-        direction,
+        getDirection(cameraAngle, directionOffset(input)),
         delta,
-        positionRef.current,
+        scene.position,
       );
-      const newCameraPosition = calcNewCameraPos(
-        direction,
-        delta,
-        positionRef.current,
-        camera.position,
-      );
-
-      model.scene.quaternion.rotateTowards(rotateQuaternion, FADE_IN);
-      model.scene.position.set(
+      scene.position.set(
         newCharacterPosition.x,
         newCharacterPosition.y,
         newCharacterPosition.z,
-      );
-      camera.position.set(
-        newCameraPosition.x,
-        newCameraPosition.y,
-        newCameraPosition.z,
       );
 
       positionRef.current = newCharacterPosition;
     }
   });
-
-  return { positionRef };
 }

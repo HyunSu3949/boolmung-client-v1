@@ -96,3 +96,15 @@ export type Position = {
   y: number;
   z: number;
 };
+export type BaseModalType = {
+  onCloseModal: () => void;
+  props?: {
+    message: string;
+  };
+};
+export type ModalId =
+  | "confirmModal"
+  | "signupModal"
+  | "errorModal"
+  | "createChatModal"
+  | "exitModal";

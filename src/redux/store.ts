@@ -5,13 +5,11 @@ import { persistReducer } from "redux-persist";
 import { authReducer } from "src/redux/features/authSlice";
 import { socketReducer } from "src/redux/features/socketSlice";
 import { socketMiddleware } from "src/redux/features/socketMiddleware";
-import { actionReducer } from "src/redux/features/actionSlice";
 import { modalReducer } from "src/redux/features/modalSlice";
 
 const reducers = combineReducers({
   authReducer,
   socketReducer,
-  actionReducer,
   modalReducer,
 });
 

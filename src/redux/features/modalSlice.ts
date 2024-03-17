@@ -1,17 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ComponentType } from "react";
 
-type BaseModalType = {
-  onCloseModal: () => void;
-  props?: {
-    message: string;
-  };
-};
-
-type ModalComponentType = ComponentType<BaseModalType>;
+import { ModalId } from "src/types/index";
 
 type ModalItem = {
-  Component: ComponentType<BaseModalType>;
+  componentId: ModalId;
   props?: {
     message: string;
   };
@@ -32,9 +24,9 @@ const modalSlice = createSlice({
     openModal: (state, action: PayloadAction<ModalItem>) => {
       state.openedModals = [...state.openedModals, action.payload];
     },
-    closeModal: (state, action: PayloadAction<ModalComponentType>) => {
+    closeModal: (state, action: PayloadAction<string>) => {
       state.openedModals = state.openedModals.filter(
-        (modal) => modal.Component !== action.payload,
+        (modal) => modal.componentId !== action.payload,
       );
     },
   },

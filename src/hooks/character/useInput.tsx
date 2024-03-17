@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 
-import { setDirectionInput } from "src/redux/features/actionSlice";
 import { Input } from "src/types/index";
 
 export const useInput = () => {
@@ -22,7 +20,6 @@ export const useInput = () => {
     [],
   );
 
-  const dispatch = useDispatch();
   const findKey = useCallback((key: string) => keys[key], [keys]);
 
   useEffect(() => {
@@ -32,7 +29,6 @@ export const useInput = () => {
 
       const action = findKey(e.code);
       setInput((prev: any) => ({ ...prev, [action]: true }));
-      dispatch(setDirectionInput({ [action]: true }));
       activeKeys.add(e.code);
     };
 
@@ -41,7 +37,6 @@ export const useInput = () => {
 
       const action = findKey(e.code);
       setInput((prev: any) => ({ ...prev, [action]: false }));
-      dispatch(setDirectionInput({ [action]: false }));
       activeKeys.delete(e.code);
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -51,7 +46,7 @@ export const useInput = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [dispatch, findKey, keys]);
+  }, [findKey, keys]);
 
   return input;
 };

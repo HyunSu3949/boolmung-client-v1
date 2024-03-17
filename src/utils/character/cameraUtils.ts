@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { CAMERE_MODEL_DISTANCE, DEFAULT_CAMERA_Y } from "./constants";
+import { Position } from "src/types/index";
 
 export const roundToTwoDecimal = (number: number) => {
   if (Math.abs(number) < 0.01) return 0;
@@ -18,17 +19,6 @@ export const getCameraPosition = (x: number, z: number) => {
     cameraPositionY: DEFAULT_CAMERA_Y,
     cameraPositionZ,
   };
-};
-
-export const setCameraPosition = (
-  camera: THREE.Camera,
-  modelPositionX: number,
-  modelPositionZ: number,
-) => {
-  const { cameraPositionX, cameraPositionY, cameraPositionZ } =
-    getCameraPosition(modelPositionX, modelPositionZ);
-  camera.position.set(cameraPositionX, cameraPositionY, cameraPositionZ);
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
 };
 
 export const calculateCameraToModelDirectionAngle = (

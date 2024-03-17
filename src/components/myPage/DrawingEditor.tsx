@@ -75,7 +75,7 @@ export default function DrawingEditor() {
             if (res.status === 200) {
               dispatch(
                 openModal({
-                  Component: ConfirmModal,
+                  componentId: "confirmModal",
                   props: { message: "저장이 완료되었습니다" },
                 }),
               );
