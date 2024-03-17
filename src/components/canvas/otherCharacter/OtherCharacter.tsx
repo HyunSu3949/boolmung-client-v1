@@ -1,76 +1,60 @@
 import * as THREE from "three";
-import { useRef, useMemo } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from "react";
+import { useGLTF } from "@react-three/drei";
+import { useLoader } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 
-import { ActionInfo, GLTFResult } from "src/types/index";
-import { MODEL_SCALE, SPEED, assetsUrl } from "src/utils/character/constants";
-import useActions from "src/hooks/character/useActions";
-
-import {
-  directionOffset,
-  getDirection,
-  getRotateQuaternion,
-  calcNewCharacterPos,
-} from "../../../utils/character/movementUtils";
+import { GLTFResult, Input, Position } from "src/types/index";
+import { MODEL_SCALE, assetsUrl } from "src/utils/character/constants";
+import useMovement from "src/hooks/character/useMovement";
 
 type Props = {
-  state: ActionInfo;
-  image: string;
+  state: {
+    input: Input;
+    position: Position;
+    cameraCharacterAngleY: number;
+    image: string;
+  };
 };
 
-export function OtherCharacter({ state, image }: Props) {
-  const { input, position, cameraCharacterAngleY } = state;
-
-  const faceTexture = useLoader(THREE.TextureLoader, image);
+export function OtherCharacter({ state }: Props) {
+  const { input, position, cameraCharacterAngleY, image } = state;
+  const positionRef = useRef(position);
 
   const model = useGLTF(assetsUrl.model) as GLTFResult;
-  const { animations, scene } = model;
+  const faceTexture = useLoader(THREE.TextureLoader, image);
 
-  const clone = useMemo(() => {
-    const clonedScene = SkeletonUtils.clone(scene);
-    clonedScene.animations = animations.filter(
-      (clip: any) => clip.name === "walk" || clip.name === "default",
-    );
+  const clonedModel = useMemo(() => {
+    const clonedScene = SkeletonUtils.clone(model.scene);
+
     faceTexture.flipY = false;
+
     clonedScene.traverse((child: any) => {
       if (child.isMesh && child.material.name === "face") {
         const clonedMaterial = child.material.clone();
         clonedMaterial.map = faceTexture;
-        child.material = clonedMaterial;
 
+        child.material = clonedMaterial;
         child.material.needsUpdate = true;
       }
     });
+    return { ...model, scene: clonedScene };
+  }, [faceTexture, model]);
 
-    return clonedScene;
-  }, [animations, faceTexture, scene]);
+  useEffect(() => {
+    const { x, y, z } = position;
+    clonedModel.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
+    clonedModel.scene.position.set(x, y, z);
+  }, [position, clonedModel.scene]);
 
-  const { actions, ref } = useAnimations(clone.animations);
-  clone.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
-  clone.position.set(position.x, position.y, position.z);
-
-  const { action } = useActions({ actions, input });
-
-  useFrame((_, delta) => {
-    if (action === "walk") {
-      const offset = directionOffset(input);
-
-      const rotateQuarternion = getRotateQuaternion(
-        cameraCharacterAngleY,
-        offset,
-      );
-      clone.quaternion.rotateTowards(rotateQuarternion, 0.2);
-
-      const direction = getDirection(cameraCharacterAngleY, offset);
-
-      const newPosition = calcNewCharacterPos(direction, delta, clone.position);
-      clone.position.x = newPosition.x;
-      clone.position.z = newPosition.z;
-    }
+  useMovement({
+    model: clonedModel,
+    input,
+    cameraAngle: cameraCharacterAngleY,
+    positionRef,
   });
-  return <primitive object={clone} ref={ref} />;
+
+  return <primitive object={clonedModel.scene} />;
 }
 
 useGLTF.preload("/models/player7.glb");

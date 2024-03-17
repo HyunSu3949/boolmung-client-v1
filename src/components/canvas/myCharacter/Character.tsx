@@ -3,8 +3,6 @@ import { useGLTF } from "@react-three/drei";
 import { useSelector } from "react-redux";
 
 import { GLTFResult } from "src/types";
-import { RootState } from "src/redux/store";
-import OrbitControl from "src/components/canvas/myCharacter/OrbitControl";
 import useMovement from "src/hooks/character/useMovement";
 import {
   FACE_MATERIAL,
@@ -13,16 +11,27 @@ import {
   assetsUrl,
 } from "src/utils/character/constants";
 import { getTextureLoader } from "src/utils/character/textureUtils";
+import useDispatchMovement from "src/hooks/character/useDispatchMovement";
+import { useCharacterPosition } from "src/components/canvas/myCharacter/CharacterContext";
+import { RootState } from "src/redux/store";
+import useCameraMovement from "src/hooks/character/useCameraMove";
+import useCameraAngle from "src/hooks/character/useCameraAngle";
+import { useInput } from "src/hooks/character/useInput";
 
 export function Character() {
-  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
   const model = useGLTF(assetsUrl.model) as GLTFResult;
+  const positionRef = useCharacterPosition();
+  const { image } = useSelector(
+    (state: RootState) => state.reducer.authReducer.user,
+  );
+  const input = useInput();
+  const cameraAngle = useCameraAngle({ positionRef });
+
+  useCameraMovement({ input, positionRef, cameraAngle });
+  useMovement({ input, positionRef, cameraAngle, model });
+  useDispatchMovement({ input, positionRef, cameraAngle });
+
   const { scene } = model;
-
-  const { positionRef } = useMovement({
-    model,
-  });
-
   useEffect(() => {
     const updateModelMaterial = async (
       materialKey: string,
@@ -39,21 +48,13 @@ export function Character() {
       }
     };
 
-    const applyTextures = async () => {
-      updateModelMaterial(FACE_MATERIAL, user.image, assetsUrl.face);
-      updateModelMaterial(BODY_MATERIAL, assetsUrl.body, assetsUrl.body);
-    };
+    updateModelMaterial(FACE_MATERIAL, image, assetsUrl.face);
+    updateModelMaterial(BODY_MATERIAL, assetsUrl.body, assetsUrl.body);
 
-    model.scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
-    applyTextures();
-  }, [model.materials, model.scene.scale, user.image]);
+    scene.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
+  }, [model.materials, scene, image]);
 
-  return (
-    <>
-      <OrbitControl positionRef={positionRef} />
-      <primitive object={scene} rotation={[0, Math.PI / 2, 0]} />
-    </>
-  );
+  return <primitive object={scene} rotation={[0, Math.PI / 2, 0]} />;
 }
 
 useGLTF.preload("/models/player7.glb");

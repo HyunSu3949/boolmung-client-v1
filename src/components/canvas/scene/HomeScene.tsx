@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 
-import { Character } from "src/components/canvas/myCharacter/Character";
+import CharacterContainer from "src/components/canvas/myCharacter/CharacterContainer";
 
 import { Fire } from "../common/fire";
 import { Floor } from "../common/Floor";
@@ -14,7 +14,7 @@ export default function HomeScene() {
       <Wood />
       <Floor />
       <Lights />
-      <Character />
+      <CharacterContainer />
     </Canvas>
   );
 }

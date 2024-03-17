@@ -1,22 +1,15 @@
 import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import * as THREE from "three";
 
-const CONTROLER_HEIGHT_DIFFRENCE = 2;
+import { CONTROLER_HEIGHT_DIFFRENCE } from "src/utils/character/constants";
+import { useCharacterPosition } from "src/components/canvas/myCharacter/CharacterContext";
 
-type Props = {
-  positionRef: React.MutableRefObject<{
-    x: number;
-    y: number;
-    z: number;
-  }>;
-};
-
-export default function OrbitControl({ positionRef }: Props) {
+export default function OrbitControlsWrapper() {
   const orbitControlsRef = useRef<any>();
-
-  useFrame((_, $) => {
+  const positionRef = useCharacterPosition();
+  useFrame(() => {
     const { x, y, z } = positionRef.current;
     orbitControlsRef.current.target = new THREE.Vector3(
       x,
@@ -24,10 +17,6 @@ export default function OrbitControl({ positionRef }: Props) {
       z,
     );
   });
-
-  useEffect(() => {
-    orbitControlsRef.current.target.copy(positionRef.current);
-  }, [positionRef]);
 
   return (
     <OrbitControls
