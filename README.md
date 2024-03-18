@@ -23,4 +23,4 @@ wasd 키로 캐릭터를 조종할 수 있습니다.
 <img src = "https://github.com/HyunSu3949/boolmung-client-v1/assets/112445899/c8b880a3-6368-4698-8215-511ea020e63a" width="60%" height="60%">
 
 ### 포트폴리오 링크
-[네이버 바로가기](https://docs.google.com/document/d/1_CUroB26n6C3dikHxY3fZ_XVloUjl6kKgVJiSgHq2-o/edit)
+[포트폴리오 링크](https://docs.google.com/document/d/1_CUroB26n6C3dikHxY3fZ_XVloUjl6kKgVJiSgHq2-o/edit)
