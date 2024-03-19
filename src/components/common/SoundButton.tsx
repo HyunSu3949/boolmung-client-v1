@@ -30,7 +30,7 @@ export function SoundButton() {
     <>
       <audio ref={audioRef} src={audioFile} loop />
       <button
-        className="flex items-center space-x-2 w-fit whitespace-nowrap "
+        className="flex w-fit items-center space-x-2 whitespace-nowrap "
         onClick={togglePlaying}
         type="button"
       >

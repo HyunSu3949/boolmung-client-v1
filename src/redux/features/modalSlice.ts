@@ -24,7 +24,7 @@ const modalSlice = createSlice({
     openModal: (state, action: PayloadAction<ModalItem>) => {
       state.openedModals = [...state.openedModals, action.payload];
     },
-    closeModal: (state, action: PayloadAction<string>) => {
+    closeModal: (state, action: PayloadAction<ModalId>) => {
       state.openedModals = state.openedModals.filter(
         (modal) => modal.componentId !== action.payload,
       );

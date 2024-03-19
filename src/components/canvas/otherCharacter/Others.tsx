@@ -18,7 +18,7 @@ export function Others() {
   return (
     <>
       {othersInfo.map(([_id, info]) => {
-        return <OtherCharacter key={_id} state={info} image={info.image} />;
+        return <OtherCharacter key={_id} state={info} />;
       })}
     </>
   );

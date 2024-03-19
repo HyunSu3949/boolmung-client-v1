@@ -7,7 +7,7 @@ const override = {
   height: "30px",
 };
 
-export function SpinnerWithText({
+export function SpinnerWithComponent({
   loading,
   children,
 }: {

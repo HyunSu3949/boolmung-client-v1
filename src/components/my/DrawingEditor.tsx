@@ -10,9 +10,8 @@ import { patchUserInfo } from "src/utils/apis/patchApis";
 import { updateImage } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
 import { openModal } from "src/redux/features/modalSlice";
-import ConfirmModal from "src/components/modal/ConfirmModal";
 
-import { SpinnerWithText } from "../common/SpinnerWithText";
+import { SpinnerWithComponent } from "../common/SpinnerWithComponent";
 import ToolDropdown from "./ToolDropdown";
 
 export default function DrawingEditor() {
@@ -115,13 +114,13 @@ export default function DrawingEditor() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-stone-800">
+    <div className="flex flex-col items-center justify-center bg-stone-800 p-4">
       <div>
-        <div className="flex items-center w-full space-x-2">
+        <div className="flex w-full items-center space-x-2">
           <ToolDropdown selectedValue={tool} onChange={setTool} />
         </div>
         <Stage
-          className="bg-white rounded-md"
+          className="rounded-md bg-white"
           width={300}
           height={300}
           onMouseDown={handleMouseDown}
@@ -132,7 +131,6 @@ export default function DrawingEditor() {
           <Layer>
             {lines.map((line: any, i: number) => (
               <Line
-                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 points={line.points}
                 stroke="#171414"
@@ -156,13 +154,13 @@ export default function DrawingEditor() {
           </Layer>
         </Stage>
         <button
-          className="px-4 py-2 mt-4 text-white bg-blue-500 rounded shadow hover:bg-blue-700"
+          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white shadow hover:bg-blue-700"
           onClick={saveDrawingWithBackground}
           type="button"
         >
-          <SpinnerWithText loading={isLoading}>
+          <SpinnerWithComponent loading={isLoading}>
             <span>저장하기</span>
-          </SpinnerWithText>
+          </SpinnerWithComponent>
         </button>
       </div>
     </div>

@@ -56,7 +56,15 @@ export type PatchApi = {
 };
 
 export type PostApi = {
-  createRoom: PostApiEndpointInfo<any, never, never, any>;
+  createRoom: PostApiEndpointInfo<
+    any,
+    never,
+    never,
+    {
+      status: string;
+      data: RoomInfo;
+    }
+  >;
   login: PostApiEndpointInfo<
     { email: string; password: string },
     never,

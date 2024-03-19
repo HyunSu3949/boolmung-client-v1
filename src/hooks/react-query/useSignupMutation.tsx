@@ -1,25 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { UseFormSetError } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
+import { closeModal, openModal } from "src/redux/features/modalSlice";
+import { SignupFormData } from "src/types/formTypes";
 import { signup } from "src/utils/apis/postApis";
-import { SignUpFormData } from "src/types/index";
-import { openModal } from "src/redux/features/modalSlice";
-import ConfirmModal from "src/components/modal/ConfirmModal";
 
-type PropsType = {
-  closeModal: () => void;
+type Props = {
+  setError: UseFormSetError<SignupFormData>;
 };
 
-export const useSignupForm = ({ closeModal }: PropsType) => {
+export default function useSignupMutation({ setError }: Props) {
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    setError,
-  } = useForm<SignUpFormData>();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (body: any) => signup({ body }),
@@ -45,7 +37,7 @@ export const useSignupForm = ({ closeModal }: PropsType) => {
     },
     onSuccess: (result) => {
       if (result.status === "success") {
-        closeModal();
+        dispatch(closeModal("signupModal"));
         dispatch(
           openModal({
             componentId: "confirmModal",
@@ -55,19 +47,5 @@ export const useSignupForm = ({ closeModal }: PropsType) => {
       }
     },
   });
-
-  const onSubmit = (data: SignUpFormData) => {
-    mutate(data);
-  };
-
-  const password = watch("password", "");
-
-  return {
-    register,
-    handleSubmit,
-    errors,
-    onSubmit,
-    password,
-    isPending,
-  };
-};
+  return { signupMutate: mutate, isPending };
+}

@@ -4,23 +4,20 @@ import { useState } from "react";
 
 import { setLogoutState } from "src/redux/features/authSlice";
 import { RootState } from "src/redux/store";
-import { SpinnerWithText } from "src/components/common/SpinnerWithText";
+import { SpinnerWithComponent } from "src/components/common/SpinnerWithComponent";
 import { Svgs } from "src/components/common/Svgs";
 import { logout } from "src/utils/apis/getApis";
 
-import { SoundButton } from "./SoundButton/SoundButton";
+import { SoundButton } from "./SoundButton";
+import MyImage from "./MyImage";
 
 export function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogout = async () => {
-    setIsLoading(true);
-    await logout({});
+  const handleLogout = () => {
+    logout({});
     dispatch(setLogoutState());
-    setIsLoading(false);
     navigate("/");
   };
 
@@ -28,7 +25,7 @@ export function Navbar() {
     isActive ? "font-bold text-slate-200" : "text-slate-300";
 
   return (
-    <nav className="flex items-center justify-between w-full p-6 bg-slate-600 text-slate-100">
+    <nav className="flex w-full items-center justify-between bg-slate-600 p-6 text-slate-100">
       <div>
         <SoundButton />
       </div>
@@ -43,24 +40,18 @@ export function Navbar() {
       <div className="flex items-center space-x-2">
         <NavLink to="/my" className={getNavLinkClass}>
           <div className="flex items-center space-x-1">
-            <img
-              src={user.image}
-              alt="프로필 이미지"
-              className="w-6 h-6 rounded-full"
-            />
+            <MyImage size="sm" />
             <span>내 정보</span>
           </div>
         </NavLink>
       </div>
       <div>
         <button
-          className="p-2 border rounded-md border-slate-800 bg-slate-700 hover:bg-slate-400"
+          className="rounded-md border border-slate-800 bg-slate-700 p-2 hover:bg-slate-400"
           onClick={handleLogout}
           type="button"
         >
-          <SpinnerWithText loading={isLoading}>
-            <span>로그아웃</span>
-          </SpinnerWithText>
+          <span>로그아웃</span>
         </button>
       </div>
     </nav>
