@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { SoundButton } from "src/components/common/SoundButton/SoundButton";
+import { SoundButton } from "src/components/common/SoundButton";
 import { Svgs } from "src/components/common/Svgs";
 import { openModal } from "src/redux/features/modalSlice";
 import { RootState } from "src/redux/store";
@@ -23,12 +23,12 @@ export default function Header() {
 
   return (
     <>
-      <div className="absolute p-4 rounded-md left-3 bg-slate-600">
+      <div className="absolute left-3 rounded-md bg-slate-600 p-4">
         <SoundButton />
       </div>
       <button
         onClick={onClick}
-        className="flex items-center px-4 py-2 text-white rounded bg-slate-600 hover:bg-slate-400 focus:outline-none"
+        className="flex items-center rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-400 focus:outline-none"
         type="button"
       >
         <Svgs id="exit" size="1.25rem" title="나가기 아이콘" />

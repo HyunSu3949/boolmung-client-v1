@@ -13,7 +13,6 @@ export function RoomList() {
     data: roomList,
     fetchNextPage,
     isFetchingNextPage,
-    status,
   } = useInfiniteQuery({
     queryKey: ["roomList"],
     queryFn: async ({ pageParam }: { pageParam: number }) => {

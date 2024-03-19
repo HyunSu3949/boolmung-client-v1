@@ -8,7 +8,7 @@ import { SpinnerWithComponent } from "src/components/common/SpinnerWithComponent
 import { Svgs } from "src/components/common/Svgs";
 import { logout } from "src/utils/apis/getApis";
 
-import { SoundButton } from "./SoundButton/SoundButton";
+import { SoundButton } from "./SoundButton";
 
 export function Navbar() {
   const dispatch = useDispatch();

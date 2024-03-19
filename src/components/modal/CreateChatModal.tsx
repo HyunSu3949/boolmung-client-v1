@@ -7,7 +7,7 @@ type Props = {
 export default function CreateChatModal({ onCloseModal }: Props) {
   return (
     <Modal onCloseModal={onCloseModal}>
-      <ChatForm onCloseModal={onCloseModal} />
+      <ChatForm />
     </Modal>
   );
 }

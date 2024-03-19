@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
+import { openModal } from "src/redux/features/modalSlice";
 import { RoomInfo } from "src/types/index";
 
 type Props = {
@@ -8,18 +10,32 @@ type Props = {
 
 export default function RoomItem({ item }: Props) {
   const { _id, title, max, participants } = item;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleClick = () => {
+    if (participants.length < max) {
+      navigate(`/room/${_id}`);
+    } else {
+      dispatch(
+        openModal({
+          componentId: "confirmModal",
+          props: { message: "인원이 가득 찼습니다." },
+        }),
+      );
+    }
+  };
   return (
-    <div>
-      <li key={_id} className="w-full">
-        <Link
-          to={`room/${_id}`}
-          className="flex w-full items-center justify-between rounded-md bg-gray-700 p-6 hover:bg-gray-600"
-        >
-          <h2 className="mr-5 text-lg text-white">{title}</h2>
-          <p className="roomInfo text-gray-300">
-            {participants.length}/{max}
-          </p>
-        </Link>
+    <div
+      onClick={handleClick}
+      className="flex w-full cursor-pointer items-center justify-between rounded-md bg-gray-700 p-6 hover:bg-gray-600"
+    >
+      <li key={_id} className="flex w-full items-start justify-between">
+        <p className="mr-5 w-4/5 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-lg text-white">
+          {title}
+        </p>
+        <p className="roomInfo w-1/5 text-center text-gray-300">
+          {participants.length}/{max}
+        </p>
       </li>
     </div>
   );
