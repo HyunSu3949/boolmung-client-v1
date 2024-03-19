@@ -34,7 +34,9 @@ export default function Header() {
         <Svgs id="exit" size="1.25rem" title="나가기 아이콘" />
         나가기
       </button>
-      <p className="text-xl text-white">{title}</p>
+      <p className="max-w-full flex-1 overflow-hidden text-ellipsis text-xl text-white">
+        {title}
+      </p>
     </>
   );
 }

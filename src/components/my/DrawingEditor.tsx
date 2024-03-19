@@ -131,7 +131,6 @@ export default function DrawingEditor() {
           <Layer>
             {lines.map((line: any, i: number) => (
               <Line
-                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 points={line.points}
                 stroke="#171414"

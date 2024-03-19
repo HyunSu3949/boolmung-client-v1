@@ -9,18 +9,15 @@ import { Svgs } from "src/components/common/Svgs";
 import { logout } from "src/utils/apis/getApis";
 
 import { SoundButton } from "./SoundButton";
+import MyImage from "./MyImage";
 
 export function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state: RootState) => state.reducer.authReducer);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogout = async () => {
-    setIsLoading(true);
-    await logout({});
+  const handleLogout = () => {
+    logout({});
     dispatch(setLogoutState());
-    setIsLoading(false);
     navigate("/");
   };
 
@@ -43,11 +40,7 @@ export function Navbar() {
       <div className="flex items-center space-x-2">
         <NavLink to="/my" className={getNavLinkClass}>
           <div className="flex items-center space-x-1">
-            <img
-              src={user.image}
-              alt="프로필 이미지"
-              className="h-6 w-6 rounded-full"
-            />
+            <MyImage size="sm" />
             <span>내 정보</span>
           </div>
         </NavLink>
@@ -58,9 +51,7 @@ export function Navbar() {
           onClick={handleLogout}
           type="button"
         >
-          <SpinnerWithComponent loading={isLoading}>
-            <span>로그아웃</span>
-          </SpinnerWithComponent>
+          <span>로그아웃</span>
         </button>
       </div>
     </nav>
