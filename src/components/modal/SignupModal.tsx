@@ -1,6 +1,6 @@
 import Modal from "src/components/modal/Modal";
 
-import { SignupForm } from "../LoginPage/SignupForm/SignupForm";
+import { SignupForm } from "../form/SignupForm/SignupForm";
 
 type Props = {
   onCloseModal: () => void;

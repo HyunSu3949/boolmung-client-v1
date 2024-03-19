@@ -14,7 +14,7 @@ export default function CreateChatButton() {
   };
   return (
     <button
-      className="flex items-center p-3 font-semibold rounded bg-slate-500 text-slate-100 hover:bg-slate-400"
+      className="flex items-center rounded bg-slate-500 p-3 font-semibold text-slate-100 hover:bg-slate-400"
       onClick={openCreateChatModal}
       type="button"
     >

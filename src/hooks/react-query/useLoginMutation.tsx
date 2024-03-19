@@ -1,30 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { UseFormSetError } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { login } from "src/utils/apis/postApis";
 import { setLoginState } from "src/redux/features/authSlice";
+import { LoginFormData } from "src/types/formTypes";
+import { login } from "src/utils/apis/postApis";
 
-type FormData = {
-  email: string;
-  password: string;
+type Props = {
+  setError: UseFormSetError<LoginFormData>;
 };
 
-export const useLoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm<FormData>();
+export default function useLoginMutation({ setError }: Props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: (body: any) => login({ body }),
     onError: (error: any) => {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         setError("root", {
           type: "manual",
           message: "아이디 또는 비밀번호를 확인해주세요.",
@@ -46,15 +40,5 @@ export const useLoginForm = () => {
     },
   });
 
-  const onSubmit = async (data: FormData) => {
-    loginMutate(data);
-  };
-
-  return {
-    register,
-    handleSubmit,
-    errors,
-    onSubmit,
-    isPending,
-  };
-};
+  return { loginMutate, isPending };
+}

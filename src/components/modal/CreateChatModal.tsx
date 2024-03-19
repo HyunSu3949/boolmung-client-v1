@@ -1,4 +1,4 @@
-import { ChatForm } from "src/components/HomePage/ChatForm";
+import { ChatForm } from "src/components/form/CreateChatForm/ChatForm";
 import Modal from "src/components/modal/Modal";
 
 type Props = {

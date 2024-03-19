@@ -26,11 +26,16 @@ export type CharacterMovementData = {
 };
 
 export type RoomInfo = {
-  _id: string;
-  owner: string;
-  title: string;
+  _id: number;
   max: number;
-  participants: string[];
+  title: string;
+  owner: any;
+  createdAt: Date;
+  participants: {
+    user: any;
+    joinedAt: Date;
+  }[];
+  password?: string | undefined;
 };
 
 export type User = {
