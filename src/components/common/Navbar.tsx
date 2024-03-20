@@ -1,10 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import { setLogoutState } from "src/redux/features/authSlice";
-import { RootState } from "src/redux/store";
-import { SpinnerWithComponent } from "src/components/common/SpinnerWithComponent";
 import { Svgs } from "src/components/common/Svgs";
 import { logout } from "src/utils/apis/getApis";
 
