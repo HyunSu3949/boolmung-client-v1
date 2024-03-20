@@ -1,5 +1,8 @@
+import { Suspense } from "react";
+
 import ClientErrorBoundary from "src/components/Error/ClientErrorBoundary";
 import ServerErrorBoundary from "src/components/Error/ServerErrorBoundary";
+import { Spinner } from "src/components/common/Spinner";
 
 import { RoomList } from "../components/room/RoomList";
 import CreateChatButton from "../components/form/CreateChatForm/CreateChatButton";
@@ -14,7 +17,9 @@ export default function HomePage() {
         <h2 className="my-4 text-slate-300">채팅방 목록</h2>
         <ServerErrorBoundary>
           <ClientErrorBoundary>
-            <RoomList />
+            <Suspense fallback={<Spinner />}>
+              <RoomList />
+            </Suspense>
           </ClientErrorBoundary>
         </ServerErrorBoundary>
       </div>

@@ -1,10 +1,10 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 
 import { getAllRoom } from "src/utils/apis/getApis";
 
 export default function useRoomListInfiniteQuery() {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery({
+    useSuspenseInfiniteQuery({
       queryKey: ["roomList"],
       queryFn: async ({ pageParam }: { pageParam: number }) => {
         const response = await getAllRoom({
@@ -16,7 +16,6 @@ export default function useRoomListInfiniteQuery() {
       getNextPageParam: (lastPage) =>
         lastPage.hasNextPage ? lastPage.nextPage : undefined,
       refetchInterval: 3000,
-      throwOnError: true,
     });
 
   return {
